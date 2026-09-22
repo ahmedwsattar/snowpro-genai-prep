@@ -12,7 +12,7 @@
     "sections": [
       { "id": "study-guide", "title": "Study guide",
         "dataSources": [{ "type": "file", "path": "SnowPro-GenAI-Prep/00-START-HERE.md, 01-domain1-overview.md, 02-domain2-functions.md, 03-domain3-governance.md, 04-domain4-documents.md, 05-link-index.md" }],
-        "producerNotes": "Pre-rendered from the markdown files via build_study_guide.py (python-markdown). QUIZ/ANSWER KEY sections are stripped (they live in quiz.html). To refresh: edit the .md files and re-run 'python3 build_study_guide.py'." }
+        "producerNotes": "Pre-rendered from the markdown files via build_study_guide.py (python-markdown). QUIZ/ANSWER KEY sections are stripped (they live in quiz.html). To refresh: edit the .md files and run the builder." }
     ]
   }
   </script>
@@ -28,8 +28,6 @@
       line-height: 1.6;
     }
     .layout { display: flex; align-items: flex-start; max-width: 1200px; margin: 0 auto; }
-
-    /* Sidebar */
     .sidebar {
       position: sticky; top: 0; align-self: flex-start;
       width: 300px; flex: 0 0 300px; height: 100vh; overflow-y: auto;
@@ -39,8 +37,8 @@
     .sidebar .tagline { font-size: 0.78rem; color: light-dark(#64748b, #94a3b8); margin: 0 0 14px; }
     .quiz-btn {
       display: block; text-align: center; text-decoration: none;
-      font-weight: 600; font-size: 0.9rem;
-      padding: 10px 12px; margin: 0 0 16px; border-radius: 9px;
+      font-weight: 600; font-size: 0.9rem; padding: 10px 12px;
+      margin: 0 0 16px; border-radius: 9px;
       background: light-dark(#2563eb, #3b82f6); color: #fff;
     }
     .quiz-btn:hover { background: light-dark(#1d4ed8, #2563eb); }
@@ -48,8 +46,7 @@
     nav.toc a {
       display: block; text-decoration: none; border-radius: 6px;
       padding: 4px 8px; margin: 1px 0;
-      color: light-dark(#475569, #cbd5e1);
-      border-left: 2px solid transparent;
+      color: light-dark(#475569, #cbd5e1); border-left: 2px solid transparent;
     }
     nav.toc a:hover { background: light-dark(#f1f5f9, #111c30); }
     nav.toc a.lvl1 { font-weight: 700; margin-top: 10px; color: light-dark(#0f172a, #f8fafc); }
@@ -59,59 +56,82 @@
       border-left-color: light-dark(#2563eb, #60a5fa);
       background: light-dark(#eff6ff, #10203a);
     }
-
-    /* Content */
+    .mobile-nav { display: none; }
     .content { flex: 1 1 auto; min-width: 0; padding: 24px 36px 120px; max-width: 860px; }
     .content section { scroll-margin-top: 16px; padding-bottom: 8px; }
     .content section + section { border-top: 1px solid light-dark(#e2e8f0, #1e293b); margin-top: 28px; padding-top: 8px; }
-
     h1 { font-size: 1.7rem; color: light-dark(#0f172a, #f1f5f9); margin: 18px 0 6px; }
     h2 { font-size: 1.3rem; color: light-dark(#0f172a, #f1f5f9); margin: 30px 0 8px; padding-bottom: 4px; border-bottom: 1px solid light-dark(#eef2f7, #1a2740); }
     h3 { font-size: 1.08rem; color: light-dark(#111827, #f1f5f9); margin: 22px 0 6px; }
     a { color: light-dark(#2563eb, #60a5fa); }
     p, li { font-size: 0.96rem; }
-
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.86em;
-      background: light-dark(#f1f5f9, #1e293b); padding: 1px 5px; border-radius: 4px;
-    }
-    pre {
-      background: light-dark(#f8fafc, #0f172a);
-      border: 1px solid light-dark(#e2e8f0, #253247);
-      border-radius: 10px; padding: 14px 16px; overflow-x: auto;
-    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.86em; background: light-dark(#f1f5f9, #1e293b); padding: 1px 5px; border-radius: 4px; }
+    pre { background: light-dark(#f8fafc, #0f172a); border: 1px solid light-dark(#e2e8f0, #253247); border-radius: 10px; padding: 14px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     pre code { background: none; padding: 0; font-size: 0.85rem; }
-
-    table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.9rem; display: block; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     th, td { border: 1px solid light-dark(#d1d5db, #374151); padding: 7px 10px; text-align: left; vertical-align: top; }
     th { background: light-dark(#f3f4f6, #1f2937); font-weight: 600; color: light-dark(#0f172a, #f8fafc); }
     tr:nth-child(even) td { background: light-dark(#fafbfc, #0d1526); }
-
-    blockquote {
-      margin: 14px 0; padding: 10px 16px;
-      border-left: 3px solid light-dark(#f59e0b, #fbbf24);
-      background: light-dark(#fffbeb, #201a09); border-radius: 0 8px 8px 0;
-    }
+    blockquote { margin: 14px 0; padding: 10px 16px; border-left: 3px solid light-dark(#f59e0b, #fbbf24); background: light-dark(#fffbeb, #201a09); border-radius: 0 8px 8px 0; }
     blockquote p { margin: 6px 0; }
     hr { border: none; border-top: 1px solid light-dark(#e2e8f0, #1e293b); margin: 22px 0; }
     strong { color: light-dark(#0f172a, #f8fafc); }
+    .back-to-top { display: none; }
 
-    /* Mobile */
     @media (max-width: 820px) {
-      .layout { flex-direction: column; }
-      .sidebar { position: static; width: 100%; flex-basis: auto; height: auto; border-right: none; border-bottom: 1px solid light-dark(#e2e8f0, #1e293b); }
-      .content { padding: 20px; }
+      body { overflow-x: hidden; }
+      .layout { display: block; }
+      .sidebar {
+        display: none;
+        position: fixed; z-index: 20; inset: 52px 0 auto 0;
+        width: 100%; height: min(72vh, 560px); overflow-y: auto;
+        padding: 16px; background: light-dark(#ffffff, #0b1120);
+        border: 1px solid light-dark(#e2e8f0, #1e293b);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+      }
+      .sidebar.open { display: block; }
+      .sidebar h2, .sidebar .tagline { display: none; }
+      .sidebar .quiz-btn { margin-bottom: 10px; }
+      .mobile-nav {
+        display: flex; position: sticky; z-index: 21; top: 0; align-items: center;
+        justify-content: space-between; gap: 12px; min-height: 52px; padding: 8px 16px;
+        background: light-dark(#ffffff, #0b1120); border-bottom: 1px solid light-dark(#e2e8f0, #1e293b);
+      }
+      .mobile-nav strong { font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .menu-toggle, .top-link {
+        border: 1px solid light-dark(#cbd5e1, #475569); border-radius: 8px; padding: 7px 10px;
+        background: light-dark(#f8fafc, #111c30); color: light-dark(#1f2937, #e5e7eb);
+        font: inherit; font-size: 0.84rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+      }
+      .content { max-width: none; padding: 16px 16px 96px; }
+      h1 { font-size: clamp(1.35rem, 6vw, 1.7rem); line-height: 1.3; }
+      h2 { font-size: 1.18rem; line-height: 1.35; margin-top: 24px; }
+      h3 { font-size: 1rem; }
+      p, li { font-size: 0.95rem; }
+      ul, ol { padding-left: 1.35rem; }
+      pre { margin-left: 0; margin-right: 0; padding: 12px; font-size: 0.8rem; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 6px 8px; }
+      blockquote { padding: 8px 12px; }
+      .back-to-top { display: block; position: fixed; right: 16px; bottom: 16px; z-index: 10; opacity: 0.95; }
+      .toc-backdrop { display: none; }
+      .sidebar.open + .toc-backdrop { display: block; position: fixed; z-index: 19; inset: 52px 0 0; background: rgba(15, 23, 42, 0.35); }
     }
   </style>
 </head>
 <body>
+  <div class="mobile-nav" aria-label="Mobile navigation">
+    <strong id="mobile-title">SnowPro Gen AI Study Guide</strong>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Contents</button>
+  </div>
   <div class="layout">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <h2>SnowPro Gen AI (GES-C02)</h2>
       <p class="tagline">Study guide · read all four domains, then test yourself.</p>
       <a class="quiz-btn" href="quiz.html">Take the practice quiz &rarr;</a>
-      <nav class="toc" id="toc"></nav>
+      <nav class="toc" id="toc" aria-label="Table of contents"></nav>
     </aside>
+    <div class="toc-backdrop" id="toc-backdrop"></div>
     <main class="content" id="content">
 <section id="start" data-nav="Start Here">
 <h1>SnowPro Specialty: Gen AI (GES-C02) — Study Companion</h1>
@@ -2212,40 +2232,47 @@ AS
 </section>
     </main>
   </div>
+  <button class="top-link back-to-top" id="back-to-top" type="button">Top &uarr;</button>
 
   <script>
     const contentEl = document.getElementById('content');
     const tocEl = document.getElementById('toc');
+    const sidebarEl = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const backdrop = document.getElementById('toc-backdrop');
+    const topButton = document.getElementById('back-to-top');
 
     function slug(s) {
       return s.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').slice(0, 60);
     }
+    function closeMenu() {
+      sidebarEl.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+    menuToggle.addEventListener('click', () => {
+      const open = sidebarEl.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+    backdrop.addEventListener('click', closeMenu);
+    window.addEventListener('resize', () => { if (window.innerWidth > 820) closeMenu(); });
+    topButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
     const tocLinks = [];
     const usedIds = {};
-
     contentEl.querySelectorAll('section').forEach(secEl => {
       const l1 = document.createElement('a');
-      l1.className = 'lvl1';
-      l1.href = '#' + secEl.id;
+      l1.className = 'lvl1'; l1.href = '#' + secEl.id;
       l1.textContent = secEl.dataset.nav || secEl.id;
-      tocEl.appendChild(l1);
-      tocLinks.push({ a: l1, targetId: secEl.id });
-
+      tocEl.appendChild(l1); tocLinks.push({ a: l1, targetId: secEl.id });
       secEl.querySelectorAll('h2').forEach(h => {
         let id = slug(h.textContent) || secEl.id;
         if (usedIds[id]) { usedIds[id]++; id = id + '-' + usedIds[id]; } else { usedIds[id] = 1; }
-        h.id = id;
-        h.style.scrollMarginTop = '16px';
-        const l2 = document.createElement('a');
-        l2.className = 'lvl2';
-        l2.href = '#' + id;
-        l2.textContent = h.textContent;
-        tocEl.appendChild(l2);
-        tocLinks.push({ a: l2, targetId: id });
+        h.id = id; h.style.scrollMarginTop = '68px';
+        const l2 = document.createElement('a'); l2.className = 'lvl2'; l2.href = '#' + id;
+        l2.textContent = h.textContent; tocEl.appendChild(l2); tocLinks.push({ a: l2, targetId: id });
       });
     });
-
+    tocEl.addEventListener('click', closeMenu);
     const byId = {};
     tocLinks.forEach(t => byId[t.targetId] = t.a);
     const targets = tocLinks.map(t => document.getElementById(t.targetId)).filter(Boolean);
@@ -2254,16 +2281,12 @@ AS
       if (id === activeId) return;
       if (activeId && byId[activeId]) byId[activeId].classList.remove('active');
       activeId = id;
-      if (byId[id]) {
-        byId[id].classList.add('active');
-        byId[id].scrollIntoView({ block: 'nearest' });
-      }
+      if (byId[id]) { byId[id].classList.add('active'); byId[id].scrollIntoView({ block: 'nearest' }); }
     }
     const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter(e => e.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
       if (visible.length) setActive(visible[0].target.id);
-    }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+    }, { rootMargin: '-68px 0px -70% 0px', threshold: 0 });
     targets.forEach(t => observer.observe(t));
   </script>
 </body>
