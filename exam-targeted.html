@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="snowflake-source" content="cortex-agent-authored" />
+  <title>SnowPro Gen AI (GES-C02) — Targeted Drill</title>
+  <script type="application/json" id="snowflake-report-metadata">
+  {
+    "generated": "2026-08-12",
+    "intent": "Targeted practice drill for the specific GES-C02 subtopics Ahmed missed on the study exam (1.1, 1.2, 2.1, 2.2, 2.3, 2.5, 3.1, 3.2, 3.3, 4.2, 4.4). Filterable by subtopic; doc-grounded explanations.",
+    "sections": [
+      { "id": "drill", "title": "Targeted drill",
+        "dataSources": [{ "type": "docs", "path": "docs.snowflake.com: AI functions, cortex-search, cortex-analyst semantic views, cortex LLM privileges, model access, cost views, ai_parse_document, ai_extract, SPCS, model registry" }],
+        "producerNotes": "One question bank tagged by exam subtopic. To refresh, re-verify facts against docs and update the QUESTIONS array (each item has a topic like '3.1')." }
+    ]
+  }
+  </script>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
+      max-width: 900px; margin: 0 auto; padding: 24px 20px 90px;
+      color: light-dark(#1f2937, #e5e7eb);
+      background: light-dark(#ffffff, #0b1120);
+      line-height: 1.5;
+    }
+    h1 { color: light-dark(#0f172a, #f1f5f9); margin-bottom: 4px; font-size: 1.5rem; }
+    .sub { color: light-dark(#64748b, #94a3b8); margin-top: 0; font-size: 0.95rem; }
+    a { color: light-dark(#2563eb, #60a5fa); }
+
+    .controls {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 12px 0; margin: 10px 0 8px;
+      background: light-dark(#ffffff, #0b1120);
+      border-bottom: 1px solid light-dark(#e2e8f0, #1e293b);
+    }
+    .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-btn, .action-btn {
+      font: inherit; font-size: 0.82rem; cursor: pointer;
+      padding: 5px 11px; border-radius: 999px;
+      border: 1px solid light-dark(#cbd5e1, #334155);
+      background: light-dark(#f8fafc, #1e293b);
+      color: light-dark(#334155, #cbd5e1);
+    }
+    .filter-btn.active {
+      background: light-dark(#0d9488, #14b8a6);
+      border-color: light-dark(#0d9488, #14b8a6);
+      color: #fff; font-weight: 600;
+    }
+    .action-btn:hover, .filter-btn:hover { border-color: light-dark(#0d9488, #2dd4bf); }
+    .spacer { flex: 1 1 auto; }
+
+    .scorebar {
+      display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap;
+      font-size: 0.9rem; color: light-dark(#475569, #cbd5e1);
+      padding: 10px 14px; margin: 4px 0 20px; border-radius: 10px;
+      background: light-dark(#f1f5f9, #111c30);
+    }
+    .scorebar strong { color: light-dark(#0f172a, #f8fafc); font-size: 1.05rem; }
+    .score-correct { color: light-dark(#15803d, #4ade80); }
+    .score-wrong { color: light-dark(#b91c1c, #f87171); }
+
+    .q {
+      border: 1px solid light-dark(#e2e8f0, #1e293b);
+      border-radius: 12px; padding: 18px 18px 6px; margin: 0 0 18px;
+      background: light-dark(#ffffff, #0f172a);
+    }
+    .q-head { display: flex; gap: 10px; align-items: baseline; margin-bottom: 10px; }
+    .q-tag {
+      font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+      padding: 3px 8px; border-radius: 6px;
+      background: light-dark(#ccfbf1, #042f2e);
+      color: light-dark(#0f766e, #5eead4);
+    }
+    .q-text { font-weight: 600; color: light-dark(#0f172a, #f1f5f9); }
+    .q-text code, .opt code {
+      background: light-dark(#f1f5f9, #1e293b);
+      padding: 1px 5px; border-radius: 4px; font-size: 0.88em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .opts { list-style: none; padding: 0; margin: 0; }
+    .opt {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 12px; margin: 6px 0; cursor: pointer;
+      border: 1px solid light-dark(#e2e8f0, #253247);
+      border-radius: 9px; transition: background 0.12s, border-color 0.12s;
+    }
+    .opt:hover { border-color: light-dark(#2dd4bf, #14b8a6); }
+    .opt input { margin-top: 3px; accent-color: light-dark(#0d9488, #14b8a6); }
+    .opt .letter { font-weight: 700; color: light-dark(#64748b, #94a3b8); }
+    .opt.correct { background: light-dark(#dcfce7, #052e1a); border-color: light-dark(#22c55e, #16a34a); }
+    .opt.wrong { background: light-dark(#fee2e2, #3b0d0d); border-color: light-dark(#ef4444, #dc2626); }
+    .opt.locked { cursor: default; }
+    .opt.missed { background: light-dark(#fef9c3, #422006); border-color: light-dark(#eab308, #ca8a04); }
+
+    .multi-hint { font-size: 0.8rem; font-weight: 600; color: light-dark(#0d9488, #2dd4bf); margin: 2px 0 6px; }
+    .multi-submit {
+      margin: 4px 0 2px; padding: 7px 16px; cursor: pointer;
+      border: 1px solid light-dark(#0d9488, #14b8a6); border-radius: 8px;
+      background: light-dark(#0d9488, #14b8a6); color: #fff; font-weight: 600; font-size: 0.85rem;
+    }
+    .multi-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .explain {
+      margin: 4px 0 14px; padding: 12px 14px;
+      border-left: 3px solid light-dark(#0d9488, #14b8a6);
+      background: light-dark(#f8fafc, #111c30);
+      border-radius: 0 8px 8px 0; font-size: 0.92rem; display: none;
+    }
+    .explain.show { display: block; }
+    .explain .verdict { font-weight: 700; }
+    .explain .verdict.right { color: light-dark(#15803d, #4ade80); }
+    .explain .verdict.no { color: light-dark(#b91c1c, #f87171); }
+
+    footer { margin-top: 30px; font-size: 0.85rem; color: light-dark(#64748b, #94a3b8); }
+  </style>
+</head>
+<body>
+
+  <h1>SnowPro Gen AI (GES-C02) — Targeted Drill</h1>
+  <p class="sub">Built around the exact subtopics you missed. Filter to one objective, drill it, then move on. Single-answer questions lock on click; multi-answer ("Select TWO/THREE") let you tick boxes then press Check answer. Either way you get a grounded explanation.</p>
+
+  <div class="controls">
+    <div class="filters" id="filters"></div>
+    <span class="spacer"></span>
+    <button class="action-btn" id="reset">Reset all</button>
+  </div>
+
+  <div class="scorebar">
+    <span>Answered <strong id="s-answered">0</strong> / <strong id="s-total">0</strong></span>
+    <span class="score-correct">Correct <strong id="s-correct">0</strong></span>
+    <span class="score-wrong">Incorrect <strong id="s-wrong">0</strong></span>
+    <span>Score <strong id="s-pct">&mdash;</strong></span>
+  </div>
+
+  <div id="quiz"></div>
+
+  <footer>
+    Grounded against Snowflake product docs (2026-08-12). Back to <a href="index.html">prep hub</a> &middot; <a href="study-guide.html">study guide</a> &middot; <a href="study-guide.html#advanced">advanced notes</a>.
+  </footer>
+
+  <script>
+    const TOPIC_NAMES = {
+      "1.1": "1.1 Principles & features",
+      "1.2": "1.2 Gen AI capabilities",
+      "2.1": "2.1 Apply AI functions",
+      "2.2": "2.2 Data analysis use case",
+      "2.3": "2.3 Chat interfaces",
+      "2.5": "2.5 Run third-party models",
+      "3.1": "3.1 Model access controls",
+      "3.2": "3.2 RBAC grant/revoke",
+      "3.3": "3.3 Cost mgmt & optimize",
+      "3.4": "3.4 Observability & hallucination",
+      "4.2": "4.2 Doc prep & extraction",
+      "4.4": "4.4 Doc troubleshoot/optimize"
+    };
+
+    const QUESTIONS = [
+      // ===== 1.1 Principles & features =====
+      { topic: "1.1", q: "A security team worries that using Cortex LLMs will expose company data to model training. What is Snowflake's stated principle?",
+        opts: ["Data is used to improve the base models by default","Customer data stays within Snowflake's governance/security boundary and is not used to train the models","Data leaves Snowflake but is anonymized first","Only Enterprise edition keeps data private"], answer: 1,
+        why: "Cortex is fully-managed inside Snowflake's governance boundary; your data isn't used to train the foundation models and doesn't leave that boundary." },
+      { topic: "1.1", q: "You need to improve a model's accuracy on a narrow, repeated classification task and lower per-call inference cost. Which Snowflake feature, and what privilege does it need?",
+        opts: ["RAG with Cortex Search; CORTEX_USER","Cortex Fine-tuning (FINETUNE); CREATE MODEL privilege","Provisioned Throughput; CREATE WAREHOUSE","AI_CLASSIFY; ACCOUNTADMIN"], answer: 1,
+        why: "Cortex Fine-tuning customizes a base model on labeled data — cheaper/faster than prompting a large model for a narrow task. It's created with FINETUNE and requires the CREATE MODEL privilege. (RAG adds context but doesn't change the model.)" },
+      { topic: "1.1", q: "Which statement correctly pairs a Cortex product with its core purpose?",
+        opts: ["Cortex Analyst → semantic search over unstructured PDFs","Cortex Search → text-to-SQL over structured tables","Cortex Agents → orchestrate tools (Search, Analyst, custom) to answer a request","Snowflake Intelligence → a vector distance function"], answer: 2,
+        why: "Agents orchestrate multiple tools. Search = unstructured retrieval; Analyst = text-to-SQL over structured data; Intelligence = the no-code UI over agents." },
+
+      // ===== 1.2 Gen AI capabilities =====
+      { topic: "1.2", q: "A 40-page contract exceeds the model's context window when passed whole. What capability addresses this, and why?",
+        opts: ["Fine-tuning, because it enlarges the context window","Chunking, because long inputs must be split to fit the max tokens (prompt + response) the model can consider","Cross-region inference, because other regions have bigger windows","Guardrails, because they compress the text"], answer: 1,
+        why: "The context window is the max tokens (prompt + response) a model can consider; long docs must be chunked to fit. Exceeding it truncates/errors and raises latency/cost." },
+      { topic: "1.2", q: "What is the Model Context Protocol (MCP) in the Snowflake Gen AI context?",
+        opts: ["A vector distance metric","An open protocol for exposing/consuming tools and data so agents can interoperate (Cortex Agents can act as MCP server/client)","A billing view for Cortex","A required parameter of AI_COMPLETE"], answer: 1,
+        why: "MCP is an open protocol for tool/data interoperability; Cortex Agents can act as MCP servers/clients so internal and external tools work together." },
+      { topic: "1.2", q: "The Cortex REST APIs (Analyst, Agents, inference) support which authentication methods?",
+        opts: ["Password only","PAT, key-pair JWT, and OAuth","SSO only","No auth needed inside Snowflake"], answer: 1,
+        why: "Snowflake REST APIs authenticate via programmatic access token (PAT), key-pair JWT, or OAuth." },
+
+      // ===== 2.1 Apply AI functions =====
+      { topic: "2.1", q: "You must keep only rows whose free-text `note` semantically expresses a safety complaint, directly in SQL. Best function?",
+        opts: ["AI_CLASSIFY in SELECT","AI_FILTER in the WHERE clause","AI_SENTIMENT","VECTOR_L2_DISTANCE"], answer: 1,
+        why: "AI_FILTER evaluates a natural-language condition to TRUE/FALSE and can be used directly in WHERE to filter rows by meaning." },
+      { topic: "2.1", q: "You need one summary that distills a customer's key issue across ALL of their support tickets (many rows per customer). Which function?",
+        opts: ["SUMMARIZE (scalar)","AI_SUMMARIZE_AGG (aggregate) with GROUP BY customer","AI_COMPLETE per row","AI_TRANSLATE"], answer: 1,
+        why: "AI_SUMMARIZE_AGG is an aggregate function that reduces many rows into one summary (use with GROUP BY). SUMMARIZE handles a single value only." },
+      { topic: "2.1", q: "A task-specific function (AI_CLASSIFY/AI_EXTRACT/AI_TRANSLATE) fits your need. Why prefer it over a hand-prompted AI_COMPLETE?",
+        opts: ["It's the only one with region support","It's purpose-built — typically cheaper and more accurate than a hand-crafted prompt","AI_COMPLETE can't run in SQL","Task functions don't need any role"], answer: 1,
+        why: "Task-specific functions are optimized for their job: cheaper and more accurate than a general prompt. Prefer them when they fit." },
+      { topic: "2.1", q: "An <code>AI_COMPLETE</code> app needs to BALANCE response quality against processing speed/cost. Which choice best meets that?",
+        opts: ["Pick the largest model (e.g. llama3.1-405b) and lower <code>temperature</code> to cut processing overhead","Pick a small model and set <code>temperature = 0.7</code> to optimize quality and speed","Use a small model (e.g. mistral-7b) and raise <code>max_tokens</code> to improve quality","Pick a mid-tier model (e.g. llama3.1-70b) and benchmark quality against latency and cost"], answer: 3,
+        why: "Model SIZE is the quality-vs-speed dial: bigger = higher quality but slower/costlier. The balanced approach is a mid-tier model benchmarked against latency/cost. temperature only controls randomness (not speed); max_tokens only caps OUTPUT LENGTH (not quality) and can slow responses; the 405b model is the slowest, so A doesn't help speed." },
+      { topic: "2.1", q: "To find semantically SIMILAR items (e.g. similar resolved support tickets) by comparing text embeddings, which vector function?",
+        opts: ["VECTOR_L1_DISTANCE","VECTOR_L2_DISTANCE","VECTOR_INNER_PRODUCT","VECTOR_COSINE_SIMILARITY"], answer: 3,
+        why: "Cosine similarity compares vectors by ANGLE (direction), the standard magnitude-independent measure for semantic similarity of embeddings. VECTOR_INNER_PRODUCT is the raw (un-normalized) dot product \u2014 skewed by magnitude unless vectors are unit-normalized. L1 (Manhattan) and L2 (Euclidean) are DISTANCE metrics (smaller = closer), not the go-to similarity score." },
+
+      // ===== 2.2 Data analysis given a use case =====
+      { topic: "2.2", q: "For a RAG pipeline over Markdown docs, which chunking helper best preserves document structure?",
+        opts: ["SPLIT_TEXT_RECURSIVE_CHARACTER only","SPLIT_TEXT_MARKDOWN_HEADER, which splits along Markdown headers","AI_COUNT_TOKENS","VECTOR_TRUNCATE"], answer: 1,
+        why: "SPLIT_TEXT_MARKDOWN_HEADER chunks along Markdown headers, preserving structure (pairs well with AI_PARSE_DOCUMENT LAYOUT). Recursive-character is the generic fallback." },
+      { topic: "2.2", q: "Retrieval returns loosely-relevant chunks and answer quality suffers. Which Cortex Search capability most directly improves the ordering of retrieved results?",
+        opts: ["Disabling reranking","Semantic reranking (on by default) to reorder candidates by relevance","Lowering TARGET_LAG","Switching to FULL refresh"], answer: 1,
+        why: "Cortex Search applies semantic reranking (default on) to reorder candidates for relevance. Disabling it lowers latency but can hurt relevance." },
+      { topic: "2.2", q: "For text-to-SQL accuracy on structured data, which pairing is correct?",
+        opts: ["Cortex Search + chunking","Cortex Analyst grounded on a semantic view, improved with Verified Queries and custom instructions","AI_EMBED + VECTOR_SUM","AI_TRANSCRIBE + LAYOUT"], answer: 1,
+        why: "Analyst does text-to-SQL grounded on a semantic view/model; accuracy improves via the Verified Query Repository and custom instructions." },
+
+      // ===== 2.3 Chat interfaces =====
+      { topic: "2.3", q: "In a multi-turn chat app, follow-ups lose context. What must the app do each request?",
+        opts: ["Increase the warehouse size","Resend the conversation history in the messages array (the LLM is stateless)","Enable guardrails","Cache the embedding"], answer: 1,
+        why: "The LLM keeps no state between calls; the app must pass prior turns in the messages array so context accumulates." },
+      { topic: "2.3", q: "A Streamlit-in-Snowflake app calls Cortex Analyst. Beyond CORTEX_USER + USE AI FUNCTIONS, what account setting must be enabled?",
+        opts: ["CORTEX_ENABLED_CROSS_REGION = ANY_REGION","ENABLE_CORTEX_ANALYST = TRUE","CORTEX_MODELS_ALLOWLIST = 'None'","AUTO_SUSPEND = 1800"], answer: 1,
+        why: "Cortex Analyst is opt-in via the account parameter ENABLE_CORTEX_ANALYST = TRUE, plus CORTEX_USER and USAGE on the semantic view + warehouse." },
+      { topic: "2.3", q: "A business stakeholder wants to ask questions in plain English over your agents and semantic models with no coding. Which surface?",
+        opts: ["Cortex Code CLI","Snowflake Intelligence (no-code UI over agents)","Model Registry","SPCS endpoint"], answer: 1,
+        why: "Snowflake Intelligence is the no-code, business-user chat UI built on top of Cortex Agents and semantic models." },
+      { topic: "2.3", q: "In a Cortex Analyst API response, where do you find which Verified Query Repository (VQR) entry was used to generate the SQL?",
+        opts: ["<code>message.content[].type</code>","<code>message.content[].text</code>","<code>message.content[].confidence</code> (the <code>verified_query_used</code> object)","<code>message.content[].suggestions</code>"], answer: 2,
+        why: "For the sql content block, Cortex Analyst returns a confidence object containing verified_query_used (name, question, sql, verified_at, verified_by); it's null if no verified query matched. type is just the block label (text/suggestions/sql); text is the NL interpretation; suggestions only appears for AMBIGUOUS questions where no SQL could be generated." },
+
+      // ===== 2.5 Run third-party models =====
+      { topic: "2.5", q: "Correct ORDER of steps to serve a custom containerized model on SPCS?",
+        opts: ["Compute pool → service spec → Docker image → image repository","Docker image → image repository → compute pool → service spec → CREATE SERVICE","CREATE SERVICE → Docker image → compute pool","Service spec → CREATE SERVICE → build image"], answer: 1,
+        why: "Containerize (Docker image) → push to an image repository → create a compute pool → write a service spec → CREATE SERVICE and call its endpoint." },
+      { topic: "2.5", q: "You have a trained Python model to deploy as a versioned, governed object callable from SQL, without managing containers. Best fit?",
+        opts: ["SPCS","Snowflake Model Registry (log_model)","Cortex Fine-tuning","Provisioned Throughput"], answer: 1,
+        why: "Model Registry logs a versioned MODEL object and packages dependencies — no containers. SPCS is for custom containers/GPUs." },
+      { topic: "2.5", q: "When is SPCS the right choice over the Model Registry?",
+        opts: ["When you just want to version a scikit-learn model","When you need GPUs, a custom serving framework, or full runtime control beyond the managed runtime","When you want the simplest possible deploy","When you only need text-to-SQL"], answer: 1,
+        why: "SPCS gives container/GPU/runtime control for models the managed runtime can't host; Registry is the simplest path for standard models." },
+      { topic: "2.5", q: "How should an externally-trained model (e.g. a scikit-learn model in a notebook) be registered in the Snowflake Model Registry?",
+        opts: ["Use <code>snowflake.ml.registry</code> \u2014 call <code>log_model()</code> on the model object; the registry serializes it and logs it as a first-class MODEL object","Use <code>snowflake.ml.registry</code> to stage a pickle file, then reference that stage to register it","Use the Snowflake CLI to serialize and log the model directly","Use the Snowflake CLI to push the model to a stage, then register it"], answer: 0,
+        why: "The Model Registry is driven by the snowflake-ml-python SDK: Registry.log_model() takes the in-memory model, serializes it, captures dependencies/signature, and creates a versioned MODEL object. You do NOT hand-stage a pickle (B) \u2014 log_model handles serialization. The registry is a Python API, not a snow CLI workflow (C/D)." },
+
+      // ===== 3.1 Model access controls =====
+      { topic: "3.1", q: "What is the recommended, fine-grained way to control which LLMs a role may call?",
+        opts: ["CORTEX_MODELS_ALLOWLIST (the go-forward mechanism)","Model RBAC: application roles in SNOWFLAKE.MODELS (e.g. CORTEX-MODEL-ROLE-ALL)","Network policies","Masking policies"], answer: 1,
+        why: "Model RBAC via application roles in SNOWFLAKE.MODELS is the recommended, fine-grained mechanism; the account allowlist is legacy." },
+      { topic: "3.1", q: "RBAC grants USAGE on a model but CORTEX_MODELS_ALLOWLIST is 'None'. Can a non-admin role use the model?",
+        opts: ["No — allowlist 'None' always blocks","Yes — access is granted if either RBAC OR the allowlist permits it","Only if ACCOUNTADMIN","Only in the home region"], answer: 1,
+        why: "RBAC and the allowlist combine with OR — either one granting access is sufficient; denied only if both fail. (Setting allowlist to 'None' makes RBAC the sole gate only when RBAC is also absent.)" },
+      { topic: "3.1", q: "An admin adds `'Llama3.1-70B'` to CORTEX_MODELS_ALLOWLIST but it still isn't allowed. Why?",
+        opts: ["Allowlist can't name specific models","Model names are case-sensitive and must be lowercase (e.g. 'llama3.1-70b')","Only ORGADMIN can set it","It must be set per session"], answer: 1,
+        why: "The allowlist is account-level, ACCOUNTADMIN-only, and names are case-sensitive lowercase." },
+      { topic: "3.1", q: "An ACCOUNTADMIN wants the account restricted to exactly two models via the allowlist: <code>claude-3-5-sonnet</code> and <code>mistral-large2</code>. Which value is syntactically valid?",
+        opts: ["<code>CORTEX_MODELS_ALLOWLIST = ['claude-3-5-sonnet','mistral-large2'];</code>","<code>CORTEX_MODELS_ALLOWLIST = 'claude-3-5-sonnet,mistral-large2';</code>","<code>CORTEX_MODELS_ALLOWLIST = 'All';</code>","<code>CORTEX_MODELS_ALLOWLIST = 'Claude-3-5-Sonnet,Mistral-Large2';</code>"], answer: 1,
+        why: "The allowlist takes ONE quoted, comma-separated STRING of model names ('a,b'), or the special values 'All'/'None'. An array literal (A) is invalid; 'All' (C) allows everything; names are case-sensitive lowercase, so the capitalized names in D won't match." },
+      { topic: "3.1", q: "At which level can the <code>CORTEX_MODELS_ALLOWLIST</code> parameter be set?",
+        opts: ["Session","Database","Account (via ALTER ACCOUNT, ACCOUNTADMIN only)","Virtual warehouse"], answer: 2,
+        why: "CORTEX_MODELS_ALLOWLIST is an ACCOUNT-level parameter — set only with ALTER ACCOUNT by ACCOUNTADMIN. It CANNOT be set at the session, database, or warehouse level; it's a single account-wide control. Per-role model access is done separately via model RBAC (SNOWFLAKE.MODELS application roles), not by scoping this parameter." },
+
+      // ===== 3.2 RBAC grant/revoke =====
+      { topic: "3.2", q: "A user has USE AI FUNCTIONS but AI_COMPLETE still fails. What's missing?",
+        opts: ["A semantic view","A CORTEX_USER (or AI_FUNCTIONS_USER) database role","ORGADMIN","Cross-region enabled"], answer: 1,
+        why: "Calling AI functions needs BOTH the USE AI FUNCTIONS privilege AND a CORTEX_USER/AI_FUNCTIONS_USER database role." },
+      { topic: "3.2", q: "A Gen AI app works for users with ACCOUNTADMIN but fails with access errors for a custom <code>business_rl</code> role running the same queries on the same models. Most likely cause?",
+        opts: ["business_rl hasn't been granted the <code>SNOWFLAKE.CORTEX_USER</code> database role","CORTEX_MODELS_ALLOWLIST is still at its default","IMPORTED PRIVILEGES weren't granted, so no role can use Cortex","The warehouse is too small"], answer: 0,
+        why: "ACCOUNTADMIN has Cortex access inherently; a custom role needs SNOWFLAKE.CORTEX_USER (or AI_FUNCTIONS_USER) granted to it. The allowlist default already permits models; a missing warehouse yields a 'no active warehouse' error, not a model access-denied error." },
+      { topic: "3.2", q: "Which is TRUE about granting SNOWFLAKE Cortex database roles?",
+        opts: ["They can be granted directly to a user","They must be granted to a custom account role, which is then granted to users","Only ORGADMIN can grant them","They require GRANT APPLICATION ROLE"], answer: 1,
+        why: "SNOWFLAKE database roles can't be granted directly to users — grant to a custom role, then grant that role to users." },
+      { topic: "3.2", q: "To restrict a role to Cortex Agents only (not other Cortex features), you should:",
+        opts: ["Grant CORTEX_USER","Grant CORTEX_AGENT_USER (to a custom role) and NOT grant CORTEX_USER","Set ENABLE_CORTEX_ANALYST = TRUE","Grant AI_FUNCTIONS_USER"], answer: 1,
+        why: "CORTEX_AGENT_USER scopes access to Agents only; granting CORTEX_USER would re-open all covered features." },
+      { topic: "3.2", q: "An agent works when a user runs it in one session role but fails in normal use. Why?",
+        opts: ["Agents ignore RBAC","Agents evaluate the user's DEFAULT role and need a DEFAULT warehouse — grants must be on the default role","Masking policy blocks it","The allowlist is 'All'"], answer: 1,
+        why: "Cortex Agents use the querying user's default role (not the active session role) and require a default warehouse; grants must sit on the default role and cover every tool object." },
+      { topic: "3.2", q: "Which THREE privileges let a role CREATE a Cortex Agent object in a schema? (pick the create-object trio)",
+        opts: ["USAGE on database + USAGE on schema + CREATE AGENT on schema","CORTEX_ANALYST_USER + USAGE on Snowflake Intelligence + CREATE AGENT","USAGE on Cortex Search service + USAGE on schema + CREATE AGENT","CORTEX_USER + USAGE on warehouse + MODIFY on agent"], answer: 0,
+        why: "Creating ANY object in a schema needs the create-object trio: USAGE on the parent database, USAGE on the schema, and CREATE <object> (here CREATE AGENT) on the schema. CORTEX_ANALYST_USER is the wrong role (agents use CORTEX_USER/CORTEX_AGENT_USER) and governs CALLING not creating; USAGE on a Cortex Search service is only for a search TOOL at run time; USAGE on warehouse/MODIFY are for running/updating, not creating." },
+
+      // ===== 3.3 Cost management & optimization =====
+      { topic: "3.3", q: "Which view gives DAILY credit consumption for AI services?",
+        opts: ["ACCOUNT_USAGE.METERING_HISTORY","ACCOUNT_USAGE.METERING_DAILY_HISTORY (SERVICE_TYPE='AI_SERVICES')","INFORMATION_SCHEMA.METERING_HISTORY","ACCOUNT_USAGE.QUERY_HISTORY"], answer: 1,
+        why: "Daily → METERING_DAILY_HISTORY in ACCOUNT_USAGE. METERING_HISTORY is hourly; INFORMATION_SCHEMA is the wrong namespace." },
+      { topic: "3.3", q: "You want per-query token usage for AI SQL functions to attribute cost. Which view?",
+        opts: ["CORTEX_AISQL_USAGE_HISTORY","METERING_DAILY_HISTORY","CORTEX_ANALYST_USAGE_HISTORY","CORTEX_SEARCH_DAILY_USAGE_HISTORY"], answer: 0,
+        why: "CORTEX_AISQL_USAGE_HISTORY captures per-query LLM function token usage." },
+      { topic: "3.3", q: "Which TWO cost categories does the <code>CORTEX_SEARCH_DAILY_USAGE_HISTORY</code> view track (its <code>CONSUMPTION_TYPE</code> values)?",
+        opts: ["Serving compute","Cloud services compute","Virtual warehouse compute","EMBED_TEXT_TOKENS (embedding tokens)","Storage"], answers: [0,3],
+        why: "The view's CONSUMPTION_TYPE is one of SERVING, EMBED_TEXT_TOKENS, or BATCH (batch = serving + query-embedding combined) \u2014 so it tracks serving compute and embed-text token compute. Trap: virtual warehouse compute, cloud services, and storage ARE real Cortex Search costs but are NOT itemized in this view (docs: Snowflake 'intends to also provide virtual warehouse usage in this view in the future'). 'TOKEN_CREDITS' isn't a real category \u2014 the embedding type is literally EMBED_TEXT_TOKENS." },
+      { topic: "3.3", q: "Before running an expensive batch, you want to estimate token cost. Which helper, and what other lever most reduces cost?",
+        opts: ["AI_COUNT_TOKENS; and use smaller models / shorter prompts+outputs","AI_EMBED; and a bigger warehouse","VECTOR_NORMALIZE; and more regions","SUMMARIZE; and disabling guardrails"], answer: 0,
+        why: "AI_COUNT_TOKENS estimates tokens pre-run; token cost drops with smaller models and shorter prompts/outputs (bigger warehouses don't change inference token cost)." },
+      { topic: "3.3", q: "For predictable, high-volume inference cost/throughput at scale, which mechanism — and how do you attribute AI spend to a team?",
+        opts: ["A larger warehouse; resource monitors only","Provisioned Throughput (reserved capacity); attribute with object tagging + budgets","Cross-region inference; masking policies","AUTO_SUSPEND; verified queries"], answer: 1,
+        why: "Provisioned Throughput reserves capacity for predictable cost/throughput. Use object tagging + usage quotas/budgets to attribute and cap AI spend by team." },
+      { topic: "3.3", q: "For a chargeback report you need total <strong>credits</strong> consumed by AI services (incl. Cortex LLM functions), aggregated per day, from <code>ACCOUNT_USAGE</code>. Which view?",
+        opts: ["<code>METERING_DAILY_HISTORY</code> filtered on <code>SERVICE_TYPE='AI_SERVICES'</code>","<code>CORTEX_FUNCTIONS_USAGE_HISTORY</code>","<code>QUERY_HISTORY</code>","<code>WAREHOUSE_METERING_HISTORY</code>"], answer: 0,
+        why: "METERING_DAILY_HISTORY reports daily CREDITS by SERVICE_TYPE, including AI_SERVICES. CORTEX_FUNCTIONS_USAGE_HISTORY is token-level per function (not credits-by-service); QUERY_HISTORY has no per-service credit column; WAREHOUSE_METERING_HISTORY covers warehouse compute only. Rule: 'credits by AI service' &rarr; METERING_DAILY_HISTORY; 'tokens per function/query' &rarr; the CORTEX_*_USAGE_HISTORY views." },
+
+      // ===== 4.2 Doc prep & extraction workflows =====
+      { topic: "4.2", q: "You must run AI functions on PDFs in a stage. What builds the FILE object the functions consume, and what does the stage need?",
+        opts: ["GET_PRESIGNED_URL; a masking policy","TO_FILE(...); a directory table on the stage","AI_EMBED; a warehouse","PROMPT(); a semantic view"], answer: 1,
+        why: "TO_FILE(stage, path) builds the FILE object; the stage must have a directory table to enumerate file paths (e.g. via DIRECTORY(@stage))." },
+      { topic: "4.2", q: "Invoices need structured fields (vendor, total); a contract archive needs full searchable Markdown with tables. Correct workflow?",
+        opts: ["AI_PARSE_DOCUMENT OCR for both","AI_EXTRACT (schema) for invoice fields; AI_PARSE_DOCUMENT LAYOUT for contracts","AI_EXTRACT for both","AI_CLASSIFY for both"], answer: 1,
+        why: "Specific fields → AI_EXTRACT with a response schema; whole document as Markdown preserving tables → AI_PARSE_DOCUMENT LAYOUT." },
+      { topic: "4.2", q: "You want documents processed automatically as they land in a stage. Which two objects form the pipeline?",
+        opts: ["Masking policy + row access policy","A Stream (CDC on the directory table) + a Task to run parse/extract","Warehouse + resource monitor","Semantic view + verified query"], answer: 1,
+        why: "A Stream captures newly-landed files via the directory table; a Task executes the AI_PARSE/AI_EXTRACT step. Both are required." },
+      { topic: "4.2", q: "A downstream process needs temporary access to a specific staged file. Which function?",
+        opts: ["TO_FILE","GET_PRESIGNED_URL","AI_PARSE_DOCUMENT","VECTOR_TRUNCATE"], answer: 1,
+        why: "GET_PRESIGNED_URL generates a temporary access URL for a staged file (BUILD_SCOPED_FILE_URL is related)." },
+
+      // ===== 4.4 Doc troubleshoot & optimize =====
+      { topic: "4.4", q: "A 5,000-page PDF fails AI_PARSE_DOCUMENT. Best fix within documented limits?",
+        opts: ["Use an X-LARGE warehouse","Split via page_split/page_filter to stay within the ~2,000-page limit","Switch OCR→LAYOUT to raise the limit","Convert to .txt"], answer: 1,
+        why: "Max ~2,000 pages/doc — split/filter pages. Warehouse size doesn't raise the limit; OCR vs LAYOUT doesn't change page limits." },
+      { topic: "4.4", q: "Parsing is slow and you scaled to X-LARGE with no improvement. Why, and what's recommended?",
+        opts: ["Bug — file a ticket","AI_PARSE_DOCUMENT bills per page and doesn't benefit from big warehouses; use one no larger than MEDIUM","Enable guardrails","Increase max_tokens"], answer: 1,
+        why: "AI_PARSE_DOCUMENT cost/perf is per page; a larger warehouse doesn't speed it up. Use a warehouse no larger than MEDIUM." },
+      { topic: "4.4", q: "AI functions return errors on FILE objects from a stage. Which stage configuration is a known blocker?",
+        opts: ["Server-side encrypted external stage","Client-side encrypted stages (AWS_CSE/AZURE_CSE), SNOWFLAKE_FULL internal encryption, user/table stages, or double-quoted stage names","Any stage with a directory table","A stage in the same schema"], answer: 1,
+        why: "AI functions on FILE objects don't work on client-side-encrypted stages, SNOWFLAKE_FULL internal encryption, user/table stages, or double-quoted stage names. Use server-side-encrypted stages." },
+      { topic: "4.4", q: "Out-of-the-box AI_EXTRACT misses niche fields on specialized forms. Best optimization?",
+        opts: ["Bigger warehouse","Fine-tune the arctic-extract model on labeled examples","Switch to OCR mode","Raise page_filter range"], answer: 1,
+        why: "Fine-tune arctic-extract on labeled examples for domain-specific extraction accuracy." },
+      { topic: "4.4", q: "Large volumes of JSON sit in a single big table with a VARIANT column; you must balance storage/cost and query speed for analytics. Which TWO most directly OPTIMIZE performance?",
+        opts: ["Flatten frequently queried fields into typed relational columns","Define a clustering key on the columns most used in filters/joins","Use a materialized view to pre-aggregate AND reduce storage costs","Add Search Optimization Service on the VARIANT to speed all query patterns","Use an external function to process the JSON and reduce storage"], answers: [0,1],
+        why: "The two real wins: flatten hot fields into native-typed columns (avoids per-row VARIANT parsing, enables columnar pruning/compression) and add a clustering key (better partition pruning on a large table). Traps: a materialized view ADDS storage + maintenance cost (so 'reduce storage' is wrong); Search Optimization helps SELECTIVE point lookups, not broad analytics, and adds cost; external functions call external code and don't optimize storage/scan. Encryption at-rest/in-transit is automatic and irrelevant to the design." },
+
+      // ===== 2.2 (hallucination via grounding) =====
+      { topic: "2.2", q: "A chatbot over your internal PDFs keeps inventing plausible-but-wrong answers. Which approach most directly reduces hallucination?",
+        opts: ["Raise temperature so it's more creative","Ground answers with RAG — retrieve relevant chunks via Cortex Search and pass them to AI_COMPLETE","Enable Cortex Guard (guardrails=TRUE)","Fine-tune on unrelated data"], answer: 1,
+        why: "RAG grounds responses in retrieved facts, the primary hallucination defense. Higher temperature increases invention; Cortex Guard is a safety filter, not a factuality control." },
+      { topic: "2.2", q: "An analyst asks Cortex Analyst a question and gets a subtly wrong SQL definition of 'active customer'. Which feature best improves trust/consistency for such questions?",
+        opts: ["Cortex Guard","Verified Query Repository (admin-approved NL→SQL pairs Analyst reuses)","AI_REDACT","A larger warehouse"], answer: 1,
+        why: "The Verified Query Repository stores admin-approved NL→SQL pairs Analyst reuses for similar questions — improving accuracy and trust. (Custom instructions can also encode the definition.)" },
+      { topic: "2.2", q: "You need machine-parseable output and want to stop the model from inventing extra fields. Which combination helps most?",
+        opts: ["guardrails=TRUE and temperature=1","Structured Outputs (response_format + required) with temperature=0","show_details=TRUE only","AI_TRANSLATE then AI_COMPLETE"], answer: 1,
+        why: "A response_format schema (with required fields) constrains output to your structure, and temperature=0 makes it deterministic — both reduce free-form drift/fabrication." },
+
+      // ===== 3.4 Observability & hallucination =====
+      { topic: "3.4", q: "You want to quantify whether your RAG app's answers are actually supported by the retrieved context. Which metric, via which tooling?",
+        opts: ["Cosine similarity, via VECTOR functions","Groundedness (part of the RAG Triad), via AI Observability + the TruLens SDK","Token count, via AI_COUNT_TOKENS","Latency, via QUERY_HISTORY"], answer: 1,
+        why: "The RAG Triad's groundedness metric (LLM-as-judge) scores whether the answer is supported by retrieved context. AI Observability uses the TruLens SDK for evaluation and tracing." },
+      { topic: "3.4", q: "Which three metrics make up the RAG Triad in Snowflake AI Observability?",
+        opts: ["Precision, recall, F1","Context relevance, groundedness, answer relevance","Latency, cost, throughput","BLEU, ROUGE, perplexity"], answer: 1,
+        why: "The RAG Triad = context relevance (is retrieved context relevant?), groundedness (is the answer supported by it?), and answer relevance (does it address the question?)." },
+      { topic: "3.4", q: "A colleague proposes enabling Cortex Guard to 'stop the model from hallucinating'. Best correction?",
+        opts: ["Correct — Cortex Guard prevents hallucination","Cortex Guard (and Cortex AI Guardrails) are safety controls (harmful output / prompt injection), not factuality; use RAG grounding and evaluate with groundedness instead","Cortex Guard only works with Analyst","Guard removes PII, which stops hallucination"], answer: 1,
+        why: "Cortex Guard filters harmful output (Llama Guard 3); AI Guardrails defend against prompt injection. Neither addresses factual accuracy — grounding (RAG/VQR) does, and groundedness measures it." },
+      { topic: "3.4", q: "During debugging you need to see exactly which retrieved chunks and prompt produced a given answer. Which AI Observability capability, and where are the records stored?",
+        opts: ["Resource monitors; in a resource monitor log","Tracing; telemetry is written to an event table","Masking policies; in ACCOUNT_USAGE","VECTOR_NORMALIZE; in a stage"], answer: 1,
+        why: "Tracing captures each step (retrieval, prompt, response) for debugging; AI Observability logging writes telemetry to an event table for analysis." },
+      { topic: "3.4", q: "Which sequence correctly evaluates a RAG app end-to-end with Snowflake AI Observability?",
+        opts: ["Instrument/evaluate with the TruLens SDK &rarr; register the app in Snowflake &rarr; create a run with an input data set &rarr; execute the run to generate traces + metrics &rarr; monitor in Snowsight","Instrument with Traceloop &rarr; create a run &rarr; execute &rarr; monitor in Snowsight","Register the app &rarr; create a run &rarr; execute &rarr; cancel the run &rarr; monitor in Snowsight","Enable Cortex Guard &rarr; create a run &rarr; execute &rarr; monitor in Snowsight"], answer: 0,
+        why: "AI Observability uses the TruLens SDK to instrument/evaluate the app; then you register it, create a run over an input data set, execute it to produce traces and RAG-Triad metrics, and monitor in Snowsight. Traceloop (B) and Cortex Guard (D) are wrong tools; cancelling a run (C) yields no metrics." },
+
+      // ===== Missed-question adds (2026-09-01 practice session) =====
+      { topic: "4.2", q: "To pull structured fields (vendor, invoice #, total) from PDF invoices on a stage, which pattern works \u2014 and what is the input gotcha with <code>AI_EXTRACT</code>?",
+        opts: ["Pass the stage-path string <code>'@stage/inv.pdf'</code> straight into AI_EXTRACT","AI_PARSE_DOCUMENT to get text, then AI_EXTRACT with a response schema; feed AI_EXTRACT a FILE object via <code>TO_FILE(@stage,'path')</code> (not a bare stage-path string)","AI_CLASSIFY the invoice, then AI_COMPLETE for each field","AI_EMBED the PDF, then rank fields by cosine similarity"], answer: 1,
+        why: "Specific fields \u2192 AI_EXTRACT with an object/response schema. The gotcha: file-based AI functions consume a FILE object built with TO_FILE(@stage,'path') \u2014 a bare stage-path STRING won't work. AI_PARSE_DOCUMENT can first turn the PDF into text/markdown to feed the pipeline." },
+      { topic: "3.3", q: "An <code>AI_COMPLETE</code> call processes fewer tokens than a big <code>AI_EMBED</code> batch, yet shows MORE token credits. Why?",
+        opts: ["Token credits are unrelated to token counts","Token credits = tokens \u00d7 per-model rate; AI_EMBED bills on INPUT tokens only at a low rate, while AI_COMPLETE bills INPUT + OUTPUT at a higher per-token rate","AI_COMPLETE always runs on a larger warehouse, which adds token credits","AI_EMBED is free of charge"], answer: 1,
+        why: "Token credits = tokens \u00d7 the model's per-token rate. AI_EMBED is billed on input tokens only at a low embedding rate; AI_COMPLETE (generation) bills BOTH input and output tokens at a higher rate \u2014 so even fewer tokens can cost more credits. Warehouse size doesn't change inference token credits." },
+      { topic: "3.2", q: "Which TWO approaches successfully let a custom role (and then <code>some_user</code>) call Cortex LLM functions? (Select TWO)",
+        opts: ["As SYSADMIN: <code>GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE my_role</code>","<code>GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO USER some_user</code>","As SECURITYADMIN (has MANAGE GRANTS): grant the DB role to <code>my_role</code>, then <code>GRANT ROLE my_role TO USER some_user</code>","As SYSADMIN: <code>CREATE ROLE my_role</code> then grant the database role to it","As ACCOUNTADMIN: grant the DB role to <code>my_role</code>, then <code>GRANT ROLE my_role TO USER some_user</code>"], answers: [2,4],
+        why: "Granting a SNOWFLAKE shared-database role requires ACCOUNTADMIN or a role with MANAGE GRANTS (SECURITYADMIN) \u2014 so C and E work. A database role CANNOT be granted directly to a user (B out): grant it to a custom account role, then grant that role to the user. SYSADMIN by default lacks MANAGE GRANTS (and CREATE ROLE), so A and D fail." },
+      { topic: "2.3", q: "In a Streamlit LLM chat app, which command creates the role-based message container that shows user/assistant turns, supports custom avatars, and can host charts, tables, and text?",
+        opts: ["<code>st.write</code>","<code>st.chat_message</code>","<code>st.chat_input</code>","<code>st.markdown</code>"], answer: 1,
+        why: "<code>st.chat_message(name, avatar=...)</code> is the role-based container for a chat turn; used as a context manager it can hold any element (charts, tables, text). st.chat_input renders the input box; st.markdown/st.write only render text/generic content \u2014 no role or avatar." },
+      { topic: "4.2", q: "<code>SPLIT_TEXT_RECURSIVE_CHARACTER('hello world are you here','none', X, Y)</code> returns <code>['hello world are','world are you','are you here']</code>. What are X (chunk_size) and Y (overlap)?",
+        opts: ["chunk_size=10, overlap=5","chunk_size=25, overlap=10","chunk_size=15, overlap=10","chunk_size=100, overlap=25"], answer: 2,
+        why: "This is the documentation's own example: chunk_size 15, overlap 10. Each chunk is \u226415 chars and consecutive chunks overlap by ~10 chars (whole words). overlap must be < chunk_size; the other pairs don't reproduce this output." },
+      { topic: "4.2", q: "Building a document ingestion + chunking pipeline with <code>AI_PARSE_DOCUMENT</code> and <code>SPLIT_TEXT_RECURSIVE_CHARACTER</code>, which TWO statements are TRUE? (Select TWO)",
+        opts: ["AI_PARSE_DOCUMENT in a Dynamic Table auto-re-parses documents the instant new files land in the source stage","SPLIT_TEXT_RECURSIVE_CHARACTER's default separators split on paragraph breaks first, then finer boundaries \u2014 preserving natural-language structure","Setting TARGET_LAG makes a table refresh immediately whenever rows are inserted","Cortex Search requires a unique hash-key column to de-duplicate chunks","AI_PARSE_DOCUMENT returns a JSON-formatted STRING; convert it with PARSE_JSON to read the <code>:content</code> field"], answers: [1,4],
+        why: "B: default separators ['\\n\\n','\\n',' ',''] split on paragraph breaks first, recursing to finer boundaries only when a chunk still exceeds chunk_size. E: AI_PARSE_DOCUMENT returns a JSON string \u2014 docs say convert with PARSE_JSON to an OBJECT to access :content. Traps: A (a Dynamic Table refreshes off table/view sources on TARGET_LAG; it can't watch a stage for file-add events \u2014 that's streams+tasks), C (TARGET_LAG is lag-based refresh, not an insert trigger), D (no hash-key de-dup requirement)." },
+      { topic: "2.5", q: "When creating a compute pool to run third-party models in Snowflake, which consideration is correct?",
+        opts: ["Programmatic creation must go through the Snowflake CLI","A maximum of 50 nodes applies regardless of <code>INSTANCE_FAMILY</code>","The pool starts suspended \u2014 no nodes are provisioned at creation, and it only incurs cost once a workload uses it (system GPU/CPU pools default <code>INITIALLY_SUSPENDED=TRUE</code>)","You must always run <code>ALTER COMPUTE POOL RESUME</code> before first use"], answer: 2,
+        why: "Compute pools \u2014 and the system GPU/CPU pools used for model serving, which default INITIALLY_SUSPENDED=TRUE \u2014 come up suspended and only bill when a workload runs. Traps: A (create via SQL/Snowsight/Python API too, not CLI-only); B (per-account cap is 750 and per-family limits vary \u2014 50 is just the GPU system pool's default MAX_NODES); D (AUTO_RESUME defaults TRUE, so a submitted service auto-resumes \u2014 and a plain CREATE COMPUTE POOL defaults INITIALLY_SUSPENDED=FALSE)." },
+
+      // ===== Hard exam-edge set (2026-09-03, doc-verified) =====
+      { topic: "1.1", q: "You fine-tune a model with Cortex Fine-tuning (FINETUNE 'CREATE'). Which set of facts is correct?",
+        opts: ["Any model can be fine-tuned; needs ACCOUNTADMIN; data columns can be named anything","Base model is <code>llama3.1-8b</code>; the query result MUST have columns named <code>prompt</code> and <code>completion</code>; creator needs <code>CREATE MODEL</code> on the schema","Training data columns must be <code>input</code>/<code>output</code>; needs CREATE WAREHOUSE","Fine-tuned models work in any region via cross-region inference"], answer: 1,
+        why: "Cortex Fine-tuning (text) uses base model llama3.1-8b; the training/validation query MUST produce columns literally named prompt and completion (alias with AS); the creating role needs CREATE MODEL (or OWNERSHIP) on the target schema, plus SNOWFLAKE.CORTEX_USER. Cross-region inference does NOT support fine-tuned models \u2014 inference must run in the model's region (replicate the model to move it)." },
+      { topic: "3.4", q: "A teammate says \"turn on Cortex Guard to stop prompt-injection attacks on our agent.\" What's the precise correction?",
+        opts: ["Correct \u2014 Cortex Guard blocks prompt injection","Cortex Guard (guardrails=TRUE, Llama Guard 3) filters HARMFUL model output; PROMPT-INJECTION/jailbreak defense is Cortex AI Guardrails (set via ALTER ACCOUNT ... AI_SETTINGS advanced_prompt_injection) for Agents/CoWork/CoCo","Both are the same feature with two names","Guardrails prevent hallucination"], answer: 1,
+        why: "Two different controls: Cortex Guard = a COMPLETE/AI_COMPLETE safety filter (guardrails=TRUE) that removes harmful content (violence, hate, self-harm...) using Llama Guard 3. Cortex AI Guardrails = Horizon feature configured with ALTER ACCOUNT SET AI_SETTINGS (advanced_prompt_injection) that defends Cortex Agents/CoWork/CoCo against prompt injection + jailbreak. Neither addresses factual accuracy \u2014 that's grounding (RAG/VQR) measured by groundedness." },
+      { topic: "2.1", q: "You need deterministic, machine-parseable JSON from <code>AI_COMPLETE</code>. Which is TRUE about structured outputs?",
+        opts: ["Default temperature is 1; you must raise it for JSON","<code>response_format</code> (JSON schema or TYPE literal) works only with the SINGLE-STRING AI_COMPLETE, NOT the prompt-object (image/doc) form; default temperature is already 0","Type literals support VARIANT and DATE top-level types","Schema property names may contain spaces"], answer: 1,
+        why: "response_format (JSON schema, or a TYPE OBJECT literal) is supported only for AI_COMPLETE single-string \u2014 you CANNOT get structured output from the prompt-object (image/document) form. AI_COMPLETE temperature defaults to 0 (deterministic already). Type literals can't use VARIANT/MAP/date-time as mapped types; schema keys can't contain spaces. For OpenAI models the schema also needs additionalProperties=false and every property in 'required'." },
+      { topic: "2.2", q: "In a Cortex Analyst semantic model, a verified query in the VQR must reference tables/columns how?",
+        opts: ["By the physical base-table and column names","By the LOGICAL names defined in the semantic model \u2014 the logical table name prefixed with two underscores (e.g. <code>__sales_data</code>)","By fully-qualified DB.SCHEMA.TABLE only","By column ordinal position"], answer: 1,
+        why: "Verified queries must use the semantic model's LOGICAL table/column names, not the underlying physical names. The logical table is referenced with a double-underscore prefix (e.g. FROM __sales_data), and logical column names (not the physical d_state/dt/amt) are used. Invalid/physical-name queries hurt Analyst accuracy." },
+      { topic: "2.1", q: "Which pairing of embedding model to VECTOR dimension is correct for building a similarity search column?",
+        opts: ["<code>snowflake-arctic-embed-m-v1.5</code> \u2192 VECTOR(FLOAT, 1024)","<code>snowflake-arctic-embed-l-v2.0</code> \u2192 VECTOR(FLOAT, 1024); <code>snowflake-arctic-embed-m-v1.5</code> \u2192 VECTOR(FLOAT, 768)","All Arctic embed models output 512 dimensions","Dimensions are chosen freely by the user"], answer: 1,
+        why: "Output dimension is fixed by the model: arctic-embed-m / m-v1.5 / e5-base-v2 = 768; arctic-embed-l-v2.0 / voyage-multilingual-2 / nv-embed-qa-4 = 1024. The VECTOR column must match (e.g. VECTOR(FLOAT, 768)). 512 is the context window (tokens), not the dimension. AI_EMBED bills input tokens only; the vector similarity functions incur NO token cost." },
+      { topic: "2.1", q: "Best practice for calling <code>VECTOR_COSINE_SIMILARITY</code> in a top-k semantic search query?",
+        opts: ["Call it in the WHERE clause so it runs on every row","Put it in the SELECT with a column alias, then ORDER BY that alias and LIMIT k (optionally filter the alias in WHERE)","Only usable inside a JOIN ON clause","It must be wrapped in AI_COMPLETE"], answer: 1,
+        why: "Docs recommend calling the similarity function in the SELECT (aliased) and using ORDER BY alias + LIMIT k, so it's computed for the rows the WHERE clause selects rather than blindly over all rows. To threshold on similarity, alias it in SELECT and reference the alias in WHERE. Vector similarity functions don't consume tokens." },
+      { topic: "2.2", q: "A Cortex Search Service is created on a table protected by a row access policy. A role with only USAGE on the service (no access to the base rows) queries it. What happens?",
+        opts: ["It sees only rows its own role can read","It errors out due to the policy","It can see results from ALL indexed rows the service OWNER can read \u2014 Cortex Search runs with OWNER'S RIGHTS","Row policies are re-applied at query time per querying role"], answer: 2,
+        why: "Cortex Search queries run with OWNER'S RIGHTS: any role with USAGE on the service can retrieve any data the service indexed, regardless of that role's privileges on the underlying tables/views. So a querying role can see rows it could NOT read directly \u2014 a key governance caution when granting USAGE on a search service." },
+      { topic: "4.2", q: "Which statement about <code>CREATE CORTEX SEARCH SERVICE</code> is correct?",
+        opts: ["<code>EMBEDDING_MODEL</code> and <code>REFRESH_MODE</code> can be changed later with ALTER","Default embedding model is <code>snowflake-arctic-embed-m-v1.5</code>; the source query must qualify for dynamic-table INCREMENTAL refresh and needs change tracking; EMBEDDING_MODEL/REFRESH_MODE are fixed at create (use CREATE OR REPLACE to change)","Any SELECT works, including non-incremental constructs","REFRESH_MODE defaults to FULL"], answer: 1,
+        why: "Default embedding model = snowflake-arctic-embed-m-v1.5. REFRESH_MODE defaults to INCREMENTAL and the source query must satisfy dynamic-table incremental-refresh constraints; change tracking must be enabled on base objects (Snowflake tries to enable it). EMBEDDING_MODEL and REFRESH_MODE CANNOT be altered \u2014 recreate with CREATE OR REPLACE. Recommended chunk size \u2264512 tokens; base result must be <400M rows." },
+      { topic: "3.1", q: "Since the USE AI FUNCTIONS privilege was introduced, what does a custom role need to call <code>AI_COMPLETE</code>?",
+        opts: ["Only <code>SNOWFLAKE.CORTEX_USER</code>","BOTH the account-level <code>USE AI FUNCTIONS</code> privilege (or per-function <code>USE AI FUNCTION AI_COMPLETE</code>) AND a <code>CORTEX_USER</code>/<code>AI_FUNCTIONS_USER</code> database role","Only ACCOUNTADMIN","Only <code>CORTEX_MODELS_ALLOWLIST</code> set to 'All'"], answer: 1,
+        why: "Access is now gated by TWO things: the account-level USE AI FUNCTIONS privilege (granted to PUBLIC by default, or a per-function USE AI FUNCTION <name>) AND one of the CORTEX_USER / AI_FUNCTIONS_USER database roles. Missing either blocks the call. Model access (allowlist/RBAC) is a separate, third control layer." },
+      { topic: "4.4", q: "Which is a real documented LIMIT you must design around for Cortex Search / doc functions?",
+        opts: ["Cortex Search base result must be < 400M rows; AI_PARSE_DOCUMENT max ~2,000 pages/doc; AI_EXTRACT max 125 pages/doc","Cortex Search has no row limit","AI_PARSE_DOCUMENT max 100 pages","AI_EXTRACT has no page limit"], answer: 0,
+        why: "Documented hard limits: Cortex Search materialized source query must be <400M rows (else creation fails); AI_PARSE_DOCUMENT max 2,000 pages and 100 MB per doc; AI_EXTRACT max 125 pages/doc (each page ~970 tokens). Knowing which limit maps to which function is a common D4 trap." },
+      { topic: "3.3", q: "Which single ACCOUNT_USAGE view gives per-QUERY token + credit attribution for AISQL functions (the current canonical one)?",
+        opts: ["<code>METERING_DAILY_HISTORY</code>","<code>CORTEX_AISQL_USAGE_HISTORY</code> (per-query model, tokens, token_credits) \u2014 don't also sum the legacy CORTEX_FUNCTIONS_USAGE_HISTORY / CORTEX_AI_FUNCTIONS_USAGE_HISTORY","<code>QUERY_HISTORY</code>","<code>WAREHOUSE_METERING_HISTORY</code>"], answer: 1,
+        why: "CORTEX_AISQL_USAGE_HISTORY is the current canonical per-query view (model, tokens, token_credits, query_tag, user, warehouse). CORTEX_FUNCTIONS_USAGE_HISTORY (legacy) and CORTEX_AI_FUNCTIONS_USAGE_HISTORY (intermediate) OVERLAP with it \u2014 don't sum all three. For credits-by-AI-service per day use METERING_DAILY_HISTORY (SERVICE_TYPE) instead." },
+      { topic: "2.2", q: "You must stop an LLM from inventing fields AND make output repeatable. Best combination?",
+        opts: ["Structured Outputs (response_format with 'required') + temperature=0","guardrails=TRUE + temperature=1","show_details=TRUE only","AI_CLASSIFY then AI_TRANSLATE"], answer: 0,
+        why: "A response_format JSON schema with a 'required' list constrains output to your structure (COMPLETE errors if a required field can't be produced), and temperature=0 makes generation deterministic. Guardrails is a safety filter (not a format control); show_details only adds metadata. Docs explicitly recommend temperature=0 for consistent structured output." }
+    ];
+
+    const LETTERS = ["A","B","C","D","E"];
+    const state = {};
+    const pending = {};
+    let activeFilter = "all";
+    const quizEl = document.getElementById("quiz");
+    const filtersEl = document.getElementById("filters");
+
+    const topicKeys = Object.keys(TOPIC_NAMES);
+    const filterDefs = [{ key: "all", label: "All (" + QUESTIONS.length + ")" }]
+      .concat(topicKeys.map(k => ({ key: k, label: k })));
+    filterDefs.forEach(f => {
+      const b = document.createElement("button");
+      b.className = "filter-btn" + (f.key === activeFilter ? " active" : "");
+      b.textContent = f.label;
+      b.title = f.key === "all" ? "All subtopics" : TOPIC_NAMES[f.key];
+      b.dataset.filter = f.key;
+      b.addEventListener("click", () => {
+        activeFilter = f.key;
+        document.querySelectorAll(".filter-btn").forEach(x => x.classList.toggle("active", x.dataset.filter === f.key));
+        render();
+      });
+      filtersEl.appendChild(b);
+    });
+
+    function render() {
+      const _scrollY = window.scrollY;
+      quizEl.innerHTML = "";
+      let n = 0;
+      QUESTIONS.forEach((item, idx) => {
+        if (activeFilter !== "all" && item.topic !== activeFilter) return;
+        n++;
+        const isMulti = Array.isArray(item.answers);
+        const correctSet = isMulti ? item.answers.slice().sort((a,b)=>a-b) : [item.answer];
+        const chosen = state[idx];
+        const answered = isMulti ? Array.isArray(chosen) : chosen !== undefined;
+        if (isMulti && !pending[idx]) pending[idx] = [];
+        const sel = isMulti ? (answered ? chosen : pending[idx]) : chosen;
+
+        const card = document.createElement("div");
+        card.className = "q";
+        const head = document.createElement("div");
+        head.className = "q-head";
+        const tag = document.createElement("span");
+        tag.className = "q-tag";
+        tag.textContent = TOPIC_NAMES[item.topic];
+        const qtext = document.createElement("span");
+        qtext.className = "q-text";
+        qtext.innerHTML = n + ". " + item.q;
+        head.appendChild(tag); head.appendChild(qtext);
+        card.appendChild(head);
+
+        if (isMulti) {
+          const hint = document.createElement("div");
+          hint.className = "multi-hint";
+          hint.textContent = "Select " + correctSet.length + " \u2014 multiple answers";
+          card.appendChild(hint);
+        }
+
+        const ul = document.createElement("ul");
+        ul.className = "opts";
+        item.opts.forEach((opt, oi) => {
+          const li = document.createElement("li");
+          li.className = "opt";
+          const isSel = isMulti ? sel.includes(oi) : sel === oi;
+          if (answered) {
+            li.classList.add("locked");
+            const isCorrect = correctSet.includes(oi);
+            if (isCorrect && isSel) li.classList.add("correct");
+            else if (!isCorrect && isSel) li.classList.add("wrong");
+            else if (isCorrect && !isSel) li.classList.add("missed");
+          }
+          const input = document.createElement("input");
+          input.type = isMulti ? "checkbox" : "radio";
+          input.name = "q" + idx; input.value = oi;
+          input.checked = isSel; input.disabled = answered;
+          const letter = document.createElement("span");
+          letter.className = "letter"; letter.textContent = LETTERS[oi] + ".";
+          const txt = document.createElement("span"); txt.innerHTML = opt;
+          li.appendChild(input); li.appendChild(letter); li.appendChild(txt);
+          if (!answered) {
+            li.addEventListener("click", () => {
+              if (isMulti) {
+                const arr = pending[idx];
+                const at = arr.indexOf(oi);
+                if (at === -1) arr.push(oi); else arr.splice(at, 1);
+                render(); updateScore();
+              } else {
+                if (state[idx] !== undefined) return;
+                state[idx] = oi; render(); updateScore();
+              }
+            });
+          }
+          ul.appendChild(li);
+        });
+        card.appendChild(ul);
+
+        if (isMulti && !answered) {
+          const btn = document.createElement("button");
+          btn.className = "multi-submit";
+          btn.textContent = "Check answer";
+          btn.disabled = pending[idx].length === 0;
+          btn.addEventListener("click", () => {
+            state[idx] = pending[idx].slice().sort((a,b)=>a-b);
+            render(); updateScore();
+          });
+          card.appendChild(btn);
+        }
+
+        const ex = document.createElement("div");
+        ex.className = "explain" + (answered ? " show" : "");
+        if (answered) {
+          const correct = isMulti
+            ? (chosen.length === correctSet.length && chosen.every((v,i) => v === correctSet[i]))
+            : chosen === item.answer;
+          const letters = correctSet.map(i => LETTERS[i]).join(", ");
+          const verdict = correct
+            ? '<span class="verdict right">Correct.</span> '
+            : '<span class="verdict no">Not quite &mdash; correct answer' + (correctSet.length > 1 ? "s are " : " is ") + letters + '.</span> ';
+          ex.innerHTML = verdict + item.why;
+        }
+        card.appendChild(ex);
+        quizEl.appendChild(card);
+      });
+      document.getElementById("s-total").textContent = QUESTIONS.length;
+      window.scrollTo(0, _scrollY);
+    }
+
+    function updateScore() {
+      let answered = 0, correct = 0;
+      QUESTIONS.forEach((item, idx) => {
+        const isMulti = Array.isArray(item.answers);
+        const val = state[idx];
+        const isAnswered = isMulti ? Array.isArray(val) : val !== undefined;
+        if (!isAnswered) return;
+        answered++;
+        if (isMulti) {
+          const cs = item.answers.slice().sort((a,b)=>a-b);
+          if (val.length === cs.length && val.every((v,i) => v === cs[i])) correct++;
+        } else if (val === item.answer) {
+          correct++;
+        }
+      });
+      document.getElementById("s-answered").textContent = answered;
+      document.getElementById("s-correct").textContent = correct;
+      document.getElementById("s-wrong").textContent = answered - correct;
+      const pct = answered ? Math.round(correct / answered * 100) : null;
+      document.getElementById("s-pct").textContent = pct === null ? "\u2014" : pct + "%";
+    }
+
+    document.getElementById("reset").addEventListener("click", () => {
+      for (const k in state) delete state[k];
+      for (const k in pending) delete pending[k];
+      render(); updateScore();
+    });
+
+    render(); updateScore();
+  </script>
+</body>
+</html>

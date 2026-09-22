@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="snowflake-source" content="cortex-agent-authored" />
+  <title>SnowPro Gen AI (GES-C02) — Practice Quiz</title>
+  <script type="application/json" id="snowflake-report-metadata">
+  {
+    "generated": "2026-08-10",
+    "intent": "Interactive self-graded practice quiz for the SnowPro Specialty: Gen AI (GES-C02) certification, covering all four exam domains.",
+    "sections": [
+      { "id": "quiz", "title": "Practice quiz",
+        "dataSources": [{ "type": "file", "path": "SnowPro-GenAI-Prep/01-domain1-overview.md, 02-domain2-functions.md, 03-domain3-governance.md, 04-domain4-documents.md" }],
+        "producerNotes": "Questions, options, correct answers, and explanations are transcribed verbatim from the four domain study-note markdown files' QUIZ + ANSWER KEY sections. To refresh, re-read those files and update the QUESTIONS array in the inline script." }
+    ]
+  }
+  </script>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
+      max-width: 860px; margin: 0 auto; padding: 24px 20px 80px;
+      color: light-dark(#1f2937, #e5e7eb);
+      background: light-dark(#ffffff, #0b1120);
+      line-height: 1.5;
+    }
+    h1 { color: light-dark(#0f172a, #f1f5f9); margin-bottom: 4px; font-size: 1.6rem; }
+    .sub { color: light-dark(#64748b, #94a3b8); margin-top: 0; font-size: 0.95rem; }
+    a { color: light-dark(#2563eb, #60a5fa); }
+
+    .controls {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 12px 0; margin: 12px 0 8px;
+      background: light-dark(#ffffff, #0b1120);
+      border-bottom: 1px solid light-dark(#e2e8f0, #1e293b);
+    }
+    .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-btn, .action-btn {
+      font: inherit; font-size: 0.85rem; cursor: pointer;
+      padding: 6px 12px; border-radius: 999px;
+      border: 1px solid light-dark(#cbd5e1, #334155);
+      background: light-dark(#f8fafc, #1e293b);
+      color: light-dark(#334155, #cbd5e1);
+    }
+    .filter-btn.active {
+      background: light-dark(#2563eb, #3b82f6);
+      border-color: light-dark(#2563eb, #3b82f6);
+      color: #fff; font-weight: 600;
+    }
+    .action-btn:hover, .filter-btn:hover { border-color: light-dark(#2563eb, #60a5fa); }
+    .spacer { flex: 1 1 auto; }
+
+    .scorebar {
+      display: flex; gap: 18px; align-items: baseline; flex-wrap: wrap;
+      font-size: 0.9rem; color: light-dark(#475569, #cbd5e1);
+      padding: 10px 14px; margin: 4px 0 20px;
+      border-radius: 10px;
+      background: light-dark(#f1f5f9, #111c30);
+    }
+    .scorebar strong { color: light-dark(#0f172a, #f8fafc); font-size: 1.05rem; }
+    .score-correct { color: light-dark(#15803d, #4ade80); }
+    .score-wrong { color: light-dark(#b91c1c, #f87171); }
+
+    .q {
+      border: 1px solid light-dark(#e2e8f0, #1e293b);
+      border-radius: 12px; padding: 18px 18px 6px; margin: 0 0 18px;
+      background: light-dark(#ffffff, #0f172a);
+    }
+    .q-head { display: flex; gap: 10px; align-items: baseline; margin-bottom: 10px; }
+    .q-tag {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.03em;
+      text-transform: uppercase; white-space: nowrap;
+      padding: 3px 8px; border-radius: 6px;
+      background: light-dark(#e0e7ff, #1e3a5f);
+      color: light-dark(#3730a3, #93c5fd);
+    }
+    .q-text { font-weight: 600; color: light-dark(#0f172a, #f1f5f9); }
+    .q-text code, .opt code {
+      background: light-dark(#f1f5f9, #1e293b);
+      padding: 1px 5px; border-radius: 4px; font-size: 0.88em;
+    }
+
+    .opts { list-style: none; padding: 0; margin: 0; }
+    .opt {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 12px; margin: 6px 0; cursor: pointer;
+      border: 1px solid light-dark(#e2e8f0, #253247);
+      border-radius: 9px;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .opt:hover { border-color: light-dark(#93c5fd, #3b82f6); }
+    .opt input { margin-top: 3px; accent-color: light-dark(#2563eb, #3b82f6); }
+    .opt .letter { font-weight: 700; color: light-dark(#64748b, #94a3b8); }
+    .opt.correct {
+      background: light-dark(#dcfce7, #052e1a);
+      border-color: light-dark(#22c55e, #16a34a);
+    }
+    .opt.wrong {
+      background: light-dark(#fee2e2, #3b0d0d);
+      border-color: light-dark(#ef4444, #dc2626);
+    }
+    .opt.locked { cursor: default; }
+    .opt.locked:hover { border-color: light-dark(#e2e8f0, #253247); }
+    .opt.correct.locked:hover { border-color: light-dark(#22c55e, #16a34a); }
+    .opt.wrong.locked:hover { border-color: light-dark(#ef4444, #dc2626); }
+
+    .explain {
+      margin: 4px 0 14px; padding: 12px 14px;
+      border-left: 3px solid light-dark(#2563eb, #3b82f6);
+      background: light-dark(#f8fafc, #111c30);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      display: none;
+    }
+    .explain.show { display: block; }
+    .explain .verdict { font-weight: 700; }
+    .explain .verdict.right { color: light-dark(#15803d, #4ade80); }
+    .explain .verdict.no { color: light-dark(#b91c1c, #f87171); }
+
+    footer { margin-top: 30px; font-size: 0.85rem; color: light-dark(#64748b, #94a3b8); }
+  </style>
+</head>
+<body>
+
+  <h1>SnowPro Specialty: Gen AI (GES-C02)</h1>
+  <p class="sub">Self-graded practice quiz &middot; 34 questions across all four exam domains. Pick an answer to lock it in and see the explanation instantly.</p>
+
+  <div class="controls">
+    <div class="filters" id="filters"></div>
+    <span class="spacer"></span>
+    <button class="action-btn" id="reset">Reset all</button>
+  </div>
+
+  <div class="scorebar">
+    <span>Answered <strong id="s-answered">0</strong> / <strong id="s-total">0</strong></span>
+    <span class="score-correct">Correct <strong id="s-correct">0</strong></span>
+    <span class="score-wrong">Incorrect <strong id="s-wrong">0</strong></span>
+    <span>Score <strong id="s-pct">&mdash;</strong></span>
+  </div>
+
+  <div id="quiz"></div>
+
+  <footer>
+    Study companion for the SnowPro Specialty: Gen AI exam. Answers reflect the domain study notes in this folder.
+    Official guide: <a href="https://learn.snowflake.com/en/certifications/snowpro-specialty-gen-ai/">Snowflake certification page</a>.
+  </footer>
+
+  <script>
+    // ---- Question bank (transcribed from the four domain study-note files) ----
+    const QUESTIONS = [
+      // ---------------- DOMAIN 1 ----------------
+      { domain: 1, q: "A team wants business users to ask plain-English questions like \"What were Q3 sales by region?\" against governed fact/dimension tables. Which Cortex capability, and what must exist first?",
+        opts: ["Cortex Search; a chunked document index","Cortex Analyst; a semantic view/model","AI_COMPLETE; a fine-tuned model","Snowflake Intelligence; a compute pool"], answer: 1,
+        why: "Cortex Analyst does text-to-SQL over structured data and requires a semantic view/model to ground generation. Search is for unstructured retrieval; a compute pool is SPCS infra." },
+      { domain: 1, q: "Which statement about <code>CORTEX_ENABLED_CROSS_REGION</code> is correct?",
+        opts: ["It can be set per session by any user with CORTEX_USER","It causes your customer data to be permanently stored in the processing region","It is an account-level parameter set only by ACCOUNTADMIN, and credits are billed in the requesting region","It is set by ORGADMIN at the organization level"], answer: 2,
+        why: "Account-level, ACCOUNTADMIN-only, cannot be set at user/session level or by ORGADMIN. Customer data is not persisted in the processing region. Credits bill in the requesting region." },
+      { domain: 1, q: "An organization needs one assistant that can answer questions requiring both a query against sales tables AND retrieval from support PDFs, deciding which to use per question. Best fit?",
+        opts: ["Cortex Analyst alone","Cortex Search alone","Cortex Agents","AI_EMBED"], answer: 2,
+        why: "Cortex Agents orchestrate multiple tools (Analyst for structured + Search for unstructured) and choose per question. A single tool alone can't span both; AI_EMBED just makes vectors." },
+      { domain: 1, q: "You want to run a proprietary open-source LLM with a custom serving stack and GPU control inside Snowflake. Which is most appropriate?",
+        opts: ["Snowpark Container Services","Cortex Fine-tuning","Cortex Analyst","Verified Query Repository"], answer: 0,
+        why: "SPCS runs containerized models with runtime/GPU control. Fine-tuning customizes a managed base model but doesn't give a custom serving stack; the others are unrelated." },
+      { domain: 1, q: "Which pair correctly matches feature &rarr; purpose?",
+        opts: ["Verified Query &rarr; controls which regions models run in","Semantic View &rarr; grounds Cortex Analyst's text-to-SQL generation","Cortex Search &rarr; converts natural language to SQL over tables","MCP &rarr; a vector distance metric"], answer: 1,
+        why: "Semantic View grounds Analyst. Verified Query improves Analyst accuracy (not region control), Cortex Search is unstructured retrieval (not text-to-SQL), MCP is a tool protocol." },
+      { domain: 1, q: "A developer needs a no-code, business-user-facing chat experience built on top of existing agents and semantic models. Which product?",
+        opts: ["Cortex Code CLI","AI Studio","Snowflake Intelligence","Model Registry"], answer: 2,
+        why: "Snowflake Intelligence is the no-code chat UI over agents/semantic models. Cortex Code is developer tooling; AI Studio is for trying/comparing models; Model Registry stores models." },
+
+      // ---------------- DOMAIN 2 ----------------
+      { domain: 2, q: "You must return strictly valid JSON (fixed fields: <code>risk_level</code>, <code>reason</code>) from an LLM so a downstream job can parse it. Best approach?",
+        opts: ["AI_COMPLETE with a structured output response_format schema","AI_SENTIMENT","SUMMARIZE","AI_FILTER"], answer: 0,
+        why: "Structured Outputs: pass a JSON schema as response_format to AI_COMPLETE so it returns schema-valid JSON. Sentiment/summarize/filter don't produce arbitrary structured fields." },
+      { domain: 2, q: "In semantic search you compute <code>VECTOR_COSINE_SIMILARITY</code> between a query embedding and document embeddings. To get the best matches you order by:",
+        opts: ["similarity ASC (smallest first)","similarity DESC (largest first)","L2 distance DESC","it doesn't matter"], answer: 1,
+        why: "Cosine similarity: higher = more similar, so order DESC. (For L1/L2 distance you'd order ASC.)" },
+      { domain: 2, q: "A nightly job runs an LLM over millions of rows; a few malformed rows shouldn't abort the whole query. Which function?",
+        opts: ["AI_COMPLETE","TRY_COMPLETE","AI_AGG","PROMPT"], answer: 1,
+        why: "TRY_COMPLETE returns NULL on failure instead of erroring — resilient batch processing. AI_COMPLETE would abort on a bad row." },
+      { domain: 2, q: "Which correctly orders the RAG ingestion steps?",
+        opts: ["Embed &rarr; Parse &rarr; Chunk &rarr; Retrieve &rarr; Generate","Parse &rarr; Chunk &rarr; Embed &rarr; Index/Serve &rarr; Retrieve &rarr; Generate","Chunk &rarr; Generate &rarr; Embed &rarr; Parse","Retrieve &rarr; Parse &rarr; Generate &rarr; Embed"], answer: 1,
+        why: "Parse &rarr; Chunk &rarr; Embed &rarr; Index/Serve (Cortex Search) &rarr; Retrieve top-k &rarr; Generate (AI_COMPLETE)." },
+      { domain: 2, q: "A data scientist has a trained Python model and wants to deploy it as a versioned, governed Snowflake object callable for inference, without managing containers. Best fit?",
+        opts: ["Snowpark Container Services","Snowflake Model Registry","Cortex Analyst","Provisioned Throughput"], answer: 1,
+        why: "Model Registry logs/serves a versioned model object with no container management. SPCS is for containers/custom serving; Analyst/PTU are unrelated." },
+      { domain: 2, q: "What is the primary role of the messages array in a multi-turn Cortex chat app?",
+        opts: ["To store user credentials securely","To speed up response generation","To maintain conversation context across turns (the model is otherwise stateless)","To cap tokens per request"], answer: 2,
+        why: "The messages array carries conversation history so context persists; the LLM itself is stateless. (Matches official sample question 2.)" },
+      { domain: 2, q: "You need to filter a table to only rows whose free-text <code>feedback</code> expresses a complaint about shipping. Most direct?",
+        opts: ["AI_FILTER in the WHERE clause","AI_EMBED then manual thresholding","AI_TRANSLATE","VECTOR_L1_DISTANCE"], answer: 0,
+        why: "AI_FILTER evaluates a natural-language condition to TRUE/FALSE and can be used directly in WHERE." },
+      { domain: 2, q: "A team runs a GPU-heavy open-source LLM with a custom serving framework inside Snowflake. Which setup objects are involved?",
+        opts: ["Semantic view + verified query","Compute pool + image repository + service spec (SPCS)","Cortex Search service + reranker","ENABLE_CORTEX_ANALYST parameter"], answer: 1,
+        why: "SPCS uses a compute pool, image repository (Docker image), and a service spec to create the service. The others are unrelated products." },
+      { domain: 2, q: "Which is an <strong>aggregate</strong> Cortex function usable even without the CORTEX_USER role?",
+        opts: ["AI_COMPLETE","AI_CLASSIFY","AI_SUMMARIZE_AGG","AI_TRANSLATE"], answer: 2,
+        why: "AI_SUMMARIZE_AGG (and AI_AGG) are the aggregate functions and work with AI_FUNCTIONS_USER even without CORTEX_USER. The rest are scalar." },
+      { domain: 2, q: "For a high-volume, latency-sensitive production workload needing predictable inference cost/throughput, you should consider:",
+        opts: ["A larger warehouse","Provisioned Throughput","VECTOR_NORMALIZE","Disabling cross-region inference"], answer: 1,
+        why: "Provisioned Throughput reserves dedicated capacity for predictable throughput/cost at scale. A bigger warehouse doesn't change LLM inference throughput." },
+
+      // ---------------- DOMAIN 3 ----------------
+      { domain: 3, q: "Which query retrieves <strong>daily</strong> credit consumption for AI services?",
+        opts: ["<code>SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY WHERE SERVICE_TYPE='AI_SERVICES';</code>","<code>SELECT * FROM SNOWFLAKE.INFORMATION_SCHEMA.METERING_HISTORY WHERE SERVICE_TYPE='AI_SERVICES';</code>","<code>SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.METERING_HISTORY WHERE SERVICE_TYPE='AI_SERVICES';</code>","<code>SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.METERING_DAILY_HISTORY WHERE SERVICE_TYPE='AI_SERVICES';</code>"], answer: 3,
+        why: "Daily &rarr; METERING_DAILY_HISTORY, in ACCOUNT_USAGE. C is hourly; B uses INFORMATION_SCHEMA (wrong); A is QUERY_HISTORY. Matches official sample Q1." },
+      { domain: 3, q: "A user has the <code>USE AI FUNCTIONS</code> account privilege but calls to AI_COMPLETE fail. Most likely missing?",
+        opts: ["A default warehouse","The CORTEX_USER (or AI_FUNCTIONS_USER) database role","ORGADMIN","A semantic view"], answer: 1,
+        why: "AI functions need both the account privilege and a CORTEX_USER/AI_FUNCTIONS_USER database role. Having only the privilege isn't enough." },
+      { domain: 3, q: "You must restrict a specific analyst role to only Cortex <strong>Agents</strong> (not other Cortex features). Which grant?",
+        opts: ["<code>GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE analyst_role;</code>","<code>GRANT DATABASE ROLE SNOWFLAKE.CORTEX_AGENT_USER TO ROLE analyst_role;</code> (and revoke CORTEX_USER)","<code>GRANT ROLE SNOWFLAKE.CORTEX_AGENT_USER TO USER analyst_user;</code>","<code>ALTER ACCOUNT SET ENABLE_CORTEX_ANALYST = TRUE;</code>"], answer: 1,
+        why: "Grant CORTEX_AGENT_USER (Agents-only) and revoke CORTEX_USER (which would re-open all features). Database roles can't be granted directly to users; D enables Analyst." },
+      { domain: 3, q: "Recommended, fine-grained way to control which LLMs a role may call?",
+        opts: ["CORTEX_MODELS_ALLOWLIST parameter (it's the go-forward mechanism)","Model RBAC via application roles in SNOWFLAKE.MODELS","Network policies","Masking policies"], answer: 1,
+        why: "Model RBAC (application roles in SNOWFLAKE.MODELS) is the recommended, fine-grained, go-forward mechanism; the allowlist is legacy/deprecating." },
+      { domain: 3, q: "Which tool set evaluates a RAG app's answer quality and groundedness inside Snowflake?",
+        opts: ["AI Observability with the TruLens SDK","Resource monitors","AI_REDACT","VECTOR_COSINE_SIMILARITY"], answer: 0,
+        why: "AI Observability + the TruLens SDK provide evaluation metrics (RAG Triad), tracing, and comparisons." },
+      { domain: 3, q: "Before sending customer support text to an LLM, you must remove PII. Which function?",
+        opts: ["AI_CLASSIFY","AI_REDACT","AI_FILTER","AI_TRANSLATE"], answer: 1,
+        why: "AI_REDACT removes/masks sensitive data (PII)." },
+      { domain: 3, q: "How do RBAC model access and the account allowlist interact?",
+        opts: ["Both must permit the model (AND)","Access granted if either permits it (OR); denied only if both fail","Allowlist always overrides RBAC","RBAC only works for ACCOUNTADMIN"], answer: 1,
+        why: "OR relationship — either mechanism grants access; denied only if both fail. (ACCOUNTADMIN bypasses both.)" },
+      { domain: 3, q: "A Cortex Agent call fails for a user even though their current session role has all privileges. Likely cause?",
+        opts: ["The agent needs a masking policy","Agents evaluate the user's <strong>default</strong> role/warehouse, which lack the grants","Cross-region inference is disabled","The allowlist is set to 'All'"], answer: 1,
+        why: "Cortex Agents determine permissions from the querying user's default role and require a default warehouse — not the current session role." },
+      { domain: 3, q: "Which is TRUE about granting Cortex database roles?",
+        opts: ["They can be granted directly to a user","They must be granted to a role, which is then granted to users","Only ORGADMIN can grant them","They're granted with GRANT APPLICATION ROLE only"], answer: 1,
+        why: "SNOWFLAKE database roles can't be granted directly to users; grant to a custom role, then to users." },
+      { domain: 3, q: "To defend Cortex Agents against prompt-injection/jailbreak attempts, you enable:",
+        opts: ["AI_REDACT","Cortex AI Guardrails (via AI_SETTINGS)","A resource monitor","VECTOR_NORMALIZE"], answer: 1,
+        why: "Cortex AI Guardrails (configured via the account AI_SETTINGS parameter) protect against prompt injection/jailbreaks. AI_REDACT handles PII, a different concern." },
+
+      // ---------------- DOMAIN 4 ----------------
+      { domain: 4, q: "Invoices need fields (vendor, total, line items); legal contracts need full text as searchable Markdown with tables preserved. Best workflow?",
+        opts: ["AI_PARSE_DOCUMENT for all, then SQL filters for invoice fields","AI_EXTRACT for all, with separate schemas","AI_PARSE_DOCUMENT OCR for invoices; AI_EXTRACT for contracts' full text","AI_EXTRACT (schema) for invoices; AI_PARSE_DOCUMENT LAYOUT for contracts"], answer: 3,
+        why: "Fields &rarr; AI_EXTRACT with a schema; full text + preserved tables as Markdown &rarr; AI_PARSE_DOCUMENT LAYOUT. Matches official sample Q3." },
+      { domain: 4, q: "Which AI_PARSE_DOCUMENT mode preserves tables and headers and is required for image extraction?",
+        opts: ["OCR","LAYOUT","TEXT","RAW"], answer: 1,
+        why: "LAYOUT preserves structure and is required for extract_images. OCR is text-only." },
+      { domain: 4, q: "<code>page_filter: [{'start': 0, 'end': 2}]</code> processes which pages?",
+        opts: ["Pages 1 and 2 (the first two)","Pages 0,1,2 (three pages)","Only page 2","All pages after page 2"], answer: 0,
+        why: "Ranges are 0-based, start inclusive, end exclusive: start 0, end 2 &rarr; indexes 0 and 1 = the first two pages. B is wrong because end is exclusive (index 2 not included)." },
+      { domain: 4, q: "To automatically process documents as they land on a stage, which two objects form the core pipeline?",
+        opts: ["Masking policy + row access policy","Stream (CDC on directory table) + Task","Warehouse + resource monitor","Semantic view + verified query"], answer: 1,
+        why: "A Stream captures new/changed files (CDC on the directory table); a Task executes the parsing/extraction. Both are needed." },
+      { domain: 4, q: "A 5,000-page PDF fails to process. Best fix within limits?",
+        opts: ["Use a larger warehouse","Switch to OCR from LAYOUT only","Use page_split/page_filter to process within the 2,000-page limit","Convert to TXT"], answer: 2,
+        why: "Max is 2,000 pages/doc; use page_split/page_filter to process in bounds. A bigger warehouse doesn't help; OCR vs LAYOUT doesn't change the page limit." },
+      { domain: 4, q: "Which function generates a temporary URL so a process can access a staged file?",
+        opts: ["TO_FILE","GET_PRESIGNED_URL","AI_EMBED","VECTOR_TRUNCATE"], answer: 1,
+        why: "GET_PRESIGNED_URL creates a temporary access URL for a staged file (BUILD_SCOPED_FILE_URL is related)." },
+      { domain: 4, q: "Out-of-the-box AI_EXTRACT misses several domain-specific fields on your specialized forms. Best optimization?",
+        opts: ["Use a bigger warehouse","Fine-tune the arctic-extract model on labeled examples","Switch to OCR mode","Increase page_filter range"], answer: 1,
+        why: "Fine-tune arctic-extract for domain-specific extraction accuracy." },
+      { domain: 4, q: "Which warehouse size does Snowflake recommend for AI_PARSE_DOCUMENT?",
+        opts: ["As large as possible for speed","No larger than MEDIUM (bigger doesn't help)","Only X-SMALL is allowed","Warehouse size is irrelevant; it's serverless with no compute"], answer: 1,
+        why: "Use a warehouse no larger than MEDIUM; larger warehouses don't improve AI_PARSE_DOCUMENT performance (billing is per page)." }
+    ];
+
+    const DOMAIN_NAMES = {
+      1: "D1 · Overview",
+      2: "D2 · Functions",
+      3: "D3 · Governance",
+      4: "D4 · Documents"
+    };
+    const LETTERS = ["A","B","C","D","E"];
+
+    // ---- State ----
+    const state = {}; // index -> chosen option index
+    let activeFilter = "all";
+
+    const quizEl = document.getElementById("quiz");
+    const filtersEl = document.getElementById("filters");
+
+    // ---- Build filter buttons ----
+    const filterDefs = [
+      { key: "all", label: "All domains" },
+      { key: "1", label: DOMAIN_NAMES[1] },
+      { key: "2", label: DOMAIN_NAMES[2] },
+      { key: "3", label: DOMAIN_NAMES[3] },
+      { key: "4", label: DOMAIN_NAMES[4] }
+    ];
+    filterDefs.forEach(f => {
+      const b = document.createElement("button");
+      b.className = "filter-btn" + (f.key === activeFilter ? " active" : "");
+      b.textContent = f.label;
+      b.dataset.filter = f.key;
+      b.addEventListener("click", () => {
+        activeFilter = f.key;
+        document.querySelectorAll(".filter-btn").forEach(x => x.classList.toggle("active", x.dataset.filter === f.key));
+        render();
+      });
+      filtersEl.appendChild(b);
+    });
+
+    // ---- Render questions ----
+    function render() {
+      const _scrollY = window.scrollY;
+      quizEl.innerHTML = "";
+      let shownNumber = 0;
+      QUESTIONS.forEach((item, idx) => {
+        if (activeFilter !== "all" && String(item.domain) !== activeFilter) return;
+        shownNumber++;
+        const chosen = state[idx];
+        const answered = chosen !== undefined;
+
+        const card = document.createElement("div");
+        card.className = "q";
+
+        const head = document.createElement("div");
+        head.className = "q-head";
+        const tag = document.createElement("span");
+        tag.className = "q-tag";
+        tag.textContent = DOMAIN_NAMES[item.domain];
+        const qtext = document.createElement("span");
+        qtext.className = "q-text";
+        qtext.innerHTML = shownNumber + ". " + item.q;
+        head.appendChild(tag);
+        head.appendChild(qtext);
+        card.appendChild(head);
+
+        const ul = document.createElement("ul");
+        ul.className = "opts";
+        item.opts.forEach((opt, oi) => {
+          const li = document.createElement("li");
+          li.className = "opt";
+          if (answered) {
+            li.classList.add("locked");
+            if (oi === item.answer) li.classList.add("correct");
+            else if (oi === chosen) li.classList.add("wrong");
+          }
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "q" + idx;
+          input.value = oi;
+          input.checked = chosen === oi;
+          input.disabled = answered;
+          const letter = document.createElement("span");
+          letter.className = "letter";
+          letter.textContent = LETTERS[oi] + ".";
+          const txt = document.createElement("span");
+          txt.innerHTML = opt;
+          li.appendChild(input);
+          li.appendChild(letter);
+          li.appendChild(txt);
+          if (!answered) {
+            li.addEventListener("click", () => {
+              if (state[idx] !== undefined) return;
+              state[idx] = oi;
+              render();
+              updateScore();
+            });
+          }
+          ul.appendChild(li);
+        });
+        card.appendChild(ul);
+
+        const ex = document.createElement("div");
+        ex.className = "explain" + (answered ? " show" : "");
+        if (answered) {
+          const correct = chosen === item.answer;
+          const verdict = correct
+            ? '<span class="verdict right">Correct.</span> '
+            : '<span class="verdict no">Not quite &mdash; correct answer is ' + LETTERS[item.answer] + '.</span> ';
+          ex.innerHTML = verdict + item.why;
+        }
+        card.appendChild(ex);
+
+        quizEl.appendChild(card);
+      });
+      document.getElementById("s-total").textContent = QUESTIONS.length;
+    }
+
+    // ---- Score ----
+    function updateScore() {
+      let answered = 0, correct = 0;
+      QUESTIONS.forEach((item, idx) => {
+        if (state[idx] !== undefined) {
+          answered++;
+          if (state[idx] === item.answer) correct++;
+        }
+      });
+      const wrong = answered - correct;
+      document.getElementById("s-answered").textContent = answered;
+      document.getElementById("s-correct").textContent = correct;
+      document.getElementById("s-wrong").textContent = wrong;
+      document.getElementById("s-pct").textContent = answered ? Math.round(correct / answered * 100) + "%" : "\u2014";
+      window.scrollTo(0, _scrollY);
+    }
+
+    document.getElementById("reset").addEventListener("click", () => {
+      for (const k in state) delete state[k];
+      render();
+      updateScore();
+    });
+
+    // ---- Init ----
+    render();
+    updateScore();
+  </script>
+
+</body>
+</html>

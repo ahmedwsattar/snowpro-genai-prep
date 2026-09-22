@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="snowflake-source" content="cortex-agent-authored" />
+  <title>SnowPro Gen AI (GES-C02) — Prep Hub</title>
+  <script type="application/json" id="snowflake-report-metadata">
+  {
+    "generated": "2026-08-10",
+    "intent": "Landing page / entry point for the SnowPro Specialty: Gen AI (GES-C02) prep materials, linking to the study guide and the practice quiz.",
+    "sections": [
+      { "id": "hub", "title": "Prep hub",
+        "producerNotes": "Static links to study-guide.html and quiz.html in the same folder, plus the domain-weighting overview. No data sources; hand-authored." }
+    ]
+  }
+  </script>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
+      color: light-dark(#1f2937, #e5e7eb);
+      background: light-dark(#f8fafc, #0b1120);
+      line-height: 1.55;
+      padding: 40px 20px;
+    }
+    .wrap { width: 100%; max-width: 760px; }
+    header { text-align: center; margin-bottom: 28px; }
+    h1 { font-size: 1.7rem; margin: 0 0 6px; color: light-dark(#0f172a, #f1f5f9); }
+    .sub { margin: 0; color: light-dark(#64748b, #94a3b8); font-size: 0.98rem; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+    .card {
+      display: block; text-decoration: none; color: inherit;
+      border: 1px solid light-dark(#e2e8f0, #1e293b); border-radius: 14px;
+      padding: 22px 20px; background: light-dark(#ffffff, #0f172a);
+      transition: border-color 0.12s, transform 0.12s, box-shadow 0.12s;
+    }
+    .card:hover {
+      border-color: light-dark(#2563eb, #60a5fa); transform: translateY(-2px);
+      box-shadow: 0 6px 20px light-dark(rgba(37,99,235,0.12), rgba(0,0,0,0.4));
+    }
+    .card .icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .card h2 { margin: 0 0 6px; font-size: 1.15rem; color: light-dark(#0f172a, #f1f5f9); }
+    .card p { margin: 0 0 12px; font-size: 0.9rem; color: light-dark(#475569, #cbd5e1); }
+    .card .go { font-size: 0.88rem; font-weight: 600; color: light-dark(#2563eb, #60a5fa); }
+
+    .meta {
+      margin-top: 26px; border: 1px solid light-dark(#e2e8f0, #1e293b);
+      border-radius: 12px; background: light-dark(#ffffff, #0f172a); padding: 18px 20px;
+    }
+    .meta h3 { margin: 0 0 10px; font-size: 1rem; color: light-dark(#0f172a, #f1f5f9); }
+    table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+    th, td { border: 1px solid light-dark(#e2e8f0, #253247); padding: 6px 10px; text-align: left; }
+    th { background: light-dark(#f3f4f6, #1f2937); font-weight: 600; }
+    td.w { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .hi td { background: light-dark(#eff6ff, #10203a); font-weight: 600; }
+
+    footer { margin-top: 22px; text-align: center; font-size: 0.82rem; color: light-dark(#64748b, #94a3b8); }
+    footer a { color: light-dark(#2563eb, #60a5fa); }
+
+    @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>SnowPro Specialty: Gen AI (GES-C02)</h1>
+      <p class="sub">Your prep hub — study the material, then test yourself.</p>
+    </header>
+
+    <div class="cards">
+      <a class="card" href="study-guide.html">
+        <div class="icon">&#128218;</div>
+        <h2>Study Guide</h2>
+        <p>All four domains in one scrollable page with a table-of-contents sidebar. Read this first.</p>
+        <span class="go">Start reading &rarr;</span>
+      </a>
+      <a class="card" href="quiz.html">
+        <div class="icon">&#9989;</div>
+        <h2>Practice Quiz</h2>
+        <p>34 self-graded scenario questions with instant feedback, explanations, and domain filters.</p>
+        <span class="go">Take the quiz &rarr;</span>
+      </a>
+      <a class="card" href="exam-hard.html">
+        <div class="icon">&#128293;</div>
+        <h2>Hard Mock Exam</h2>
+        <p>34 tougher, nuance-driven questions grounded in the docs. Sit this once you're scoring well on the quiz.</p>
+        <span class="go">Start the mock &rarr;</span>
+      </a>
+      <a class="card" href="study-guide.html#advanced">
+        <div class="icon">&#129504;</div>
+        <h2>Advanced Gotchas</h2>
+        <p>Deep-dive on the exam-edge nuances behind the hard mock: defaults, limits, security models. Review last.</p>
+        <span class="go">Jump to deep-dive &rarr;</span>
+      </a>
+      <a class="card" href="exam-targeted.html">
+        <div class="icon">&#127919;</div>
+        <h2>Targeted Drill</h2>
+        <p>75 questions organized by exam subtopic (1.1&ndash;4.4). Filter to a weak objective and drill it.</p>
+        <span class="go">Drill by subtopic &rarr;</span>
+      </a>
+      <a class="card" href="mock-exam.html">
+        <div class="icon">&#128203;</div>
+        <h2>Full Mock Exam</h2>
+        <p>65 questions sampled at the real domain weights (18/38/29/15%). Timed-style full run &mdash; sit this last.</p>
+        <span class="go">Take the full mock &rarr;</span>
+      </a>
+      <a class="card" href="exam-hardest.html">
+        <div class="icon">&#128128;</div>
+        <h2>Hardest Questions</h2>
+        <p>24 brutal exam-edge questions on the traps that catch people: fine-tuning, guardrails, structured outputs, owner's rights, embeddings. Drill these until they're automatic.</p>
+        <span class="go">Face the hardest &rarr;</span>
+      </a>
+    </div>
+
+    <div class="meta">
+      <h3>Exam at a glance</h3>
+      <table>
+        <thead><tr><th>Domain</th><th class="w">Weight</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td>1.0 &nbsp;Snowflake for Gen AI Overview</td><td class="w">18%</td><td>Foundational</td></tr>
+          <tr class="hi"><td>2.0 &nbsp;Snowflake Gen AI Functions</td><td class="w">38%</td><td>Highest — spend the most time here</td></tr>
+          <tr><td>3.0 &nbsp;Snowflake Gen AI Governance</td><td class="w">29%</td><td>Second priority</td></tr>
+          <tr><td>4.0 &nbsp;Snowflake Document Processing</td><td class="w">15%</td><td>Smallest, overlaps with Domain 2</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      Domains 2 + 3 are 67% of the exam. &middot;
+      Official page: <a href="https://learn.snowflake.com/en/certifications/snowpro-specialty-gen-ai/">Snowflake certification</a>
+    </footer>
+  </div>
+</body>
+</html>

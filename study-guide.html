@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="snowflake-source" content="cortex-agent-authored" />
+  <title>SnowPro Gen AI (GES-C02) — Study Guide</title>
+  <script type="application/json" id="snowflake-report-metadata">
+  {
+    "generated": "2026-08-10",
+    "intent": "Readable, self-contained HTML study guide for the SnowPro Specialty: Gen AI (GES-C02) certification, covering all four exam domains. Markdown is pre-rendered at build time so it opens directly in any browser.",
+    "sections": [
+      { "id": "study-guide", "title": "Study guide",
+        "dataSources": [{ "type": "file", "path": "SnowPro-GenAI-Prep/00-START-HERE.md, 01-domain1-overview.md, 02-domain2-functions.md, 03-domain3-governance.md, 04-domain4-documents.md, 05-link-index.md" }],
+        "producerNotes": "Pre-rendered from the markdown files via build_study_guide.py (python-markdown). QUIZ/ANSWER KEY sections are stripped (they live in quiz.html). To refresh: edit the .md files and re-run 'python3 build_study_guide.py'." }
+    ]
+  }
+  </script>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
+      color: light-dark(#1f2937, #e5e7eb);
+      background: light-dark(#ffffff, #0b1120);
+      line-height: 1.6;
+    }
+    .layout { display: flex; align-items: flex-start; max-width: 1200px; margin: 0 auto; }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky; top: 0; align-self: flex-start;
+      width: 300px; flex: 0 0 300px; height: 100vh; overflow-y: auto;
+      padding: 20px 16px; border-right: 1px solid light-dark(#e2e8f0, #1e293b);
+    }
+    .sidebar h2 { font-size: 0.95rem; margin: 0 0 4px; color: light-dark(#0f172a, #f1f5f9); }
+    .sidebar .tagline { font-size: 0.78rem; color: light-dark(#64748b, #94a3b8); margin: 0 0 14px; }
+    .quiz-btn {
+      display: block; text-align: center; text-decoration: none;
+      font-weight: 600; font-size: 0.9rem;
+      padding: 10px 12px; margin: 0 0 16px; border-radius: 9px;
+      background: light-dark(#2563eb, #3b82f6); color: #fff;
+    }
+    .quiz-btn:hover { background: light-dark(#1d4ed8, #2563eb); }
+    nav.toc { font-size: 0.86rem; }
+    nav.toc a {
+      display: block; text-decoration: none; border-radius: 6px;
+      padding: 4px 8px; margin: 1px 0;
+      color: light-dark(#475569, #cbd5e1);
+      border-left: 2px solid transparent;
+    }
+    nav.toc a:hover { background: light-dark(#f1f5f9, #111c30); }
+    nav.toc a.lvl1 { font-weight: 700; margin-top: 10px; color: light-dark(#0f172a, #f8fafc); }
+    nav.toc a.lvl2 { padding-left: 18px; }
+    nav.toc a.active {
+      color: light-dark(#1d4ed8, #93c5fd);
+      border-left-color: light-dark(#2563eb, #60a5fa);
+      background: light-dark(#eff6ff, #10203a);
+    }
+
+    /* Content */
+    .content { flex: 1 1 auto; min-width: 0; padding: 24px 36px 120px; max-width: 860px; }
+    .content section { scroll-margin-top: 16px; padding-bottom: 8px; }
+    .content section + section { border-top: 1px solid light-dark(#e2e8f0, #1e293b); margin-top: 28px; padding-top: 8px; }
+
+    h1 { font-size: 1.7rem; color: light-dark(#0f172a, #f1f5f9); margin: 18px 0 6px; }
+    h2 { font-size: 1.3rem; color: light-dark(#0f172a, #f1f5f9); margin: 30px 0 8px; padding-bottom: 4px; border-bottom: 1px solid light-dark(#eef2f7, #1a2740); }
+    h3 { font-size: 1.08rem; color: light-dark(#111827, #f1f5f9); margin: 22px 0 6px; }
+    a { color: light-dark(#2563eb, #60a5fa); }
+    p, li { font-size: 0.96rem; }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.86em;
+      background: light-dark(#f1f5f9, #1e293b); padding: 1px 5px; border-radius: 4px;
+    }
+    pre {
+      background: light-dark(#f8fafc, #0f172a);
+      border: 1px solid light-dark(#e2e8f0, #253247);
+      border-radius: 10px; padding: 14px 16px; overflow-x: auto;
+    }
+    pre code { background: none; padding: 0; font-size: 0.85rem; }
+
+    table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.9rem; display: block; overflow-x: auto; }
+    th, td { border: 1px solid light-dark(#d1d5db, #374151); padding: 7px 10px; text-align: left; vertical-align: top; }
+    th { background: light-dark(#f3f4f6, #1f2937); font-weight: 600; color: light-dark(#0f172a, #f8fafc); }
+    tr:nth-child(even) td { background: light-dark(#fafbfc, #0d1526); }
+
+    blockquote {
+      margin: 14px 0; padding: 10px 16px;
+      border-left: 3px solid light-dark(#f59e0b, #fbbf24);
+      background: light-dark(#fffbeb, #201a09); border-radius: 0 8px 8px 0;
+    }
+    blockquote p { margin: 6px 0; }
+    hr { border: none; border-top: 1px solid light-dark(#e2e8f0, #1e293b); margin: 22px 0; }
+    strong { color: light-dark(#0f172a, #f8fafc); }
+
+    /* Mobile */
+    @media (max-width: 820px) {
+      .layout { flex-direction: column; }
+      .sidebar { position: static; width: 100%; flex-basis: auto; height: auto; border-right: none; border-bottom: 1px solid light-dark(#e2e8f0, #1e293b); }
+      .content { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>SnowPro Gen AI (GES-C02)</h2>
+      <p class="tagline">Study guide · read all four domains, then test yourself.</p>
+      <a class="quiz-btn" href="quiz.html">Take the practice quiz &rarr;</a>
+      <nav class="toc" id="toc"></nav>
+    </aside>
+    <main class="content" id="content">
+<section id="start" data-nav="Start Here">
+<h1>SnowPro Specialty: Gen AI (GES-C02) — Study Companion</h1>
+<p>Built from the official study guide (Last Updated: April 30, 2026) and grounded against live Snowflake docs.</p>
+<h2>What's in this folder</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00-START-HERE.md</code></td>
+<td>This file — exam facts, study plan, how to use the material</td>
+</tr>
+<tr>
+<td><code>01-domain1-overview.md</code></td>
+<td>Domain 1.0 notes + quiz (18%)</td>
+</tr>
+<tr>
+<td><code>02-domain2-functions.md</code></td>
+<td>Domain 2.0 notes + quiz (38%)</td>
+</tr>
+<tr>
+<td><code>03-domain3-governance.md</code></td>
+<td>Domain 3.0 notes + quiz (29%)</td>
+</tr>
+<tr>
+<td><code>04-domain4-documents.md</code></td>
+<td>Domain 4.0 notes + quiz (15%)</td>
+</tr>
+<tr>
+<td><code>05-link-index.md</code></td>
+<td>All doc/blog links from the guide, grouped by domain, with verified URLs</td>
+</tr>
+</tbody>
+</table>
+<p>Each domain file ends with a <strong>quiz</strong> (scenario-style, like the real exam) and a separate <strong>answer key with explanations</strong>. Try the quiz before reading the answers.</p>
+<h2>Exam facts</h2>
+<ul>
+<li><strong>Exam:</strong> SnowPro Specialty: Gen AI</li>
+<li><strong>Format:</strong> Scenario-based, interactive, and real-world multiple-choice questions</li>
+<li><strong>Prerequisites/audience:</strong> 1+ years of Gen AI experience on Snowflake; Python proficiency helpful; SQL + data engineering assumed</li>
+<li><strong>Recert:</strong> All SnowPro certs expire <strong>2 years</strong> after issue; recertify via Snowflake Continuing Education (eligible ILT courses or an equal/higher SnowPro cert). You must hold a valid cert to use the CE program.</li>
+<li><strong>Estimated guide study time:</strong> 10–13 hours</li>
+</ul>
+<h2>Domain weightings (memorize this)</h2>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Weight</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0 Snowflake for Gen AI Overview</td>
+<td>18%</td>
+<td>Foundational</td>
+</tr>
+<tr>
+<td><strong>2.0 Snowflake Gen AI Functions</strong></td>
+<td><strong>38%</strong></td>
+<td><strong>Highest — spend the most time here</strong></td>
+</tr>
+<tr>
+<td>3.0 Snowflake Gen AI Governance</td>
+<td>29%</td>
+<td>Second priority</td>
+</tr>
+<tr>
+<td>4.0 Snowflake Document Processing</td>
+<td>15%</td>
+<td>Smallest, but overlaps with Domain 2</td>
+</tr>
+</tbody>
+</table>
+<p>Domains 2 + 3 together are <strong>67%</strong> of the exam. Functions and governance are where the exam is won.</p>
+<h2>Recommended study plan</h2>
+<p><strong>Session 1 — Foundation (Domain 1)</strong>
+Read <code>01-domain1-overview.md</code>. Goal: know what each Cortex product <em>is</em> and when to pick it (Search vs. Analyst vs. Agents vs. Intelligence). Take the quiz.</p>
+<p><strong>Session 2 &amp; 3 — Functions (Domain 2, the big one)</strong>
+Read <code>02-domain2-functions.md</code> in two passes:
+- Pass A: the AI_* task functions and when to use each; AI_COMPLETE vs. task-specific; structured outputs.
+- Pass B: vector functions, RAG pipeline mechanics (chunking, embedding, reranking), multi-turn chat, SPCS + Model Registry for BYO models.
+Take the quiz after each pass.</p>
+<p><strong>Session 4 — Governance (Domain 3)</strong>
+Read <code>03-domain3-governance.md</code>. Drill the database roles, the ACCOUNT_USAGE cost views, model access control (RBAC vs. allowlist), and AI Observability/TruLens. Take the quiz.</p>
+<p><strong>Session 5 — Document Processing (Domain 4)</strong>
+Read <code>04-domain4-documents.md</code>. Focus on AI_PARSE_DOCUMENT (OCR vs. LAYOUT) vs. AI_EXTRACT, and Streams + Tasks pipelines. Take the quiz.</p>
+<p><strong>Session 6 — Review + official practice</strong>
+- Re-take every quiz cold.
+- Do the official sample questions (in the guide, also reproduced with explanations at the end of the domain files where relevant).
+- Skim <code>05-link-index.md</code> and open any link on a topic you're still shaky on.</p>
+<h2>High-yield "decision" cheat (know these cold)</h2>
+<ul>
+<li><strong>Search unstructured docs / build a RAG chatbot over PDFs →</strong> Cortex Search</li>
+<li><strong>Natural-language questions over structured tables (text-to-SQL) →</strong> Cortex Analyst (needs a semantic view/model)</li>
+<li><strong>Orchestrate multiple tools (Search + Analyst + custom) in one agent →</strong> Cortex Agents</li>
+<li><strong>No-code business chat UI over your agents/data →</strong> Snowflake Intelligence</li>
+<li><strong>Generate free-form text from a prompt →</strong> AI_COMPLETE</li>
+<li><strong>Extract structured fields from a doc →</strong> AI_EXTRACT</li>
+<li><strong>Convert a whole doc to text/Markdown (OCR or layout) →</strong> AI_PARSE_DOCUMENT</li>
+<li><strong>Daily AI credit consumption →</strong> <code>SNOWFLAKE.ACCOUNT_USAGE.METERING_DAILY_HISTORY</code> (service type <code>AI_SERVICES</code>)</li>
+</ul>
+<blockquote>
+<p>Version note: This material was verified against Snowflake docs in 2026. The study guide lists a few role names loosely (e.g., "CORTEX_ANALYST_USER"). See <code>03-domain3-governance.md</code> for exactly which roles/parameters are real vs. how the guide phrases them — I flag the differences so you're not caught out.</p>
+</blockquote>
+</section>
+<section id="domain1" data-nav="Domain 1 · Overview (18%)">
+<h1>Domain 1.0 — Snowflake for Gen AI Overview (18%)</h1>
+<p>Goal of this domain: know <strong>what each Cortex product is</strong> and <strong>when to choose it</strong>. Most Domain 1 questions are "which capability fits this scenario" — memorize the decision table at the end.</p>
+<hr />
+<h2>1.1 Snowflake's Gen AI principles and features</h2>
+<h3>Snowflake Cortex — the umbrella</h3>
+<p>Cortex is Snowflake's fully-managed AI layer. No infra to manage; models run inside Snowflake's governance/security boundary. Your data does not leave the Snowflake boundary to be trained on.</p>
+<p><strong>Cortex Models &amp; Functions</strong> — Serverless LLM access via SQL/Python/REST. Two families:
+- <strong>General:</strong> <code>AI_COMPLETE</code> (free-form generation, the workhorse).
+- <strong>Task-specific:</strong> <code>AI_CLASSIFY</code>, <code>AI_EXTRACT</code>, <code>AI_SENTIMENT</code>, <code>AI_TRANSLATE</code>, <code>AI_SUMMARIZE_AGG</code>, etc. — optimized single-purpose functions.</p>
+<p><strong>Cortex Fine-tuning</strong> (customizes a base model on your labeled data) — cheaper/faster inference than prompting a large model for a narrow task; improves accuracy on domain-specific tasks. Created with the <code>FINETUNE</code> function / requires <code>CREATE MODEL</code> privilege.</p>
+<p><strong>Cortex Search</strong> — Managed <strong>hybrid search</strong> (vector semantic + keyword/lexical) service. This is the retrieval engine for <strong>RAG</strong> and the answer for "search across unstructured docs (PDFs)". Handles chunking-adjacent concerns, embedding, indexing, and low-latency serving for you.
+- RAG use case: retrieve relevant chunks → feed to an LLM (<code>AI_COMPLETE</code>) as grounding context.
+- Unstructured data use case: semantic search over document text.</p>
+<p><strong>Cortex Analyst</strong> — <strong>Text-to-SQL</strong> over <strong>structured</strong> data. Users ask natural-language questions; Analyst generates SQL grounded in a <strong>semantic view/model</strong> (not the raw schema). Exposed as a <strong>REST API</strong>. Improve accuracy with <strong>Verified Queries (VQR)</strong> and <strong>Custom Instructions</strong>.</p>
+<p><strong>Cortex Agents</strong> — Orchestration layer. An agent reasons over a request and calls <strong>tools</strong>: Cortex Search (unstructured), Cortex Analyst (structured), and custom tools (functions/stored procs). Use when a single question spans both structured + unstructured sources or needs multi-step tool use. Uses <strong>MCP</strong> to expose/consume tools.</p>
+<h3>Cortex Code (developer tooling)</h3>
+<p>AI coding assistant for Snowflake development.
+- <strong>Cortex Code in Snowsight UI</strong> — in-browser assistant.
+- <strong>Cortex Code CLI</strong> — command-line agent (this tool). Has session management and CLI commands. Metered/billable (replaced the older free Snowflake Copilot assistant).</p>
+<h3>Snowflake Copilot Inline (Public Preview)</h3>
+<p>Inline SQL assistant embedded in worksheets — natural-language-to-SQL help, backed by Cortex models/functions, and can leverage Cortex Search for RAG. (Legacy Copilot assistant is being superseded by Cortex Code.)</p>
+<h3>Snowflake Intelligence</h3>
+<p>A <strong>no-code, business-user chat experience</strong> built on top of Cortex Agents. Point it at your agents/semantic models/search services and let non-technical users ask questions in natural language. Think "packaged UI over Agents," not a separate model.</p>
+<h3>Interfaces to Cortex (know all three)</h3>
+<ul>
+<li><strong>AI Studio</strong> (Snowsight UI, e.g., Cortex Playground) — click-to-try, compare models.</li>
+<li><strong>SQL</strong> — call <code>AI_COMPLETE(...)</code> etc. directly in queries.</li>
+<li><strong>REST API</strong> — call Cortex Analyst / Agents / inference from applications.</li>
+</ul>
+<h3>Bringing your own models into Snowflake</h3>
+<p>Two paths (know the distinction — heavy in Domain 2.5):
+- <strong>Snowflake Model Registry</strong> — log a custom/open-source model as a versioned object in a schema, then call it for inference. Governed like any Snowflake object.
+- <strong>Snowpark Container Services (SPCS)</strong> — run containerized models/services (Docker images) on Snowflake-managed compute pools. Use when you need full control of the runtime, GPUs, or a serving framework.</p>
+<hr />
+<h2>1.2 Gen AI capabilities in Snowflake</h2>
+<p><strong>Prompting</strong> — Instructions to the LLM. Good prompts are specific, give context/examples (few-shot), and constrain output format. Poor prompts increase hallucination and token cost.</p>
+<p><strong>Cortex AI functions</strong>
+- <strong>Vector embeddings</strong> — Text → numeric vector (<code>AI_EMBED</code> / <code>EMBED_TEXT_768</code> / <code>EMBED_TEXT_1024</code>). Similar meanings → nearby vectors. Foundation of semantic search/RAG.
+- <strong>Context window</strong> — Max tokens a model can consider (prompt + response). Long docs must be <strong>chunked</strong> to fit; exceeding it truncates or errors. Bigger context = higher latency/cost.</p>
+<p><strong>Cortex Search</strong>
+- <strong>Multi-index queries</strong> — query across multiple search services/indexes.
+- <strong>Access control requirements</strong> — caller needs <code>CORTEX_USER</code> (or targeted role) <strong>plus</strong> USAGE on the search service and on the underlying DB/schema/table.
+- <strong>Different ways to use it</strong> — SQL, Python, REST API, or as a tool inside a Cortex Agent.</p>
+<p><strong>Cortex Analyst</strong>
+- <strong>Semantic Views</strong> — the governed business model (tables, relationships, dimensions, metrics, synonyms) Analyst uses to ground SQL generation.
+- <strong>Semantic Views Autopilot</strong> — assisted generation of a semantic view from your tables.
+- <strong>YAML specification</strong> — semantic models can be authored/edited as YAML.
+- <strong>Verified Query (VQR)</strong> — admin-approved NL→SQL pairs that Analyst reuses for accuracy/trust.
+- <strong>Custom Instructions</strong> — persistent guidance (business rules, definitions) applied to every request.</p>
+<p><strong>Cortex Agents / Snowflake Intelligence</strong> — see 1.1.</p>
+<p><strong>Cross-region inference</strong>
+- Controlled by the <strong>account-level</strong> parameter <strong><code>CORTEX_ENABLED_CROSS_REGION</code></strong>. Only <strong>ACCOUNTADMIN</strong> can set it (via <code>ALTER ACCOUNT</code>); cannot be set at user/session level; cannot be set by ORGADMIN.
+- Values: <code>ANY_REGION</code> (broadest), cloud-scoped (<code>AWS_GLOBAL</code>, <code>AZURE_GLOBAL</code>, <code>GCP_GLOBAL</code>), geo-scoped (<code>AWS_US</code>, <code>AWS_EU</code>, <code>AZURE_US</code>, ...), or <code>DISABLED</code> (home region only).
+- Why it matters: many frontier models aren't in every region. Cross-region routing gives access to them.
+- <strong>Data residency:</strong> customer data stays stored in your home region; only the transient inference payload is sent to the processing region and is <strong>not persisted</strong> there. Encrypted in transit (mTLS across clouds).
+- <strong>Billing:</strong> credits are consumed in the <strong>requesting</strong> region; <strong>no egress charges</strong>.
+- <strong>Considerations:</strong> added latency; not all features (e.g., some Cortex Search) supported in all regions.</p>
+<p><strong>REST APIs</strong> — Cortex Analyst, Agents, and inference are callable over REST for app integration. Auth via PAT, key-pair JWT, or OAuth.</p>
+<p><strong>Model Context Protocol (MCP)</strong> — Open protocol for exposing tools/data to agents. Cortex Agents can act as MCP servers/clients so external and internal tools interoperate.</p>
+<p><strong>Cortex Knowledge Extensions (CKE)</strong> — Marketplace-distributed knowledge (backed by a Cortex Search Service) that a provider shares so consumers' agents/LLMs can ground answers on that curated content. Access relies on the underlying Cortex Search Service's access control.</p>
+<hr />
+<h2>Decision table — pick the right capability (HIGH YIELD)</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chatbot/search over unstructured PDFs/docs</td>
+<td><strong>Cortex Search</strong></td>
+</tr>
+<tr>
+<td>RAG retrieval engine</td>
+<td><strong>Cortex Search</strong></td>
+</tr>
+<tr>
+<td>NL questions over structured tables (text-to-SQL)</td>
+<td><strong>Cortex Analyst</strong> (+ semantic view)</td>
+</tr>
+<tr>
+<td>One assistant that combines structured + unstructured + custom tools</td>
+<td><strong>Cortex Agents</strong></td>
+</tr>
+<tr>
+<td>No-code chat UI for business users</td>
+<td><strong>Snowflake Intelligence</strong></td>
+</tr>
+<tr>
+<td>Generate/summarize/translate text in SQL</td>
+<td><strong>Cortex AI functions</strong> (AI_COMPLETE, etc.)</td>
+</tr>
+<tr>
+<td>Improve a model's accuracy on a narrow, repeated task</td>
+<td><strong>Cortex Fine-tuning</strong></td>
+</tr>
+<tr>
+<td>Run your own open-source/custom model, need GPUs/runtime control</td>
+<td><strong>SPCS</strong></td>
+</tr>
+<tr>
+<td>Register + serve a custom model as a governed object</td>
+<td><strong>Model Registry</strong></td>
+</tr>
+<tr>
+<td>Access a frontier model not in your region</td>
+<td>Enable <strong>cross-region inference</strong></td>
+</tr>
+<tr>
+<td>AI coding help in terminal / Snowsight</td>
+<td><strong>Cortex Code</strong> (CLI / Snowsight)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Common traps</h2>
+<ul>
+<li><strong>Search vs. Analyst:</strong> Search = <em>unstructured</em> text retrieval; Analyst = <em>structured</em> text-to-SQL. Don't mix them up — this is tested constantly.</li>
+<li><strong>Agents vs. Intelligence:</strong> Agents = the orchestration engine/API; Intelligence = the packaged no-code UI on top.</li>
+<li><strong>Cross-region parameter</strong> is <code>CORTEX_ENABLED_CROSS_REGION</code>, ACCOUNT level, ACCOUNTADMIN only.</li>
+<li>Fine-tuning ≠ RAG. Fine-tuning changes the model; RAG adds retrieved context at query time. RAG is the go-to for "answer from my documents/knowledge."</li>
+</ul>
+<hr />
+</section>
+<section id="domain1-dd" data-nav="Domain 1 · Deep-Dive">
+<h1>Domain 1 Deep-Dive: Snowflake for Gen AI Overview</h1>
+<blockquote>
+<p>Content sourced from Snowflake documentation as of: 2026-08-24 (via <code>cortex search docs</code>)
+Exam: SnowPro Specialty: Gen AI (GES-C02)
+Domain weight: 18% (foundational — the "which product do I pick?" domain)</p>
+</blockquote>
+<p>This domain is about knowing what each Cortex product <em>is</em> and, above all, <strong>when to choose one over another</strong>. The exam leans hard on scenario questions: given a use case, pick Search vs. Analyst vs. Agents vs. Intelligence vs. a raw AI function.</p>
+<hr />
+<h2>1.1 The Cortex AI product family (what each one is)</h2>
+<p>Snowflake Cortex is a suite of LLM-powered features that run inside Snowflake's governed environment:</p>
+<ul>
+<li><strong>Cortex AI Functions</strong> — SQL functions (<code>AI_COMPLETE</code>, <code>AI_CLASSIFY</code>, <code>EMBED_TEXT_*</code>, etc.) for row-level and aggregate AI over your data.</li>
+<li><strong>Cortex Search</strong> — managed <strong>hybrid (vector + keyword)</strong> search over <strong>unstructured text</strong>; the RAG retrieval engine.</li>
+<li><strong>Cortex Analyst</strong> — fully managed, LLM-powered <strong>text-to-SQL</strong> over your <strong>structured</strong> data via a semantic model/view; exposed as a REST API.</li>
+<li><strong>Cortex Agents</strong> — a managed <strong>agentic</strong> platform: an agent reasons, plans, calls tools (Search + Analyst + custom), executes, and responds — no orchestration loop to build.</li>
+<li><strong>Snowflake Intelligence</strong> — a no-code business-user chat experience built on top of agents/data.</li>
+<li><strong>Cortex Fine-tuning</strong> — customize a base model on your data.</li>
+</ul>
+<p><strong>Key details:</strong>
+| Product | Data type | Core job |
+|---------|-----------|----------|
+| AI Functions | any (rows) | Per-row/aggregate AI tasks in SQL |
+| Cortex Search | unstructured text | Semantic/hybrid retrieval (RAG) |
+| Cortex Analyst | structured tables | Natural-language → SQL answers |
+| Cortex Agents | both | Multi-tool orchestration |
+| Snowflake Intelligence | both | No-code chat UI for business users |</p>
+<hr />
+<h2>1.2 Cortex Search — retrieval over unstructured text</h2>
+<p><strong>Cortex Search powers low-latency, high-quality "fuzzy" search</strong> over text in Snowflake, and is the standard RAG engine for LLM chatbots. It's a <strong>hybrid</strong> engine (vector + keyword) that handles embedding, indexing, and refresh for you, so you don't tune search infrastructure.</p>
+<p><strong>When to use:</strong> RAG chatbot over PDFs / a knowledge base, or enterprise search across documents.</p>
+<pre><code class="language-sql">CREATE OR REPLACE CORTEX SEARCH SERVICE kb_search
+  ON chunk
+  WAREHOUSE = search_wh
+  TARGET_LAG = '1 hour'
+  AS (SELECT chunk, source FROM kb_chunks);
+</code></pre>
+<hr />
+<h2>1.3 Cortex Analyst — natural language over structured data</h2>
+<p><strong>Cortex Analyst answers business questions over structured tables</strong> by generating text-to-SQL — no SQL from the user. It requires a <strong>semantic model/semantic view</strong> that defines tables, metrics, dimensions, and relationships so the LLM maps questions to correct SQL. It's delivered as a <strong>REST API</strong> you embed in apps.</p>
+<p><strong>When to use:</strong> "What were Q3 sales by region?" over governed tables — self-service analytics without writing SQL.</p>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Input data | Structured tables |
+| Requires | A semantic model / semantic view |
+| Interface | REST API |
+| Output | Generated SQL + answer |</p>
+<hr />
+<h2>1.4 Cortex Agents — orchestrating multiple tools</h2>
+<p><strong>Cortex Agents is a fully managed agentic platform.</strong> An agent reasons over a request, plans, calls tools, executes code, and generates a response — without you building an orchestration loop, runtime, or sandbox. It brings <strong>structured + unstructured</strong> data into one governed workflow: it generates SQL over structured data using <strong>Cortex Analyst</strong> semantic views and retrieves from unstructured sources via <strong>Cortex Search</strong>. Data access is governed by Snowflake privileges and each tool's execution context.</p>
+<p><strong>When to use:</strong> A single assistant that must both query tables <em>and</em> search documents, choosing tools automatically.</p>
+<hr />
+<h2>1.5 Snowflake Intelligence — no-code business chat</h2>
+<p><strong>Snowflake Intelligence is the no-code, business-user-facing chat experience</strong> built over your agents and data. Business users converse with their data; builders configure the agents/tools behind it. It's the "front door" UI, distinct from the Agents platform that does the orchestration.</p>
+<hr />
+<h2>1.X Decision Framework (memorize cold — this is most of the domain)</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Pick</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search unstructured docs / build a RAG chatbot over PDFs</td>
+<td><strong>Cortex Search</strong></td>
+<td>Managed hybrid retrieval engine for text</td>
+</tr>
+<tr>
+<td>Natural-language questions over structured tables</td>
+<td><strong>Cortex Analyst</strong></td>
+<td>Text-to-SQL over a semantic view</td>
+</tr>
+<tr>
+<td>One assistant that uses Search + Analyst + custom tools</td>
+<td><strong>Cortex Agents</strong></td>
+<td>Managed multi-tool orchestration</td>
+</tr>
+<tr>
+<td>No-code chat UI for business users over your data</td>
+<td><strong>Snowflake Intelligence</strong></td>
+<td>Business-facing front end</td>
+</tr>
+<tr>
+<td>Generate/transform text row-by-row in SQL</td>
+<td><strong>AI Functions</strong> (<code>AI_COMPLETE</code>, …)</td>
+<td>Direct SQL AI tasks</td>
+</tr>
+<tr>
+<td>Adapt a base model to your domain data</td>
+<td><strong>Cortex Fine-tuning</strong></td>
+<td>Custom model behavior</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1.Y Key Exam Traps for This Domain</h2>
+<ol>
+<li><strong>Search vs. Analyst is the #1 distractor.</strong> Unstructured text/documents → Cortex <strong>Search</strong>. Structured tables / metrics → Cortex <strong>Analyst</strong>. If the scenario says "PDFs / knowledge base / support articles," it's Search; if it says "sales table / natural-language BI," it's Analyst.</li>
+<li><strong>Analyst needs a semantic view.</strong> Cortex Analyst can't do reliable text-to-SQL without a semantic model/view — a scenario lacking one is a setup step, not a reason to switch products.</li>
+<li><strong>Agents vs. Intelligence.</strong> Agents = the <em>orchestration platform</em> (reasons + calls tools). Snowflake Intelligence = the <em>no-code chat UI</em> on top. Don't answer "Intelligence" when the question is about tool orchestration logic.</li>
+<li><strong>Cortex Search is hybrid, not pure vector.</strong> It combines vector + keyword search; describing it as "vector-only" is wrong.</li>
+<li><strong>Agents unify governed access.</strong> Agent tool access is governed by Snowflake privileges and each tool's execution context — it doesn't bypass RBAC.</li>
+</ol>
+<hr />
+<h2>Quick Reference Links</h2>
+<ul>
+<li><a href="https://docs.snowflake.com/en/guides-overview-ai-features" target="_blank" rel="noopener noreferrer">Snowflake AI and ML (product suite overview)</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search/cortex-search-overview" target="_blank" rel="noopener noreferrer">Cortex Search overview</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst" target="_blank" rel="noopener noreferrer">Cortex Analyst</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents" target="_blank" rel="noopener noreferrer">Cortex Agents</a></li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Official Exam Guide</a> (search "SnowPro Specialty: Gen AI")</li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Schedule your exam</a></li>
+</ul>
+</section>
+<section id="domain2" data-nav="Domain 2 · Functions (38%)">
+<h1>Domain 2.0 — Snowflake Gen AI Functions (38%)</h1>
+<p><strong>The largest domain — spend the most time here.</strong> Expect heavy questions on <em>which function to use</em>, structured outputs, vector functions, RAG pipeline mechanics, multi-turn chat, and running your own models (SPCS + Model Registry).</p>
+<hr />
+<h2>2.1 Cortex AI functions — the full catalog</h2>
+<p>All are callable in SQL (and most in Python). Access requires the <code>USE AI FUNCTIONS</code> account privilege <strong>plus</strong> a <code>CORTEX_USER</code> or <code>AI_FUNCTIONS_USER</code> database role (details in Domain 3).</p>
+<h3>General</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AI_COMPLETE</strong></td>
+<td>The workhorse. Free-form text generation from a prompt. Supports <strong>structured outputs</strong>, and multimodal input (text + image/file). Choose the model with the first arg.</td>
+</tr>
+<tr>
+<td><strong>COMPLETE Structured Outputs</strong></td>
+<td>Pass a <code>response_format</code> (JSON schema) so <code>AI_COMPLETE</code> returns valid, schema-conforming JSON instead of free text. Use when you need machine-parseable results.</td>
+</tr>
+</tbody>
+</table>
+<h3>Task-specific (prefer these over AI_COMPLETE when they fit — cheaper, more accurate, simpler)</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AI_CLASSIFY</strong></td>
+<td>Categorize text/images into your labels. Supports single or multi-label (<code>output_mode</code>).</td>
+</tr>
+<tr>
+<td><strong>AI_EXTRACT</strong></td>
+<td>Pull <strong>structured fields</strong> from text/documents/images via a response schema (question → value). Great for invoices, forms.</td>
+</tr>
+<tr>
+<td><strong>AI_PARSE_DOCUMENT</strong></td>
+<td>Convert a document on a stage to text (OCR) or Markdown+layout (LAYOUT). See Domain 4.</td>
+</tr>
+<tr>
+<td><strong>AI_SENTIMENT</strong></td>
+<td>Sentiment (and entity-level sentiment) of text.</td>
+</tr>
+<tr>
+<td><strong>SUMMARIZE</strong> / <strong>AI_SUMMARIZE_AGG</strong></td>
+<td><code>SUMMARIZE</code> = summarize one value. <code>AI_SUMMARIZE_AGG</code> = <strong>aggregate</strong> summary across many rows (aggregate function; works without CORTEX_USER).</td>
+</tr>
+<tr>
+<td><strong>AI_TRANSLATE</strong></td>
+<td>Translate between languages.</td>
+</tr>
+<tr>
+<td><strong>AI_EMBED</strong></td>
+<td>Create a vector embedding from text (or image). Foundation of semantic search/RAG.</td>
+</tr>
+<tr>
+<td><strong>AI_FILTER</strong></td>
+<td>Returns TRUE/FALSE for a natural-language condition — use in <code>WHERE</code> to filter rows by meaning.</td>
+</tr>
+<tr>
+<td><strong>AI_AGG</strong></td>
+<td>Aggregate/reduce a column of text across rows with a natural-language instruction (aggregate function; no CORTEX_USER needed).</td>
+</tr>
+<tr>
+<td><strong>AI_SIMILARITY</strong></td>
+<td>Semantic similarity between two inputs (text or images).</td>
+</tr>
+<tr>
+<td><strong>AI_TRANSCRIBE</strong></td>
+<td>Speech/audio → text.</td>
+</tr>
+<tr>
+<td><strong>AI_REDACT</strong></td>
+<td>Redact PII/sensitive data from text (governance-relevant).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Scalar vs. aggregate:</strong> <code>AI_AGG</code> and <code>AI_SUMMARIZE_AGG</code> are the two <strong>aggregate</strong> functions and are usable with just <code>AI_FUNCTIONS_USER</code> (they work even without <code>CORTEX_USER</code>). Everything else is scalar (per-row).</p>
+</blockquote>
+<h3>Vector functions (know what each computes)</h3>
+<p>Distance/similarity:
+| Function | Meaning |
+|---|---|
+| <strong>VECTOR_COSINE_SIMILARITY</strong> | Cosine of angle; <strong>higher = more similar</strong>. Most common for semantic search. |
+| <strong>VECTOR_INNER_PRODUCT</strong> | Dot product; higher = more similar (for normalized vectors ≈ cosine). |
+| <strong>VECTOR_L2_DISTANCE</strong> | Euclidean distance; <strong>lower = more similar</strong>. |
+| <strong>VECTOR_L1_DISTANCE</strong> | Manhattan (taxicab) distance; lower = more similar. |</p>
+<p>Transforms/aggregates:
+- <strong>VECTOR_TRUNCATE</strong> — shorten a vector to fewer dimensions.
+- <strong>VECTOR_NORMALIZE</strong> — scale a vector to unit length.
+- <strong>VECTOR_SUM / VECTOR_MIN / VECTOR_MAX / VECTOR_AVG</strong> — element-wise aggregations across vectors.</p>
+<blockquote>
+<p>Data type: <strong>VECTOR(type, dimension)</strong>, e.g. <code>VECTOR(FLOAT, 768)</code>. Embedding dimension must match the model.</p>
+</blockquote>
+<h3>Helper functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AI_COUNT_TOKENS</strong></td>
+<td>Estimate tokens for a prompt/model → estimate cost before running.</td>
+</tr>
+<tr>
+<td><strong>TRY_COMPLETE</strong></td>
+<td>Like AI_COMPLETE/COMPLETE but returns NULL instead of erroring — safe for large batch jobs.</td>
+</tr>
+<tr>
+<td><strong>SPLIT_TEXT_RECURSIVE_CHARACTER</strong></td>
+<td>Chunk long text by characters with overlap — the standard chunker for RAG ingestion.</td>
+</tr>
+<tr>
+<td><strong>SPLIT_TEXT_MARKDOWN_HEADER</strong></td>
+<td>Chunk text along Markdown headers — preserves document structure (pairs well with AI_PARSE_DOCUMENT LAYOUT output).</td>
+</tr>
+<tr>
+<td><strong>TO_FILE</strong></td>
+<td>Build a FILE object from a stage path — required input for AI_PARSE_DOCUMENT and multimodal AI functions.</td>
+</tr>
+<tr>
+<td><strong>PROMPT</strong></td>
+<td>Helper to build a templated prompt object (e.g., for multimodal / structured calls).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2.2 Perform data analysis given a use case</h2>
+<h3>Unstructured data</h3>
+<p>Function toolkit: <strong>AI_PARSE_DOCUMENT</strong> (get text), <strong>AI_EXTRACT</strong> (get fields), <strong>AI_SIMILARITY</strong> (compare), <strong>AI_COMPLETE</strong> (generate/answer).</p>
+<p><strong>RAG pipeline pattern (memorize the flow):</strong>
+1. <strong>Parse</strong> docs → text/Markdown (<code>AI_PARSE_DOCUMENT</code>, LAYOUT for structure).
+2. <strong>Chunk</strong> text (<code>SPLIT_TEXT_RECURSIVE_CHARACTER</code> or <code>SPLIT_TEXT_MARKDOWN_HEADER</code>). Chunk sizing matters: too big overflows context / dilutes relevance; too small loses meaning. Use overlap to preserve continuity.
+3. <strong>Embed</strong> chunks (or let Cortex Search manage embeddings). Pick an <strong>embedding model</strong> whose dimension/quality fits your language + latency.
+4. <strong>Index/serve</strong> with <strong>Cortex Search</strong> (hybrid vector + keyword). Cortex Search can add <strong>semantic reranking</strong> to reorder candidates for relevance.
+5. <strong>Retrieve</strong> top-k chunks → build prompt → <strong>AI_COMPLETE</strong> to generate a grounded answer.</p>
+<p>Key terms the guide calls out: <em>recursive split text/markdown</em>, <em>chunk sizing</em>, <em>embedding models</em>, <em>semantic reranking</em>.</p>
+<p><strong>Multi-modal analytics:</strong> AI functions handle <strong>audio</strong> (<code>AI_TRANSCRIBE</code>) and <strong>images</strong> (<code>AI_COMPLETE</code> multimodal, <code>AI_CLASSIFY</code>/<code>AI_SIMILARITY</code> on images, <code>AI_EXTRACT</code> on image files). <code>AI_COMPLETE</code> takes a FILE for image input; audio goes through AI_TRANSCRIBE first.</p>
+<h3>Structured data</h3>
+<ul>
+<li><strong>AI_COMPLETE</strong> for generative tasks over row values.</li>
+<li><strong>Cortex Analyst</strong> for text-to-SQL. Boost quality with:</li>
+<li><strong>Verified Query Repository (VQR)</strong> — curated NL→SQL pairs.</li>
+<li>Integration with <strong>Cortex Search</strong> (semantic search over dimension values / help Analyst resolve entities).</li>
+<li><strong>Suggested Questions</strong> — surface example questions to users.</li>
+<li><strong>CUSTOM_INSTRUCTIONS</strong> — persistent business rules/definitions.</li>
+</ul>
+<h3>Performance considerations (tested)</h3>
+<ul>
+<li><strong>Choosing a model:</strong> match capability to task. Small models = lower latency/cost; large/frontier models = higher quality on hard tasks. Don't use a 405B model for simple classification.</li>
+<li><strong>Latency</strong> scales with model size and output length (tokens). Long context = slower.</li>
+<li><strong>Accuracy:</strong> improve via <strong>fine-tuning</strong>, better prompts, and <strong>RAG to reduce hallucinations</strong> (ground answers in retrieved facts).</li>
+<li><strong>Model capability:</strong> not every model supports every feature/region/modality.</li>
+<li><strong>Provisioned Throughput (PTU):</strong> reserve dedicated inference capacity for predictable, high-volume workloads (vs. pay-per-token on-demand). Requires <code>CREATE PROVISIONED THROUGHPUT</code> privilege.</li>
+</ul>
+<hr />
+<h2>2.3 Build/interact with interfaces to chat with data</h2>
+<p><strong>Environment setup — required privileges:</strong> caller needs <code>USE AI FUNCTIONS</code> + <code>CORTEX_USER</code> (or targeted role) to call functions; USAGE on any search service / semantic view / warehouse used; and for Analyst, the <code>ENABLE_CORTEX_ANALYST</code> account parameter must be TRUE.</p>
+<p><strong>Invoke Cortex in app code (e.g., Streamlit in Snowflake):</strong>
+- Call <code>AI_COMPLETE</code>/Analyst REST API from the app.
+- <strong>Multi-turn chat architecture:</strong> maintain a <strong>messages array</strong> (conversation history: system/user/assistant turns) and pass it on each request. The model has no memory between calls — <strong>history in the messages array is what preserves context</strong>. This is the single most-tested chat concept (matches official sample Q2).
+- Update parameters between turns: append the latest user/assistant messages so context accumulates; trim old turns when you approach the context window.</p>
+<p><strong>Snowflake Intelligence</strong> — the no-code path to the same thing for business users.</p>
+<hr />
+<h2>2.4 Apply Cortex functions in data pipelines</h2>
+<p>Cortex functions are just SQL — drop them into ELT/pipelines:
+- <strong>Data extraction</strong> — AI_EXTRACT / AI_PARSE_DOCUMENT to pull fields/text from raw docs.
+- <strong>Data enrichment</strong> — add sentiment, classification, translations, embeddings as new columns.
+- <strong>Data augmentation</strong> — generate summaries/synthetic fields with AI_COMPLETE.
+- <strong>Data transformations</strong> — AI_FILTER in WHERE, AI_AGG/AI_SUMMARIZE_AGG in GROUP BY.
+- Combine with <strong>Streams + Tasks</strong> (or Dynamic Tables) to run continuously as new rows/files land (see Domain 4). Use <code>TRY_COMPLETE</code> for resilient batch jobs.</p>
+<hr />
+<h2>2.5 Run third-party / your own models in Snowflake</h2>
+<h3>Option A — Snowpark Container Services (SPCS)</h3>
+<p>For full runtime control (custom frameworks, GPUs). Setup steps (know the order):
+1. <strong>Environment setup</strong> — role/privileges, database/schema.
+2. <strong>Docker image</strong> — containerize the model/serving code.
+3. <strong>Image repository</strong> — <code>CREATE IMAGE REPOSITORY</code>; push the image to it.
+4. <strong>Compute pool</strong> — <code>CREATE COMPUTE POOL</code> (choose instance family; GPU pools for LLMs).
+5. <strong>Specification file</strong> — YAML service spec (containers, endpoints, resources).
+6. <strong>Create service</strong> — <code>CREATE SERVICE</code> from the spec on the compute pool; call its endpoint.</p>
+<p>Use SPCS for fine-tuning open-source LLMs (e.g., AutoTrain) and for serving models Cortex doesn't host.</p>
+<h3>Option B — Snowflake Model Registry</h3>
+<p>For logging/serving models as governed Snowflake objects (schema-level).
+1. <strong>Log the model</strong> — <code>registry.log_model(...)</code> (Python) creates a versioned MODEL object.
+2. <strong>Call the model</strong> — invoke its methods for inference (<code>model_ref.run(...)</code> / SQL). Registry handles versioning and dependency packaging.</p>
+<p><strong>When to pick which:</strong> Registry = easiest path to deploy/version a model (esp. Python ML/LLMs that fit the managed runtime). SPCS = when you need containers, custom serving, or GPU-heavy workloads beyond the managed runtime.</p>
+<hr />
+<h2>Function-selection cheat (HIGH YIELD)</h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free-form text / answer a prompt</td>
+<td>AI_COMPLETE</td>
+</tr>
+<tr>
+<td>Machine-parseable JSON out of an LLM</td>
+<td>AI_COMPLETE + response_format (Structured Outputs)</td>
+</tr>
+<tr>
+<td>Bucket into categories</td>
+<td>AI_CLASSIFY</td>
+</tr>
+<tr>
+<td>Pull named fields from text/doc</td>
+<td>AI_EXTRACT</td>
+</tr>
+<tr>
+<td>Doc → text/Markdown</td>
+<td>AI_PARSE_DOCUMENT</td>
+</tr>
+<tr>
+<td>Filter rows by meaning</td>
+<td>AI_FILTER (in WHERE)</td>
+</tr>
+<tr>
+<td>Summary across many rows</td>
+<td>AI_SUMMARIZE_AGG / AI_AGG</td>
+</tr>
+<tr>
+<td>Translate</td>
+<td>AI_TRANSLATE</td>
+</tr>
+<tr>
+<td>Sentiment</td>
+<td>AI_SENTIMENT</td>
+</tr>
+<tr>
+<td>Audio → text</td>
+<td>AI_TRANSCRIBE</td>
+</tr>
+<tr>
+<td>Redact PII</td>
+<td>AI_REDACT</td>
+</tr>
+<tr>
+<td>Make embeddings</td>
+<td>AI_EMBED</td>
+</tr>
+<tr>
+<td>Compare two texts semantically</td>
+<td>AI_SIMILARITY</td>
+</tr>
+<tr>
+<td>Estimate cost before running</td>
+<td>AI_COUNT_TOKENS</td>
+</tr>
+<tr>
+<td>Batch job that must not fail per-row</td>
+<td>TRY_COMPLETE</td>
+</tr>
+<tr>
+<td>Chunk long text for RAG</td>
+<td>SPLIT_TEXT_RECURSIVE_CHARACTER / _MARKDOWN_HEADER</td>
+</tr>
+<tr>
+<td>Most-similar vector search</td>
+<td>VECTOR_COSINE_SIMILARITY (higher = closer)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Common traps</h2>
+<ul>
+<li><strong>Task-specific over AI_COMPLETE:</strong> if AI_CLASSIFY/AI_EXTRACT/AI_TRANSLATE fits, prefer it — cheaper and more accurate than a hand-prompted AI_COMPLETE.</li>
+<li><strong>Cosine/inner-product: higher = closer. L1/L2 distance: lower = closer.</strong> Easy to flip under exam pressure.</li>
+<li><strong>Multi-turn memory = the messages array</strong>, not a server-side session. The LLM is stateless.</li>
+<li><strong>AI_EXTRACT vs. AI_PARSE_DOCUMENT:</strong> Extract = <em>specific fields</em> (schema); Parse = <em>the whole document's text/layout</em>. (Central to Domain 4 too.)</li>
+<li><strong>SPCS vs. Model Registry:</strong> containers/GPUs/custom serving → SPCS; log-and-serve a model object → Registry.</li>
+<li><strong>Provisioned Throughput</strong> = reserved capacity for cost/latency predictability at scale, not a model or a function.</li>
+</ul>
+<hr />
+</section>
+<section id="domain2-dd" data-nav="Domain 2 · Deep-Dive">
+<h1>Domain 2 Deep-Dive: Snowflake Gen AI Functions</h1>
+<blockquote>
+<p>Content sourced from Snowflake documentation as of: 2026-08-24 (via <code>cortex search docs</code>)
+Exam: SnowPro Specialty: Gen AI (GES-C02)
+Domain weight: 38% (highest-weighted domain — master this first)</p>
+</blockquote>
+<p>This domain tests whether you can pick the <em>right</em> Cortex AI function for a task, call it with correct syntax, force structured output, build a RAG retrieval pipeline (embed → store → search → generate), hold a multi-turn conversation, and bring your own model when a built-in one won't do.</p>
+<hr />
+<h2>2.1 AI_COMPLETE and the task-specific AI functions</h2>
+<p><strong><code>AI_COMPLETE</code> is the general-purpose text/multimodal generation function</strong> — the canonical replacement for the legacy <code>SNOWFLAKE.CORTEX.COMPLETE</code>. Everything else in the <code>AI_*</code> family is a <em>task-specialized</em> function that is easier to call and often cheaper/faster for its narrow job. On the exam, the trap is reaching for <code>AI_COMPLETE</code> with a hand-written prompt when a purpose-built function exists.</p>
+<p><strong>Task-specific functions (know when each wins over AI_COMPLETE):</strong>
+- <code>AI_CLASSIFY</code> — assign text/images to one of a set of labels you provide.
+- <code>AI_FILTER</code> — returns a boolean; use it in <code>WHERE</code>/<code>QUALIFY</code> to keep rows matching a natural-language condition.
+- <code>AI_AGG</code> — aggregate a <em>column</em> of text and reason across all rows (not row-by-row).
+- <code>AI_SUMMARIZE_AGG</code> — summarize across many rows.
+- <code>AI_SIMILARITY</code> — semantic similarity between two inputs.
+- <code>AI_SENTIMENT</code>, <code>SUMMARIZE</code>, <code>TRANSLATE</code>, <code>EXTRACT_ANSWER</code> — single-purpose task functions.</p>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">-- General generation: pick the model explicitly
+SELECT AI_COMPLETE('claude-4-sonnet',
+  'Write a one-sentence product tagline for a solar phone charger');
+
+-- Task-specific is simpler than a COMPLETE prompt for classification
+SELECT AI_CLASSIFY(review_text, ['positive','neutral','negative']) AS label
+FROM reviews;
+
+-- AI_FILTER used as a semantic WHERE clause
+SELECT * FROM tickets
+WHERE AI_FILTER(prompt('Is this ticket about a billing problem? {0}', body));
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Canonical function | <code>AI_COMPLETE</code> (legacy <code>SNOWFLAKE.CORTEX.COMPLETE</code> deprecated by end of 2026) |
+| Model arg | Required first argument; supported models differ in cost/context window |
+| <code>max_tokens</code> default | 4096, max 8192 (COMPLETE options) |
+| <code>temperature</code> / <code>top_p</code> default | 0 (deterministic-leaning) |
+| Privilege | <code>SNOWFLAKE.CORTEX_USER</code> database role |</p>
+<hr />
+<h2>2.2 Structured outputs (<code>response_format</code> / type literals)</h2>
+<p><strong>Structured output forces the model's response to conform to a JSON schema or SQL type</strong>, so you skip brittle post-processing. AI_COMPLETE verifies each generated token against your structure. Two ways to specify it:</p>
+<ol>
+<li><strong><code>response_format</code></strong> — a JSON schema passed as a SQL sub-object (NOT a string) in the <code>options</code> argument.</li>
+<li><strong>Type literals</strong> — begin with the <code>TYPE</code> keyword using a SQL <code>OBJECT</code> as the top-level type. <strong>Type literals are supported only for the single-string prompt form of AI_COMPLETE.</strong></li>
+</ol>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">-- response_format with a JSON schema (options object form)
+SELECT AI_COMPLETE(
+  'claude-4-sonnet',
+  'Extract the customer name and order total from: John paid $42.50',
+  {'response_format': {
+      'type':'json',
+      'schema': {'type':'object',
+        'properties': {'name':{'type':'string'},'total':{'type':'number'}},
+        'required':['name','total']}}}
+);
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Every supported model | Supports structured output; stronger models = higher quality |
+| <code>response_format</code> type | SQL sub-object, not a string |
+| Type literals scope | Single-string prompt form only |
+| Common exam trap | The <strong>Prompt object</strong> form (documents/images) <strong>cannot</strong> use <code>response_format</code> |</p>
+<hr />
+<h2>2.3 Vector data type, embeddings, and vector similarity functions</h2>
+<p><strong>Embeddings turn unstructured text/images into a <code>VECTOR</code> of floats</strong> that preserves semantic similarity. Snowflake stores them in the native <code>VECTOR(type, dimension)</code> column type and compares them with vector similarity functions.</p>
+<p><strong>Embedding functions (note the dimension in the name):</strong>
+- <code>EMBED_TEXT_768(model, text)</code> → <code>VECTOR(FLOAT, 768)</code>
+- <code>EMBED_TEXT_1024(model, text)</code> → <code>VECTOR(FLOAT, 1024)</code>
+- (<code>AI_EMBED</code> is the newer unified surface for text and images.)</p>
+<p><strong>Similarity functions:</strong>
+- <code>VECTOR_COSINE_SIMILARITY</code> — cosine (most common for semantic search; higher = more similar).
+- <code>VECTOR_INNER_PRODUCT</code>, <code>VECTOR_L2_DISTANCE</code> (lower distance = more similar).</p>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">-- 1. Store embeddings in a native VECTOR column
+CREATE TABLE docs (id INT, chunk STRING, v VECTOR(FLOAT, 768));
+
+INSERT INTO docs
+SELECT id, chunk,
+       SNOWFLAKE.CORTEX.EMBED_TEXT_768('snowflake-arctic-embed-m', chunk)
+FROM raw_chunks;
+
+-- 2. Retrieve top-k most similar chunks to a query
+SELECT chunk,
+       VECTOR_COSINE_SIMILARITY(
+         v, SNOWFLAKE.CORTEX.EMBED_TEXT_768('snowflake-arctic-embed-m', 'reset my password')
+       ) AS score
+FROM docs
+ORDER BY score DESC
+LIMIT 5;
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Column type | <code>VECTOR(&lt;type&gt;, &lt;dimension&gt;)</code> — dimension must match the embedding model |
+| Dimension mismatch | Comparing vectors of different dimensions is an error |
+| Cosine similarity | Higher value = more similar; L2 distance = lower is more similar |
+| Trap | The embedding model used for the query MUST match the model used for stored chunks |</p>
+<hr />
+<h2>2.4 RAG pipeline mechanics: Cortex Search vs. hand-rolled vector search</h2>
+<p><strong>Retrieval-Augmented Generation = retrieve relevant context, then feed it to an LLM to ground the answer.</strong> You can build the retrieval layer two ways, and the exam wants you to know the tradeoff:</p>
+<ul>
+<li><strong>Cortex Search Service (recommended):</strong> a managed <strong>hybrid (vector + keyword)</strong> search engine. It handles embedding, indexing, index refresh, and quality tuning for you. Purpose-built as the RAG engine for chatbots and enterprise search over text.</li>
+<li><strong>Manual vector search:</strong> you call <code>EMBED_TEXT_*</code> yourself, store vectors, and rank with <code>VECTOR_COSINE_SIMILARITY</code>. More control, but you own chunking, embedding, and refresh.</li>
+</ul>
+<p><strong>RAG data-flow (managed path):</strong></p>
+<pre><code>Docs → [chunk] → CREATE CORTEX SEARCH SERVICE (auto-embeds + indexes)
+     → query → SEARCH_PREVIEW / service returns top-k chunks
+     → AI_COMPLETE(prompt + retrieved chunks) → grounded answer
+</code></pre>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">-- Managed hybrid search service over a chunk table (auto refresh via TARGET_LAG)
+CREATE OR REPLACE CORTEX SEARCH SERVICE support_search
+  ON chunk                    -- the search (text) column
+  ATTRIBUTES product, region  -- filterable columns
+  WAREHOUSE = search_wh
+  TARGET_LAG = '1 hour'
+  AS (SELECT chunk, product, region FROM docs);
+</code></pre>
+<p><strong>Decision framework:</strong>
+| Scenario | Recommended Approach | Why |
+|----------|---------------------|-----|
+| Chatbot/RAG over PDFs or KB text | Cortex Search Service | Managed hybrid search, auto index refresh, no infra to tune |
+| Fine-grained control of chunking/embedding/scoring | Manual <code>EMBED_TEXT_*</code> + <code>VECTOR_COSINE_SIMILARITY</code> | Full control of the retrieval math |
+| Natural-language questions over <strong>structured tables</strong> | Cortex Analyst (not RAG) | Text-to-SQL over a semantic view, not document retrieval |</p>
+<hr />
+<h2>2.5 Multi-turn (conversational) completions</h2>
+<p><strong><code>AI_COMPLETE</code>/<code>COMPLETE</code> retain NO state between calls.</strong> To make a stateful chat, you pass the entire conversation history as an array of <code>{role, content}</code> objects in chronological order.</p>
+<ul>
+<li>Roles: <code>system</code> (optional, must be first and only one), <code>user</code>, <code>assistant</code>.</li>
+<li>Each round you resend prior turns → token count and cost grow every turn.</li>
+</ul>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">SELECT SNOWFLAKE.CORTEX.COMPLETE('claude-4-sonnet',
+  [ {'role':'system','content':'You are a terse SQL tutor.'},
+    {'role':'user','content':'What is a semantic view?'},
+    {'role':'assistant','content':'A modeled layer Cortex Analyst queries.'},
+    {'role':'user','content':'Give one example.'} ],
+  {'temperature':0.2});
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Statefulness | None — you must resend history each call |
+| System prompt | At most one; must be first element |
+| Cost implication | Grows per turn as history lengthens |</p>
+<hr />
+<h2>2.6 Bring-your-own model: Model Registry + SPCS</h2>
+<p>When a built-in Cortex model isn't enough, you host your own. The exam expects you to know the two building blocks:</p>
+<ul>
+<li><strong>Snowflake Model Registry</strong> — logs/versions models (via <code>snowflake.ml</code>) as first-class schema objects; you then call them for inference.</li>
+<li><strong>Snowpark Container Services (SPCS)</strong> — runs custom/large models (incl. GPU) in managed containers when a model can't run as a warehouse UDF.</li>
+</ul>
+<p><strong>Decision framework:</strong>
+| Scenario | Approach | Why |
+|----------|----------|-----|
+| Common LLM task (generate, classify, embed) | Built-in <code>AI_*</code> / Cortex functions | No hosting; serverless |
+| Custom or open-source model, moderate size | Model Registry + warehouse inference | Versioned, governed, SQL-callable |
+| Large / GPU model or custom container | Model Registry + <strong>SPCS</strong> | Dedicated compute (incl. GPU) the warehouse can't provide |</p>
+<hr />
+<h2>2.X Decision Frameworks: which function?</h2>
+<table>
+<thead>
+<tr>
+<th>You need to…</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generate free-form or multimodal text</td>
+<td><code>AI_COMPLETE</code></td>
+</tr>
+<tr>
+<td>Force a JSON/typed response</td>
+<td><code>AI_COMPLETE</code> + <code>response_format</code> / type literal</td>
+</tr>
+<tr>
+<td>Label rows into known categories</td>
+<td><code>AI_CLASSIFY</code></td>
+</tr>
+<tr>
+<td>Keep rows matching a fuzzy condition</td>
+<td><code>AI_FILTER</code> in <code>WHERE</code></td>
+</tr>
+<tr>
+<td>Reason across all rows of a column</td>
+<td><code>AI_AGG</code> / <code>AI_SUMMARIZE_AGG</code></td>
+</tr>
+<tr>
+<td>Embed text for semantic search</td>
+<td><code>EMBED_TEXT_768</code> / <code>EMBED_TEXT_1024</code> / <code>AI_EMBED</code></td>
+</tr>
+<tr>
+<td>Rank stored vectors by similarity</td>
+<td><code>VECTOR_COSINE_SIMILARITY</code></td>
+</tr>
+<tr>
+<td>Managed RAG retrieval over documents</td>
+<td>Cortex Search Service</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2.Y Key Exam Traps for This Domain</h2>
+<ol>
+<li><strong>Prompt object cannot use <code>response_format</code>.</strong> Structured output (<code>response_format</code>, and type literals) applies to the text/single-string prompt form. The document/image <strong>Prompt object</strong> form does not accept <code>response_format</code> — a very common distractor.</li>
+<li><strong>Task function vs. AI_COMPLETE.</strong> If a question describes classification, filtering, sentiment, or translation, the <em>best</em> answer is the task-specific function (<code>AI_CLASSIFY</code>, <code>AI_FILTER</code>, etc.), not a hand-written <code>AI_COMPLETE</code> prompt — even though COMPLETE <em>could</em> do it.</li>
+<li><strong>Cortex Search is hybrid, and it's for unstructured text.</strong> Don't confuse it with Cortex Analyst. Search = fuzzy/semantic retrieval over documents (RAG). Analyst = text-to-SQL over structured tables via a semantic view.</li>
+<li><strong>Embedding model must match.</strong> Query embeddings and stored chunk embeddings must come from the <em>same</em> model and dimension, or similarity is meaningless / errors on dimension mismatch.</li>
+<li><strong>COMPLETE is stateless.</strong> Multi-turn chat requires resending the full history array; there is no server-side session. Cost rises each turn.</li>
+<li><strong><code>SNOWFLAKE.CORTEX_USER</code> is the gating role.</strong> Without it, every AI function call fails regardless of table privileges. Users also need READ on stages/files for document inputs.</li>
+</ol>
+<hr />
+<h2>Quick Reference Links</h2>
+<ul>
+<li><a href="https://docs.snowflake.com/en/sql-reference/functions/ai_complete-single-string" target="_blank" rel="noopener noreferrer">AI_COMPLETE (Single string)</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/complete-structured-outputs" target="_blank" rel="noopener noreferrer">AI_COMPLETE structured outputs</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/ai-complete-document-intelligence" target="_blank" rel="noopener noreferrer">AI_COMPLETE with documents</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/vector-embeddings" target="_blank" rel="noopener noreferrer">Vector Embeddings</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search/cortex-search-overview" target="_blank" rel="noopener noreferrer">Cortex Search overview</a></li>
+<li><a href="https://docs.snowflake.com/en/sql-reference/functions/complete-snowflake-cortex" target="_blank" rel="noopener noreferrer">COMPLETE (SNOWFLAKE.CORTEX) — chat/history</a></li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Official Exam Guide</a> (search "SnowPro Specialty: Gen AI")</li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Schedule your exam</a></li>
+</ul>
+</section>
+<section id="domain3" data-nav="Domain 3 · Governance (29%)">
+<h1>Domain 3.0 — Snowflake Gen AI Governance (29%)</h1>
+<p>Second-largest domain. Four pillars: <strong>model access control</strong>, <strong>RBAC/privileges</strong>, <strong>cost management</strong>, and <strong>AI observability</strong>. Memorize the role names, the ACCOUNT_USAGE views, and the two model-access mechanisms.</p>
+<hr />
+<h2>3.1 Model access controls</h2>
+<h3>Two mechanisms to control which models can be used</h3>
+<ol>
+<li><strong>Role-Based Access Control (RBAC) — recommended, fine-grained.</strong>
+   - Cortex base models appear as objects in the <strong><code>SNOWFLAKE.MODELS</code></strong> schema (refreshed daily; <code>CALL SNOWFLAKE.MODELS.CORTEX_BASE_MODELS_REFRESH()</code> to refresh on demand).
+   - Snowflake creates <strong>application roles</strong> per model, e.g. <code>SNOWFLAKE."CORTEX-MODEL-ROLE-LLAMA3.1-70B"</code>, plus <code>CORTEX-MODEL-ROLE-ALL</code> for all models.
+   - Grant to a user role: <code>GRANT APPLICATION ROLE SNOWFLAKE."CORTEX-MODEL-ROLE-ALL" TO ROLE my_role;</code></li>
+<li><strong>Account-level allowlist parameter — legacy, being deprecated.</strong>
+   - <code>ALTER ACCOUNT SET CORTEX_MODELS_ALLOWLIST = 'All' | 'None' | 'model-a,model-b';</code>
+   - Account-level only; ACCOUNTADMIN only; model names are <strong>case-sensitive, lowercase</strong>.</li>
+</ol>
+<p><strong>How they interact:</strong> access is granted if <strong>either</strong> RBAC USAGE <strong>or</strong> the allowlist permits the model (OR relationship). Denied only if both fail. To use RBAC exclusively, set the allowlist to <code>'None'</code>. <strong>ACCOUNTADMIN always has access to all models</strong> regardless — test restrictions with a non-admin role and <code>USE SECONDARY ROLES NONE</code>.</p>
+<h3>Data safety &amp; security considerations</h3>
+<ul>
+<li><strong>Cross-region inference</strong> — governance angle: data residency/compliance (payload transient, not persisted in processing region; encrypted in transit). Set <code>CORTEX_ENABLED_CROSS_REGION</code> to scope routing (DISABLED for strict residency).</li>
+<li><strong>Guardrails</strong> — <strong>Cortex AI Guardrails</strong> (Horizon Catalog) protect against prompt injection / jailbreaks for CoCo, CoWork, and Cortex Agents. Enterprise Edition. Enable via account <code>AI_SETTINGS</code> parameter. (Historically "Cortex Guard" filtered harmful COMPLETE output.) Monitor with <code>CORTEX_AI_GUARDRAILS_USAGE_HISTORY</code>.</li>
+<li><strong>Sensitive data management</strong> — use <strong>AI_REDACT</strong> to strip PII before sending to a model or storing outputs.</li>
+<li><strong>Reduce hallucinations &amp; bias</strong> — ground responses with <strong>RAG</strong> (Cortex Search), use <strong>Verified Queries</strong> for Analyst, apply guardrails, prefer capable models, and evaluate with AI Observability/TruLens.</li>
+</ul>
+<h3>REST API authentication methods (know all three)</h3>
+<p>Snowflake Cortex REST APIs accept: <strong>PAT</strong> (programmatic access token), <strong>key-pair JWT</strong>, and <strong>OAuth</strong>.</p>
+<hr />
+<h2>3.2 RBAC — grant/revoke roles &amp; privileges</h2>
+<h3>The privilege model for AI functions (know this precisely)</h3>
+<p>To call Cortex AI functions a user needs <strong>BOTH</strong>:
+1. Account privilege <strong><code>USE AI FUNCTIONS</code></strong> (granted to PUBLIC by default; or per-function <code>USE AI FUNCTION &lt;name&gt;</code>), <strong>and</strong>
+2. A database role: <strong><code>SNOWFLAKE.CORTEX_USER</code></strong> <em>or</em> <strong><code>SNOWFLAKE.AI_FUNCTIONS_USER</code></strong>.</p>
+<h3>The Cortex database roles (the guide lists these; here's the accurate mapping)</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Grants access to</th>
+<th>Default on PUBLIC?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SNOWFLAKE.CORTEX_USER</strong></td>
+<td>All "covered" Cortex AI features (functions, Search, Agents, Analyst-eligible, fine-tuned model use)</td>
+<td><strong>Yes</strong> (via PUBLIC)</td>
+</tr>
+<tr>
+<td><strong>SNOWFLAKE.AI_FUNCTIONS_USER</strong></td>
+<td>Scalar AI functions only (all except the aggregate AI_AGG/AI_SUMMARIZE_AGG) — no access to Cortex services</td>
+<td>No — grant explicitly</td>
+</tr>
+<tr>
+<td><strong>SNOWFLAKE.CORTEX_AGENT_USER</strong></td>
+<td>Cortex Agents only</td>
+<td>No — grant explicitly</td>
+</tr>
+<tr>
+<td><strong>SNOWFLAKE.CORTEX_EMBED_USER</strong></td>
+<td>Embedding functions (AI_EMBED, EMBED_TEXT_768/1024) + create Search services with managed embeddings</td>
+<td>No — grant explicitly</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Exam nuance:</strong> database roles <strong>cannot be granted directly to users</strong> — grant them to a custom account role, then grant that role to users. Example:
+<code>sql
+USE ROLE ACCOUNTADMIN;
+CREATE ROLE cortex_agent_user_role;
+GRANT DATABASE ROLE SNOWFLAKE.CORTEX_AGENT_USER TO ROLE cortex_agent_user_role;
+GRANT ROLE cortex_agent_user_role TO USER example_user;</code></p>
+<p><strong>Study-guide vs. reality:</strong> the guide lists a <code>CORTEX_ANALYST_USER</code> role. In practice <strong>Cortex Analyst is gated by the <code>ENABLE_CORTEX_ANALYST</code> account parameter (opt-in) plus CORTEX_USER</strong>, not a standalone "CORTEX_ANALYST_USER" database role. If the exam offers <code>CORTEX_ANALYST_USER</code> as the "Analyst access" answer, pick it to match the guide — but understand the real mechanism is the account parameter + CORTEX_USER.</p>
+</blockquote>
+<h3>Feature-specific access requirements</h3>
+<ul>
+<li><strong>Cortex Analyst:</strong> <code>ENABLE_CORTEX_ANALYST = TRUE</code> (opt-in) + CORTEX_USER; USAGE on the semantic view + warehouse.</li>
+<li><strong>Cortex Search:</strong> CORTEX_USER (or embed role to build) + USAGE on the search service and its DB/schema/table.</li>
+<li><strong>Cortex Agents:</strong> CORTEX_USER or CORTEX_AGENT_USER; the user's <strong>default role</strong> (not session role) needs USAGE on the agent, its DB/schema, the default warehouse, and on every tool object (search service, semantic view tables, custom functions). Users also need a <strong>default warehouse</strong>.</li>
+<li><strong>Snowflake Intelligence:</strong> relies on the underlying Agent/Search access controls.</li>
+</ul>
+<h3>Revoking / opting out</h3>
+<ul>
+<li>Revoke defaults from PUBLIC: <code>REVOKE DATABASE ROLE SNOWFLAKE.CORTEX_USER FROM ROLE PUBLIC;</code> (and optionally <code>REVOKE IMPORTED PRIVILEGES ON DATABASE SNOWFLAKE FROM ROLE PUBLIC;</code> — but this also removes ACCOUNT_USAGE access, so be careful).</li>
+<li>Disable Analyst: <code>ALTER ACCOUNT SET ENABLE_CORTEX_ANALYST = FALSE;</code></li>
+<li><code>REVOKE PRIVILEGE ON APPLICATION ROLE</code> / <code>GRANT DATABASE ROLE</code> appear in the guide's links — know the DDL shapes.</li>
+</ul>
+<hr />
+<h2>3.3 Manage, monitor &amp; optimize Cortex costs</h2>
+<h3>How Cortex is billed</h3>
+<ul>
+<li><strong>Token-based</strong> for LLM functions (credits per million tokens, varies by <strong>model</strong> and <strong>function</strong> — see Service Consumption Table). Use <strong>AI_COUNT_TOKENS</strong> to estimate.</li>
+<li>Plus standard <strong>warehouse compute</strong> for the query running the function.</li>
+<li>Cortex Search adds: <strong>indexing/embedding</strong> cost + <strong>serving</strong> cost + the warehouse behind it.</li>
+</ul>
+<h3>Cost controls by feature</h3>
+<ul>
+<li><strong>Cortex Agents:</strong> limit token usage (agent config); resource budgets.</li>
+<li><strong>Cortex Search:</strong> cost types = virtual warehouse (build), <strong>EMBED_TEXT</strong> (embedding), <strong>serving</strong>, <strong>indexing</strong>.</li>
+<li><strong>Cortex AI functions:</strong> minimize tokens (shorter prompts/outputs, smaller models); token cost implications per model.</li>
+<li><strong>SPCS:</strong> track <strong>compute pool</strong> credits (pools bill while running — suspend when idle).</li>
+<li><strong>Provisioned Throughput:</strong> reserved-capacity billing.</li>
+</ul>
+<h3>ACCOUNT_USAGE / metering views (HIGH YIELD — know which view for what)</h3>
+<table>
+<thead>
+<tr>
+<th>View (SNOWFLAKE.ACCOUNT_USAGE.*)</th>
+<th>Tracks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>METERING_HISTORY</strong></td>
+<td>Hourly credits by service type (incl. <code>AI_SERVICES</code>)</td>
+</tr>
+<tr>
+<td><strong>METERING_DAILY_HISTORY</strong></td>
+<td><strong>Daily</strong> credit consumption by service type — <em>the answer for "daily AI cost"</em></td>
+</tr>
+<tr>
+<td><strong>CORTEX_ANALYST_USAGE_HISTORY</strong></td>
+<td>Analyst messages/credits by user (hourly)</td>
+</tr>
+<tr>
+<td><strong>CORTEX_AISQL_USAGE_HISTORY</strong></td>
+<td>Per-query LLM function token usage (canonical for per-query AI function cost)</td>
+</tr>
+<tr>
+<td><strong>CORTEX_SEARCH_DAILY_USAGE_HISTORY</strong></td>
+<td>Cortex Search serving/token usage (daily)</td>
+</tr>
+<tr>
+<td><strong>CORTEX_REST_API_USAGE_HISTORY</strong></td>
+<td>REST inference token usage (billed in dollars)</td>
+</tr>
+<tr>
+<td><strong>CORTEX_PROVISIONED_THROUGHPUT_USAGE_HISTORY</strong></td>
+<td>PTU hours</td>
+</tr>
+<tr>
+<td><strong>CORTEX_FUNCTIONS_USAGE_HISTORY</strong></td>
+<td>(legacy) per-function usage — superseded by CORTEX_AI_FUNCTIONS_USAGE_HISTORY</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Official sample Q1 fact:</strong> daily AI credit consumption →
+<code>SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.METERING_DAILY_HISTORY WHERE SERVICE_TYPE='AI_SERVICES';</code>
+Note: <strong>ACCOUNT_USAGE</strong> (not INFORMATION_SCHEMA), and <strong>METERING_DAILY_HISTORY</strong> for <em>daily</em>.</p>
+</blockquote>
+<h3>Usage quotas &amp; object tagging</h3>
+<ul>
+<li>Set <strong>usage quotas / budgets</strong> (incl. resource budgets and shared resource budgets for AI features) to cap/alert on spend.</li>
+<li><strong>Object tagging:</strong> tag AI objects (e.g., agents, warehouses) to attribute and monitor AI-service costs by team/cost-center.</li>
+</ul>
+<hr />
+<h2>3.4 AI Observability tools</h2>
+<p>Evaluate and monitor Gen AI apps (RAG, agents) for quality and safety.</p>
+<p><strong>Features:</strong>
+- <strong>Evaluation metrics</strong> — score outputs (e.g., the <strong>RAG Triad</strong>: context relevance, groundedness, answer relevance) using an <strong>LLM-as-a-judge</strong>.
+- <strong>Comparisons</strong> — compare app versions/configs side by side.
+- <strong>Tracing</strong> — capture each step of a request (retrieval, prompt, response) for debugging.
+- <strong>Logging</strong> + <strong>Event tables</strong> — telemetry is written to an <strong>event table</strong> for analysis.</p>
+<p><strong>Implementation:</strong> the <strong>TruLens SDK</strong> (open-source, integrated into Snowflake) instruments the app, runs evaluations, and logs traces/metrics that surface in Snowsight AI Observability.</p>
+<hr />
+<h2>Governance cheat (HIGH YIELD)</h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Daily AI credit cost</td>
+<td><code>ACCOUNT_USAGE.METERING_DAILY_HISTORY</code>, <code>SERVICE_TYPE='AI_SERVICES'</code></td>
+</tr>
+<tr>
+<td>Analyst usage by user</td>
+<td><code>CORTEX_ANALYST_USAGE_HISTORY</code></td>
+</tr>
+<tr>
+<td>Per-query AI function tokens</td>
+<td><code>CORTEX_AISQL_USAGE_HISTORY</code></td>
+</tr>
+<tr>
+<td>Restrict which models a role can call</td>
+<td>Model <strong>RBAC</strong> (SNOWFLAKE.MODELS app roles); allowlist is legacy</td>
+</tr>
+<tr>
+<td>Give only Agents access</td>
+<td><code>SNOWFLAKE.CORTEX_AGENT_USER</code></td>
+</tr>
+<tr>
+<td>Give only embedding access</td>
+<td><code>SNOWFLAKE.CORTEX_EMBED_USER</code></td>
+</tr>
+<tr>
+<td>Turn on Cortex Analyst</td>
+<td><code>ENABLE_CORTEX_ANALYST = TRUE</code></td>
+</tr>
+<tr>
+<td>Block prompt injection on agents</td>
+<td>Cortex AI Guardrails (<code>AI_SETTINGS</code>)</td>
+</tr>
+<tr>
+<td>Remove PII before inference</td>
+<td>AI_REDACT</td>
+</tr>
+<tr>
+<td>Evaluate RAG quality</td>
+<td>AI Observability + TruLens (RAG Triad)</td>
+</tr>
+<tr>
+<td>Estimate token cost pre-run</td>
+<td>AI_COUNT_TOKENS</td>
+</tr>
+<tr>
+<td>Attribute AI cost to a team</td>
+<td>Object tagging + budgets</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Common traps</h2>
+<ul>
+<li><strong>Two things needed for AI functions:</strong> <code>USE AI FUNCTIONS</code> privilege <strong>AND</strong> a CORTEX_USER/AI_FUNCTIONS_USER role. Missing either → denied.</li>
+<li><strong>Database roles can't be granted directly to users</strong> — go through a custom role.</li>
+<li><strong>METERING_DAILY_HISTORY</strong> (daily) vs <strong>METERING_HISTORY</strong> (hourly); both live in <strong>ACCOUNT_USAGE</strong>, not INFORMATION_SCHEMA.</li>
+<li><strong>RBAC vs allowlist:</strong> OR relationship; allowlist is legacy/deprecating; ACCOUNTADMIN bypasses both.</li>
+<li><strong>Agents use the caller's <em>default</em> role</strong>, not the current session role — a classic "why does it fail" question.</li>
+<li><strong>TruLens</strong> is the SDK behind AI Observability; <strong>event tables</strong> store the telemetry.</li>
+<li><strong>AI_REDACT</strong> = sensitive-data governance; <strong>Guardrails</strong> = prompt-injection/jailbreak defense. Different problems.</li>
+</ul>
+<hr />
+</section>
+<section id="domain3-dd" data-nav="Domain 3 · Deep-Dive">
+<h1>Domain 3 Deep-Dive: Snowflake Gen AI Governance</h1>
+<blockquote>
+<p>Content sourced from Snowflake documentation as of: 2026-08-24 (via <code>cortex search docs</code> + docs.snowflake.com)
+Exam: SnowPro Specialty: Gen AI (GES-C02)
+Domain weight: 29% (second-highest — heavy on privileges, model access, cost, and evaluation)</p>
+</blockquote>
+<p>This domain tests access control for AI functions, how model access is governed (RBAC vs. the deprecating allowlist), safety guardrails, cost tracking, and how you <em>evaluate</em> an AI app (AI Observability / TruLens, the RAG Triad). <strong>The privilege model changed recently — memorize the current rules below; older study notes are out of date here.</strong></p>
+<hr />
+<h2>3.1 Access control for Cortex AI Functions (the current model)</h2>
+<p><strong>Calling any Cortex AI function requires TWO things together:</strong>
+1. The <strong><code>USE AI FUNCTIONS</code></strong> account-level privilege (or a per-function <code>USE AI FUNCTION &lt;name&gt;</code> privilege), AND
+2. One of the database roles <strong><code>CORTEX_USER</code></strong> or <strong><code>AI_FUNCTIONS_USER</code></strong>.</p>
+<p>Both defaults land on <code>PUBLIC</code>: <code>USE AI FUNCTIONS</code> and <code>CORTEX_USER</code> are granted to <code>PUBLIC</code> by default, so all users can call AI functions until you revoke.</p>
+<p><strong>The database roles differ in scope:</strong>
+- <strong><code>SNOWFLAKE.CORTEX_USER</code></strong> — full Cortex AI functions + Cortex services (Search, Analyst, Agents, Fine-tuning). Granted to <code>PUBLIC</code> by default.
+- <strong><code>SNOWFLAKE.AI_FUNCTIONS_USER</code></strong> — <strong>scalar AI functions only</strong> (everything <em>except</em> the aggregates <code>AI_AGG</code> and <code>AI_SUMMARIZE_AGG</code>), and <strong>no</strong> access to Cortex services. NOT granted to PUBLIC by default.
+- <strong><code>SNOWFLAKE.CORTEX_EMBED_USER</code></strong> — only the embedding functions (<code>AI_EMBED</code>, <code>EMBED_TEXT_768</code>, <code>EMBED_TEXT_1024</code>) and creating Search Services with managed embeddings. NOT on PUBLIC by default.</p>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">USE ROLE ACCOUNTADMIN;
+
+-- Lock down: remove blanket access from everyone
+REVOKE USE AI FUNCTIONS ON ACCOUNT FROM ROLE PUBLIC;
+REVOKE DATABASE ROLE SNOWFLAKE.CORTEX_USER FROM ROLE PUBLIC;
+
+-- Grant to a purpose-built role instead
+CREATE ROLE cortex_user_role;
+GRANT USE AI FUNCTIONS ON ACCOUNT TO ROLE cortex_user_role;
+GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE cortex_user_role;
+GRANT ROLE cortex_user_role TO USER example_user;
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Two-part requirement | <code>USE AI FUNCTIONS</code> (account) <strong>AND</strong> <code>CORTEX_USER</code>/<code>AI_FUNCTIONS_USER</code> (db role) |
+| Default grants | Both <code>USE AI FUNCTIONS</code> and <code>CORTEX_USER</code> → PUBLIC |
+| Special case | With <code>USE AI FUNCTIONS</code> but <strong>no</strong> <code>CORTEX_USER</code>, a user can still call <code>AI_AGG</code> and <code>AI_SUMMARIZE_AGG</code> |
+| DB roles → users | Cannot be granted directly to a user; grant to a role, then role to user |
+| Native apps | <code>USE AI FUNCTIONS</code> does not currently apply to AI calls inside native apps |</p>
+<hr />
+<h2>3.2 Per-function privileges (the OR relationship)</h2>
+<p>You can grant <strong><code>USE AI FUNCTION &lt;name&gt;</code></strong> for individual functions instead of the blanket privilege. The blanket and per-function privileges have an <strong>OR</strong> relationship:</p>
+<ul>
+<li>Has <code>USE AI FUNCTIONS</code> → can call <strong>all</strong> functions, regardless of per-function grants/revokes.</li>
+<li>Has only <code>USE AI FUNCTION AI_COMPLETE</code> → can call only <code>AI_COMPLETE</code>.</li>
+<li>Per-function still requires the <code>CORTEX_USER</code>/<code>AI_FUNCTIONS_USER</code> database role.</li>
+</ul>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">USE ROLE ACCOUNTADMIN;
+REVOKE USE AI FUNCTIONS ON ACCOUNT FROM ROLE PUBLIC;
+
+CREATE ROLE ai_complete_user_role;
+GRANT USE AI FUNCTION AI_COMPLETE ON ACCOUNT TO ROLE ai_complete_user_role;
+GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE ai_complete_user_role;
+GRANT ROLE ai_complete_user_role TO USER example_user;
+</code></pre>
+<p><strong>Key exam point:</strong> If a role has <em>both</em> the blanket and a per-function grant, revoking the per-function grant does <strong>not</strong> cut access — the blanket privilege still applies.</p>
+<hr />
+<h2>3.3 Controlling model access: RBAC vs. CORTEX_MODELS_ALLOWLIST</h2>
+<p>Two mechanisms govern which <em>models</em> a role may invoke. They combine with an <strong>OR</strong> — access is granted if <strong>either</strong> permits it; denied only if both fail.</p>
+<p><strong>A) RBAC (recommended, go-forward):</strong> Snowflake auto-populates the <code>SNOWFLAKE.MODELS</code> schema (refreshed daily) with objects representing each Cortex model, plus application roles <code>CORTEX-MODEL-ROLE-&lt;model&gt;</code> and <code>CORTEX-MODEL-ROLE-ALL</code>. Grant those application roles to control access per-role.</p>
+<p><strong>B) <code>CORTEX_MODELS_ALLOWLIST</code> (legacy, being deprecated):</strong> account-level parameter set by ACCOUNTADMIN to <code>'All'</code>, <code>'None'</code>, or a comma-separated list. <strong>Model names are case-sensitive and must be lowercase</strong> (<code>'mistral-large2'</code>, not <code>'MISTRAL-LARGE2'</code>). <strong>Starting August 2026 you can only change it to <code>'None'</code>; it is removed entirely later in 2026.</strong> Migrate to RBAC.</p>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">-- RBAC: grant access to one model, or all current+future models
+GRANT APPLICATION ROLE SNOWFLAKE.&quot;CORTEX-MODEL-ROLE-LLAMA3.1-70B&quot; TO ROLE my_role;
+GRANT APPLICATION ROLE SNOWFLAKE.&quot;CORTEX-MODEL-ROLE-ALL&quot;        TO ROLE my_role;
+
+-- Pick up brand-new models without waiting for the daily refresh
+CALL SNOWFLAKE.MODELS.CORTEX_BASE_MODELS_REFRESH();
+
+-- Use RBAC exclusively by disabling the allowlist fallback
+ALTER ACCOUNT SET CORTEX_MODELS_ALLOWLIST = 'None';
+</code></pre>
+<p><strong>Decision framework:</strong>
+| Goal | Mechanism | Why |
+|------|-----------|-----|
+| Per-role, fine-grained, future-proof model control | RBAC (<code>SNOWFLAKE.MODELS</code> app roles) | Recommended; go-forward; survives allowlist removal |
+| Quick account-wide default (legacy) | <code>CORTEX_MODELS_ALLOWLIST</code> | Simple, but deprecating in 2026 — avoid for new work |
+| RBAC only (no fallback) | Set allowlist to <code>'None'</code> | Ensures only RBAC grants determine access |</p>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Relationship | RBAC OR allowlist — either grants access |
+| ACCOUNTADMIN | Always has access to all models, regardless of either mechanism |
+| Secondary roles | Can mask restrictions; test with <code>USE SECONDARY ROLES NONE</code> |
+| Model access ≠ function access | Function call still gated by <code>CORTEX_USER</code>/<code>USE AI FUNCTIONS</code> |</p>
+<hr />
+<h2>3.4 Safety: Cortex Guard (guardrails)</h2>
+<p><strong>Cortex Guard filters potentially unsafe/harmful model responses.</strong> It is enabled via the <code>guardrails</code> option on the completion call (either <code>TRUE</code> or <code>FALSE</code>, <strong>default <code>FALSE</code></strong>). Under the hood it uses <strong>Meta's Llama Guard</strong> to filter the model's <strong>output</strong>.</p>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">SELECT SNOWFLAKE.CORTEX.COMPLETE('claude-4-sonnet',
+  [{'role':'user','content':'...'}],
+  {'guardrails': TRUE});
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Default | <code>guardrails = FALSE</code> (off) |
+| Mechanism | Llama Guard filtering of model <strong>output</strong> (a safety filter) |
+| Not the same as | Groundedness/hallucination reduction — that's RAG grounding + evaluation, NOT Guard |</p>
+<hr />
+<h2>3.5 Cost tracking for AI workloads</h2>
+<p>AI function and Cortex service consumption bills as credits under the <strong><code>AI_SERVICES</code></strong> service type. Track it with ACCOUNT_USAGE views.</p>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">-- Daily AI credit consumption
+SELECT usage_date, credits_used
+FROM SNOWFLAKE.ACCOUNT_USAGE.METERING_DAILY_HISTORY
+WHERE service_type = 'AI_SERVICES'
+ORDER BY usage_date DESC;
+
+-- Per-function / per-model token &amp; credit detail
+SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.CORTEX_FUNCTIONS_USAGE_HISTORY
+ORDER BY start_time DESC;
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Daily credits | <code>METERING_DAILY_HISTORY</code>, <code>service_type = 'AI_SERVICES'</code> |
+| Function/model detail | <code>CORTEX_FUNCTIONS_USAGE_HISTORY</code> (tokens, model, credits) [VERIFY exact columns] |
+| Billing basis | Number of tokens processed (input + output), not file size |
+| <code>AI_COUNT_TOKENS</code> | Estimate tokens before running to forecast cost |</p>
+<hr />
+<h2>3.6 AI Observability: evaluating apps with TruLens &amp; the RAG Triad</h2>
+<p><strong>AI Observability lets you run batch evaluations on a custom AI app (agent, RAG pipeline) instrumented with TruLens.</strong> Evaluations invoke the app against a dataset, store traces, and compute <strong>LLM-as-a-judge</strong> metrics. The classic <strong>RAG Triad</strong>:</p>
+<ul>
+<li><strong>Context relevance</strong> — are the retrieved chunks relevant to the question?</li>
+<li><strong>Groundedness</strong> — is the answer supported by the retrieved context (i.e., not hallucinated)?</li>
+<li><strong>Answer relevance / correctness</strong> — does the answer actually address the question?</li>
+</ul>
+<p>Workflow: build+instrument the app with TruLens → register it in Snowflake (TruApp/framework wrapper) → create a run with a dataset + metric list → invoke the run → review metrics in Snowsight or via SQL. (For Cortex <em>Agent</em> evals specifically, use the Snowsight Evaluations tab / <code>EXECUTE_AI_EVALUATION</code> / GPA metrics.)</p>
+<p><strong>Decision framework — reducing hallucinations vs. blocking unsafe content:</strong>
+| Goal | Use | Not |
+|------|-----|-----|
+| Stop the model inventing facts | Ground answers in retrieved context (RAG / Cortex Search) + measure <strong>groundedness</strong> | Cortex Guard (that's safety, not accuracy) |
+| Block harmful/unsafe output | Cortex Guard (<code>guardrails=TRUE</code>) | Groundedness metric |
+| Prove app quality on a dataset | AI Observability + TruLens (RAG Triad) | A single ad-hoc prompt |</p>
+<hr />
+<h2>3.Y Key Exam Traps for This Domain</h2>
+<ol>
+<li><strong><code>CORTEX_USER</code> alone is no longer the whole story.</strong> Current model = <code>USE AI FUNCTIONS</code> account privilege <strong>AND</strong> a database role (<code>CORTEX_USER</code> or <code>AI_FUNCTIONS_USER</code>). A question that grants only one and expects success is a trap.</li>
+<li><strong><code>AI_FUNCTIONS_USER</code> excludes the aggregates.</strong> It covers scalar functions only — NOT <code>AI_AGG</code>/<code>AI_SUMMARIZE_AGG</code> — and grants no access to Cortex services (Search/Analyst/Agents).</li>
+<li><strong>Allowlist is deprecating and lowercase-sensitive.</strong> <code>CORTEX_MODELS_ALLOWLIST</code> model names must be lowercase; from Aug 2026 it can only be set to <code>'None'</code>. The recommended answer for new model governance is <strong>RBAC</strong>, not the allowlist.</li>
+<li><strong>RBAC OR allowlist.</strong> Model access is granted if <em>either</em> mechanism permits it. To make RBAC authoritative, set the allowlist to <code>'None'</code>.</li>
+<li><strong>Database roles can't be granted to users directly.</strong> Grant <code>CORTEX_USER</code>/<code>AI_FUNCTIONS_USER</code>/<code>CORTEX_EMBED_USER</code> to a role, then the role to the user.</li>
+<li><strong>Cortex Guard ≠ groundedness.</strong> Guard = Llama Guard output <em>safety</em> filter (default OFF). Hallucination reduction comes from RAG grounding + measuring <strong>groundedness</strong> in AI Observability. Don't swap them.</li>
+<li><strong>ACCOUNTADMIN &amp; secondary roles mask restrictions.</strong> ACCOUNTADMIN always sees all models; a user with ACCOUNTADMIN as a <em>secondary</em> role does too. Verify governance with <code>USE SECONDARY ROLES NONE</code> under a non-admin role.</li>
+</ol>
+<hr />
+<h2>Quick Reference Links</h2>
+<ul>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql-privileges-and-access" target="_blank" rel="noopener noreferrer">Privileges and model access for Cortex AI Functions</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/ai-observability/evaluate-applications-trulens" target="_blank" rel="noopener noreferrer">Evaluate applications with TruLens (AI Observability)</a></li>
+<li><a href="https://docs.snowflake.com/en/sql-reference/functions/ai_complete-single-string" target="_blank" rel="noopener noreferrer">AI_COMPLETE (Single string) — guardrails/options</a></li>
+<li><a href="https://docs.snowflake.com/en/sql-reference/sql/show-cortex-base-models" target="_blank" rel="noopener noreferrer">SHOW CORTEX BASE MODELS</a></li>
+<li><a href="https://docs.snowflake.com/en/sql-reference/account-usage/metering_daily_history" target="_blank" rel="noopener noreferrer">METERING_DAILY_HISTORY view</a></li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Official Exam Guide</a> (search "SnowPro Specialty: Gen AI")</li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Schedule your exam</a></li>
+</ul>
+</section>
+<section id="domain4" data-nav="Domain 4 · Documents (15%)">
+<h1>Domain 4.0 — Snowflake Document Processing (15%)</h1>
+<p>Smallest domain, but overlaps heavily with Domain 2. Centered on <strong>AI_PARSE_DOCUMENT vs. AI_EXTRACT</strong>, building automated pipelines with <strong>Streams + Tasks</strong>, and troubleshooting.</p>
+<hr />
+<h2>4.1 Document parsing functions</h2>
+<h3>AI_PARSE_DOCUMENT — document → text</h3>
+<p>Extracts content from a document <strong>on a Snowflake stage</strong>. Input is a <strong>FILE object</strong> (built with <code>TO_FILE('@stage','file.pdf')</code>). Returns a JSON string.</p>
+<pre><code class="language-sql">SELECT AI_PARSE_DOCUMENT(
+  TO_FILE('@my_stage','contract.pdf'),
+  {'mode': 'LAYOUT', 'page_split': true}
+);
+</code></pre>
+<p><strong>Two modes (know the difference cold):</strong>
+- <strong>OCR mode</strong> (default) — fast, high-quality <strong>text-only</strong> extraction. Does <strong>not</strong> preserve layout. Best for scanned/text-heavy docs (contracts, claims, manuals). Output: <code>{"content": "..."}</code> (plain text).
+- <strong>LAYOUT mode</strong> — extracts <strong>structure</strong>: tables, headers, reading order, as <strong>Markdown</strong>. Preferred for complex docs and <strong>required for image extraction</strong> (<code>'extract_images': true</code>).</p>
+<p><strong>Key options:</strong>
+- <strong><code>mode</code></strong>: <code>'OCR'</code> | <code>'LAYOUT'</code>.
+- <strong><code>page_split</code></strong> (bool): split multi-page docs into a <code>pages[]</code> array, each with <code>content</code> + <code>index</code> (0-based). Use it to stay under token limits for long docs. Supports PDF/PPTX/DOCX.
+- <strong><code>page_filter</code></strong>: array of <code>{'start': n, 'end': m}</code> ranges (0-based, <strong>start inclusive, end exclusive</strong>) to process only some pages. Specifying <code>page_filter</code> <strong>implies</strong> <code>page_split</code>.
+- <strong><code>extract_images</code></strong> (bool): return embedded images as base64 (LAYOUT only; ≤50 images/doc; no extra cost).
+- <strong><code>return_error_details</code></strong> (bool, 3rd positional arg): returns an OBJECT with <code>value</code>, <code>error</code>, <code>metadata</code> (incl. <code>pageCount</code>).</p>
+<p><strong>Note:</strong> <code>AI_PARSE_DOCUMENT</code> is the updated version of <code>PARSE_DOCUMENT</code> — use AI_PARSE_DOCUMENT.</p>
+<h3>AI_EXTRACT — document → structured fields</h3>
+<p>Pulls <strong>specific fields</strong> you define via a response format (a set of questions/keys → values). Best when you know exactly what you want (vendor name, total, dates, line items). Works on text, documents, and images (image input must be binary — decode base64 first).</p>
+<pre><code class="language-sql">SELECT AI_EXTRACT(
+  file =&gt; TO_FILE('@my_stage','invoice.pdf'),
+  responseFormat =&gt; {'vendor':'Who is the vendor?','total':'What is the total amount?'}
+);
+</code></pre>
+<ul>
+<li><strong>Response format</strong> = your schema/questions. Governs output keys.</li>
+<li><strong>Prompt engineering</strong> matters: clear, specific questions → better extraction. Ambiguous questions → wrong/empty values.</li>
+</ul>
+<h3>AI_PARSE_DOCUMENT vs. AI_EXTRACT (THE core Domain 4 distinction)</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AI_PARSE_DOCUMENT</th>
+<th>AI_EXTRACT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Goal</td>
+<td>Get the <strong>whole document's</strong> text/layout</td>
+<td>Get <strong>specific named fields</strong></td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Text (OCR) or Markdown+structure (LAYOUT)</td>
+<td>Structured values per your schema</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Full-text search, RAG ingestion, preserving tables/layout</td>
+<td>Invoices, forms, targeted field capture</td>
+</tr>
+<tr>
+<td>Modes/options</td>
+<td>OCR/LAYOUT, page_split, page_filter, extract_images</td>
+<td>responseFormat (questions)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Official sample Q3 pattern:</strong> invoices need <em>specific fields</em> → <strong>AI_EXTRACT</strong> with a schema; contracts need <em>full text as searchable Markdown with tables preserved</em> → <strong>AI_PARSE_DOCUMENT in LAYOUT mode</strong>. Use the right tool per doc type; don't force one for both.</p>
+<hr />
+<h2>4.2 Prepare &amp; manage documents; extraction workflows</h2>
+<ul>
+<li><strong>Upload documents</strong> to a <strong>stage</strong> (internal or external). Use a <strong>directory table</strong> to enumerate files: <code>SELECT TO_FILE('@stg', RELATIVE_PATH) FROM DIRECTORY(@stg);</code></li>
+<li><strong>Requirements / limits for AI_PARSE_DOCUMENT</strong> (know the big ones):</li>
+<li>Max file size <strong>100 MB</strong>; max <strong>2,000 pages/doc</strong>; max page resolution 10000×10000 px.</li>
+<li>Supported types: <strong>PDF, PPTX, DOCX, JPEG/JPG, PNG, TIFF/TIF, HTML, TXT</strong>.</li>
+<li>Page counting for billing: PDF/DOCX = per page; image files = per file; HTML/TXT = per 3,000-char chunk.</li>
+<li>Stage may use client-side or server-side encryption (works with PrivateLink).</li>
+</ul>
+<hr />
+<h2>4.3 Automated document processing pipelines (Streams + Tasks)</h2>
+<p>Goal: process new documents automatically as they land on a stage.</p>
+<p><strong>Pattern (know the objects):</strong>
+1. Documents land in a <strong>stage</strong> with a <strong>directory table</strong>.
+2. A <strong>Stream</strong> on the directory table (or a table of file paths) captures <strong>new/changed files</strong> (change data capture).
+3. A <strong>Task</strong> runs on a schedule or when triggered (e.g., <code>WHEN SYSTEM$STREAM_HAS_DATA('my_stream')</code>), consuming the stream and calling <code>AI_PARSE_DOCUMENT</code>/<code>AI_EXTRACT</code> to populate result tables.
+4. Optionally chain tasks (task graph/DAG) for parse → extract → classify → embed, and feed a <strong>Cortex Search</strong> service.</p>
+<ul>
+<li>Alternative: <strong>Dynamic Tables</strong> can incrementally refresh derived AI columns from a base table.</li>
+<li>Use <code>TRY_COMPLETE</code> / handle NULLs so one bad file doesn't fail the batch.</li>
+</ul>
+<hr />
+<h2>4.4 Troubleshoot &amp; optimize document processing</h2>
+<p><strong>Extraction/query errors:</strong>
+- <strong><code>GET_PRESIGNED_URL</code></strong> — generates a temporary URL to access a staged file; needed when a downstream process (or model) must fetch the file by URL. Related helper: <code>BUILD_SCOPED_FILE_URL</code>. Access issues often trace to presigned-URL/stage privileges.
+- Common errors: unsupported format/language, file &gt;100 MB, &gt;2,000 pages, page too large, file not found, insufficient stage privileges, timeout.</p>
+<p><strong>Requirements &amp; privileges:</strong> caller needs <code>SNOWFLAKE.CORTEX_USER</code> (granted by ACCOUNTADMIN) + <code>USE AI FUNCTIONS</code>, plus <strong>READ/USAGE on the stage</strong> and the file.</p>
+<p><strong>Cost &amp; best practices:</strong>
+- Billed <strong>per page</strong> processed → use <strong><code>page_filter</code></strong> to process only needed pages.
+- Run AI_PARSE_DOCUMENT on a <strong>small warehouse (≤ MEDIUM)</strong> — bigger warehouses don't speed it up.
+- Use <code>page_split</code> for very long docs to stay under token limits.</p>
+<p><strong>Fine-tuning arctic-extract models:</strong> for domain-specific extraction accuracy, <strong>fine-tune the <code>arctic-extract</code> model</strong> (Cortex Fine-tuning) on your labeled examples, then use it for AI_EXTRACT-style tasks. Use when out-of-the-box extraction misses domain fields.</p>
+<hr />
+<h2>Document-processing cheat (HIGH YIELD)</h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full text of a scanned doc, fast, no layout</td>
+<td>AI_PARSE_DOCUMENT <strong>OCR</strong></td>
+</tr>
+<tr>
+<td>Preserve tables/headers as Markdown</td>
+<td>AI_PARSE_DOCUMENT <strong>LAYOUT</strong></td>
+</tr>
+<tr>
+<td>Extract images from a doc</td>
+<td>AI_PARSE_DOCUMENT LAYOUT + <code>extract_images:true</code></td>
+</tr>
+<tr>
+<td>Pull specific fields (vendor, total)</td>
+<td><strong>AI_EXTRACT</strong> + responseFormat</td>
+</tr>
+<tr>
+<td>Process only pages 1–3</td>
+<td><code>page_filter:[{'start':0,'end':3}]</code> (0-based, end exclusive)</td>
+</tr>
+<tr>
+<td>Long doc over token limit</td>
+<td><code>page_split:true</code></td>
+</tr>
+<tr>
+<td>Auto-process new files on a stage</td>
+<td><strong>Stream</strong> (on directory table) + <strong>Task</strong></td>
+</tr>
+<tr>
+<td>Give a model temporary file access</td>
+<td>GET_PRESIGNED_URL / BUILD_SCOPED_FILE_URL</td>
+</tr>
+<tr>
+<td>Improve domain extraction accuracy</td>
+<td>Fine-tune <strong>arctic-extract</strong></td>
+</tr>
+<tr>
+<td>Right warehouse size for parsing</td>
+<td>Small–MEDIUM (larger doesn't help)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Common traps</h2>
+<ul>
+<li><strong>OCR vs LAYOUT:</strong> OCR = text only, no structure; LAYOUT = tables/headers/Markdown + required for images. Test loves this.</li>
+<li><strong>page_filter is 0-based, end-exclusive</strong>, and implies page_split.</li>
+<li><strong>AI_EXTRACT = fields; AI_PARSE_DOCUMENT = whole document.</strong> Don't extract full text with a field schema, and don't parse-then-regex when AI_EXTRACT is cleaner for fields.</li>
+<li><strong>Bigger warehouse ≠ faster parsing.</strong> Cost is per page.</li>
+<li><strong>Streams capture change; Tasks execute</strong> — the pipeline needs both.</li>
+<li><strong>arctic-extract</strong> is the fine-tunable extraction model (Domain 4-specific).</li>
+</ul>
+<hr />
+</section>
+<section id="domain4-dd" data-nav="Domain 4 · Deep-Dive">
+<h1>Domain 4 Deep-Dive: Snowflake Document Processing</h1>
+<blockquote>
+<p>Content sourced from Snowflake documentation as of: 2026-08-24 (via <code>cortex search docs</code> + docs.snowflake.com)
+Exam: SnowPro Specialty: Gen AI (GES-C02)
+Domain weight: 15% (smallest domain, but overlaps heavily with Domain 2 functions)</p>
+</blockquote>
+<p>This domain is about turning documents in a stage into usable data: parse/OCR a whole document, extract specific fields, understand charts/layouts, and keep it fresh with an incremental pipeline (Streams + Tasks). The exam's favorite question here is <strong>AI_PARSE_DOCUMENT vs. AI_EXTRACT vs. AI_COMPLETE</strong>.</p>
+<hr />
+<h2>4.1 The <code>FILE</code> data type and stage inputs</h2>
+<p>Document functions read files from a stage via a <strong><code>FILE</code> object</strong>, built with <code>TO_FILE('@stage','path')</code>. The caller needs <strong>READ</strong> on the stage plus the relevant Cortex privilege (<code>CORTEX_USER</code> / <code>USE AI FUNCTIONS</code>). Stages must use <strong>server-side encryption</strong>.</p>
+<pre><code class="language-sql">-- Reference a staged document as a FILE object
+SELECT AI_PARSE_DOCUMENT(
+  TO_FILE('@docs','contract.pdf'),
+  {'mode':'OCR'}
+);
+</code></pre>
+<hr />
+<h2>4.2 <code>AI_PARSE_DOCUMENT</code> — full document → text/Markdown (OCR vs. LAYOUT)</h2>
+<p><strong><code>AI_PARSE_DOCUMENT</code> converts an entire document into text/Markdown.</strong> It returns a JSON object with metadata and page text. It has <strong>two modes</strong> — knowing the difference is the highest-yield fact in this domain:</p>
+<ul>
+<li><strong><code>OCR</code> mode</strong> — fast, high-quality <strong>text</strong> extraction from scanned or text-heavy docs (contracts, insurance claims, manuals). <strong>Does NOT preserve layout.</strong></li>
+<li><strong><code>LAYOUT</code> mode</strong> — preferred for <strong>most/complex</strong> documents. Optimized for <strong>structured content</strong> — tables, headers, layout relationships — and returns Markdown. <strong>Image extraction (<code>extract_images</code>) requires LAYOUT mode.</strong></li>
+</ul>
+<p><strong>Snowflake implementation:</strong></p>
+<pre><code class="language-sql">-- OCR: plain text from a scanned doc
+SELECT AI_PARSE_DOCUMENT(TO_FILE('@docs','scan.pdf'), {'mode':'OCR'});
+
+-- LAYOUT: structure-aware Markdown, split per page, only pages 0-1
+SELECT AI_PARSE_DOCUMENT(
+  TO_FILE('@docs','research.pdf'),
+  {'mode':'LAYOUT', 'page_split': TRUE, 'page_filter':[{'start':0,'end':1}]}
+);
+
+-- LAYOUT + extract embedded images (LAYOUT only)
+SELECT AI_PARSE_DOCUMENT(
+  TO_FILE('@docs','report.pdf'),
+  {'mode':'LAYOUT', 'extract_images': TRUE}
+);
+</code></pre>
+<p><strong>Key details:</strong>
+| Aspect | Detail |
+|--------|--------|
+| Output | JSON with metadata + page text (Markdown in LAYOUT) |
+| <code>OCR</code> mode | Fast text extraction; layout NOT preserved |
+| <code>LAYOUT</code> mode | Structure-aware (tables/headers), Markdown; preferred default |
+| <code>extract_images</code> | LAYOUT mode only; up to 50 images/doc |
+| <code>page_split</code> / <code>page_filter</code> | Split multi-page docs; process only chosen page ranges |
+| Auto-detected | Tables and forms; handwriting; most serif/sans-serif fonts |</p>
+<hr />
+<h2>4.3 <code>AI_EXTRACT</code> — pull specific structured fields</h2>
+<p><strong><code>AI_EXTRACT</code> returns specific fields you ask for</strong> from a document (or text), as structured output — e.g., invoice number, total, vendor. Use it when you know <em>what</em> you want, versus <code>AI_PARSE_DOCUMENT</code> which gives you the <em>whole</em> document text.</p>
+<pre><code class="language-sql">SELECT AI_EXTRACT(
+  file =&gt; TO_FILE('@docs','invoice.pdf'),
+  responseFormat =&gt; {
+    'invoice_number':'What is the invoice number?',
+    'total':'What is the grand total?',
+    'vendor':'Who is the vendor?'}
+);
+</code></pre>
+<hr />
+<h2>4.4 <code>AI_COMPLETE</code> with documents — reason over a doc</h2>
+<p><strong><code>AI_COMPLETE</code> (Prompt object form)</strong> takes a prompt plus a <code>FILE</code> and <em>reasons</em> over the document — chart Q&amp;A, cross-page relationships, contextual summarization — and lets you <strong>choose the model</strong> (e.g., Claude, Gemini). Use it for interpretation/analysis, not raw extraction.</p>
+<pre><code class="language-sql">SELECT AI_COMPLETE(
+  MODEL =&gt; 'claude-4-sonnet',
+  PROMPT =&gt; PROMPT('Summarize the risk factors in {0}', TO_FILE('@docs','10k.pdf'))
+);
+</code></pre>
+<blockquote>
+<p>Trap: the Prompt object form does <strong>not</strong> support <code>response_format</code> (see Domain 2).</p>
+</blockquote>
+<hr />
+<h2>4.5 Incremental document pipelines (Streams + Tasks)</h2>
+<p>To keep parsed/extracted output fresh as new files land, build an <strong>incremental pipeline</strong>: a directory table (or stream) detects new files, and a <strong>Task</strong> (or dynamic table) processes only the new ones.</p>
+<p><strong>Data-flow:</strong></p>
+<pre><code>Files land in @stage → [Directory table / Stream detects new files]
+   → [Task runs AI_PARSE_DOCUMENT / AI_EXTRACT on new rows]
+   → Parsed table → (optional) embed + CREATE CORTEX SEARCH SERVICE
+</code></pre>
+<pre><code class="language-sql">-- Task processes only newly arrived documents on a schedule
+CREATE OR REPLACE TASK parse_new_docs
+  WAREHOUSE = etl_wh
+  SCHEDULE = '60 MINUTE'
+WHEN SYSTEM$STREAM_HAS_DATA('docs_stream')
+AS
+  INSERT INTO parsed_docs
+  SELECT relative_path,
+         AI_PARSE_DOCUMENT(TO_FILE('@docs', relative_path), {'mode':'LAYOUT'})
+  FROM docs_stream;
+</code></pre>
+<hr />
+<h2>4.X Decision Framework: which document function?</h2>
+<table>
+<thead>
+<tr>
+<th>You need to…</th>
+<th>Use</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Turn a whole document into text/Markdown</td>
+<td><code>AI_PARSE_DOCUMENT</code></td>
+<td>Full-document OCR/LAYOUT extraction</td>
+</tr>
+<tr>
+<td>Preserve tables/headers/layout or extract images</td>
+<td><code>AI_PARSE_DOCUMENT</code> <strong>LAYOUT</strong></td>
+<td>Structure-aware; images require LAYOUT</td>
+</tr>
+<tr>
+<td>Fast plain text from a scan</td>
+<td><code>AI_PARSE_DOCUMENT</code> <strong>OCR</strong></td>
+<td>Fast, no layout</td>
+</tr>
+<tr>
+<td>Pull specific named fields</td>
+<td><code>AI_EXTRACT</code></td>
+<td>Targeted structured extraction</td>
+</tr>
+<tr>
+<td>Interpret/summarize/answer questions about a doc (choose model)</td>
+<td><code>AI_COMPLETE</code> w/ FILE</td>
+<td>Reasoning + model choice</td>
+</tr>
+<tr>
+<td>Keep outputs fresh as files arrive</td>
+<td>Streams + Tasks (or dynamic tables)</td>
+<td>Incremental processing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>4.Y Key Exam Traps for This Domain</h2>
+<ol>
+<li><strong>OCR vs. LAYOUT.</strong> OCR = fast text, <strong>no layout</strong>. LAYOUT = structure-aware (tables/headers), Markdown, and the <strong>only</strong> mode that supports <code>extract_images</code>. LAYOUT is the recommended default for complex docs.</li>
+<li><strong>PARSE vs. EXTRACT vs. COMPLETE.</strong> Parse = <em>whole</em> document to text. Extract = <em>specific fields</em>. Complete = <em>reason/interpret</em> (and pick the model). Matching the verb in the scenario to the function is the whole game.</li>
+<li><strong><code>extract_images</code> needs LAYOUT.</strong> Requesting image extraction in OCR mode is invalid.</li>
+<li><strong><code>AI_COMPLETE</code> w/ documents can't use <code>response_format</code>.</strong> For guaranteed structured fields from a doc, reach for <code>AI_EXTRACT</code> (or parse then structure), not the Prompt-object COMPLETE.</li>
+<li><strong>Stage READ + encryption required.</strong> Document functions need READ on the stage and server-side-encrypted stages; missing privileges/encryption is a common failure, not a syntax error.</li>
+<li><strong>Freshness comes from Streams/Tasks, not the function.</strong> The AI functions are one-shot; ongoing freshness is a pipeline concern (Streams + Tasks / dynamic tables).</li>
+</ol>
+<hr />
+<h2>Quick Reference Links</h2>
+<ul>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/parse-document" target="_blank" rel="noopener noreferrer">Parsing documents with AI_PARSE_DOCUMENT</a></li>
+<li><a href="https://docs.snowflake.com/en/sql-reference/functions/ai_parse_document" target="_blank" rel="noopener noreferrer">AI_PARSE_DOCUMENT (SQL reference)</a></li>
+<li><a href="https://docs.snowflake.com/en/sql-reference/functions/ai_extract" target="_blank" rel="noopener noreferrer">AI_EXTRACT</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/ai-complete-document-intelligence" target="_blank" rel="noopener noreferrer">AI_COMPLETE with documents</a></li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Official Exam Guide</a> (search "SnowPro Specialty: Gen AI")</li>
+<li><a href="https://learn.snowflake.com/en/certifications/" target="_blank" rel="noopener noreferrer">Schedule your exam</a></li>
+</ul>
+</section>
+<section id="advanced" data-nav="Advanced · Exam-Edge Gotchas">
+<h1>Advanced Topics — Exam-Edge Gotchas (read last)</h1>
+<p>This is the <strong>deep-dive companion</strong> to the four domain guides. Everything here is a nuance the real exam likes to test and that the foundational notes intentionally kept simple. Grounded against Snowflake docs (2026). Skim this the day before your exam.</p>
+<blockquote>
+<p>How to use it: for each item, cover the answer and ask yourself <em>"what's the exact default / limit / exception?"</em> The exam rewards precision here, not the general idea.</p>
+</blockquote>
+<hr />
+<h2>1. AI_COMPLETE — the fine print</h2>
+<h3>Parameter defaults (memorize the numbers)</h3>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Default</th>
+<th>Gotcha</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>temperature</code></td>
+<td><strong>0</strong></td>
+<td>Higher = more random. Set <strong>0</strong> for deterministic/structured output.</td>
+</tr>
+<tr>
+<td><code>top_p</code></td>
+<td><strong>0</strong></td>
+<td>Alternative to temperature (restricts token set). Don't tune both.</td>
+</tr>
+<tr>
+<td><code>max_tokens</code></td>
+<td><strong>4096</strong></td>
+<td>Caps <strong>output</strong> length. Too-small values → <strong>truncated</strong> responses (classic "why is my answer cut off").</td>
+</tr>
+<tr>
+<td><code>guardrails</code></td>
+<td><strong>FALSE</strong></td>
+<td>TRUE enables <strong>Cortex Guard</strong>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Single-string vs. Prompt-object — the big trap</h3>
+<ul>
+<li><strong>Single-string</strong> <code>AI_COMPLETE(model, prompt, [model_parameters, response_format, show_details])</code> → <strong>supports <code>response_format</code></strong> (structured outputs) and <code>show_details</code>.</li>
+<li><strong>Prompt-object</strong> <code>AI_COMPLETE(model, PROMPT(...), [model_parameters])</code> (for images/documents/multimodal) → <strong>CANNOT take a <code>response_format</code> JSON schema.</strong> Only the single-string form does. To get structured JSON from a multimodal call, you prompt "Respond in JSON" and parse yourself.</li>
+</ul>
+<h3><code>show_details =&gt; TRUE</code></h3>
+<p>Returns a JSON object with <code>choices</code>, <code>created</code>, <code>model</code>, and a <strong><code>usage</code></strong> block (<code>prompt_tokens</code>, <code>completion_tokens</code>, <code>total_tokens</code>). Use it for <strong>cost/token tracking</strong>.</p>
+<h3>Cortex Guard (<code>guardrails =&gt; TRUE</code>)</h3>
+<ul>
+<li>Built on <strong>Meta Llama Guard 3</strong>.</li>
+<li>Filters <strong>the model's OUTPUT</strong> (violence, hate, sexual content, self-harm, etc.) <em>before it's returned</em>.</li>
+<li>It is <strong>NOT</strong> prompt-injection defense (that's <strong>Cortex AI Guardrails</strong> via <code>AI_SETTINGS</code>) and <strong>NOT</strong> PII redaction (that's <strong>AI_REDACT</strong>). Three different things — the exam mixes them.</li>
+<li>Incurs extra compute on input tokens processed.</li>
+</ul>
+<h3><code>TRY_COMPLETE</code></h3>
+<p>Returns <strong>NULL</strong> on error instead of raising — including when a model's output fails structured-output validation. Use it for resilient batch jobs.</p>
+<hr />
+<h2>2. Structured Outputs (AI_COMPLETE <code>response_format</code>)</h2>
+<p>Two ways to specify the format:
+1. <strong>SQL type literal</strong> — begins with <code>TYPE</code>, top level must be an <strong><code>OBJECT</code></strong>. e.g. <code>response_format =&gt; TYPE OBJECT(items_count NUMBER, price ARRAY(STRING))</code>.
+2. <strong>JSON schema</strong> — <code>{ 'type':'json', 'schema': {...} }</code>. Use <code>required</code> to force fields (COMPLETE errors if a required field can't be extracted).</p>
+<h3>Limitations that cause errors (high-yield)</h3>
+<ul>
+<li><strong>No spaces in keys.</strong> Property names: letters, digits, hyphen, underscore only; max 64 chars.</li>
+<li><strong>Unsupported constraint keywords → error:</strong> <code>minLength</code>, <code>maxLength</code>, <code>format</code>, <code>minimum</code>, <code>maximum</code>, <code>exclusiveMinimum/Maximum</code>, <code>multipleOf</code>, <code>minItems</code>, <code>maxItems</code>, <code>uniqueItems</code>, <code>pattern</code>, <code>minProperties</code>, <code>maxProperties</code>, etc.</li>
+<li>Type literals: <strong><code>OBJECT()</code> empty is not allowed</strong>; unsupported SQL types include <strong>VARIANT, MAP, and date/time</strong> types.</li>
+<li><code>$ref</code> allowed only <strong>within your schema</strong> under <code>$defs</code> (no external/HTTP refs).</li>
+<li><strong>OpenAI (GPT) models only:</strong> <code>additionalProperties: false</code> on every node and <code>required</code> must list every property.</li>
+<li><strong>Set <code>temperature = 0</code></strong> for the most consistent JSON. For medium/complex tasks, also add "Respond in JSON" to the prompt.</li>
+</ul>
+<hr />
+<h2>3. AI_CLASSIFY — beyond the basics</h2>
+<ul>
+<li><strong><code>output_mode</code></strong>: <code>'single'</code> (default) or <code>'multi'</code> (multi-label).</li>
+<li><strong>Up to 500 labels</strong> (the newer AI_CLASSIFY; the legacy <code>CLASSIFY_TEXT</code> was single-label / 100 categories). Accuracy tends to drop past ~20 categories in practice.</li>
+<li><strong>Categories are case-sensitive.</strong> Input text is case-sensitive too.</li>
+<li><strong><code>task_description</code></strong> ≤ <strong>50 words</strong>; per-label <strong><code>description</code></strong> ≤ <strong>25 words</strong>; both count as input tokens (cost).</li>
+<li><strong>Few-shot <code>examples</code></strong> (input + labels + explanation) improve accuracy.</li>
+<li><strong>Documents:</strong> <code>output_mode</code> <strong>must be <code>'single'</code></strong> and <strong><code>examples</code> is not supported</strong>. Doc limits: 100 pages, 200k tokens, 22 MB.</li>
+<li>Requires <strong>CORTEX_USER</strong>.</li>
+</ul>
+<hr />
+<h2>4. Cortex Search — CREATE + query internals</h2>
+<h3>CREATE CORTEX SEARCH SERVICE params</h3>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Default / note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EMBEDDING_MODEL</code></td>
+<td>default <strong><code>snowflake-arctic-embed-m-v1.5</code></strong>; <strong>can't be altered</strong> after create (must CREATE OR REPLACE).</td>
+</tr>
+<tr>
+<td><code>REFRESH_MODE</code></td>
+<td>default <strong>INCREMENTAL</strong> (needs <strong>change tracking</strong> on base objects); can't be altered after create.</td>
+</tr>
+<tr>
+<td><code>INITIALIZE</code></td>
+<td><code>ON_CREATE</code> (default, synchronous first build) or <code>ON_SCHEDULE</code> (populated at next refresh).</td>
+</tr>
+<tr>
+<td><code>TARGET_LAG</code></td>
+<td>must be <strong>shorter than the source's data-retention period</strong>, else the service can't detect changes.</td>
+</tr>
+<tr>
+<td><code>AUTO_SUSPEND</code></td>
+<td>minimum <strong>1800 seconds (30 min)</strong>; default NULL (disabled).</td>
+</tr>
+<tr>
+<td><code>ATTRIBUTES</code></td>
+<td>columns you can <strong>filter</strong> on at query time (must be in the source query).</td>
+</tr>
+<tr>
+<td><code>PRIMARY KEY</code></td>
+<td>enables an <strong>optimized (cheaper/faster) refresh path</strong>; TEXT columns only; tune with <code>FULL_INDEX_BUILD_INTERVAL_DAYS</code> (default 1).</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td>use <strong>no larger than MEDIUM</strong>; a dedicated warehouse is recommended.</td>
+</tr>
+</tbody>
+</table>
+<h3>Multi-index services</h3>
+<ul>
+<li>Syntax: <code>TEXT INDEXES col, ...</code> + <code>VECTOR INDEXES col(model='...'), ...</code>.</li>
+<li><strong>At least one VECTOR index is required</strong> (text-only errors). Querying only text indexes in a multi-index query is an error.</li>
+<li>Behavior: <strong>AND across fields</strong>, <strong>OR across terms</strong> within a text field. Text queries are stemmed/lemmatized.</li>
+</ul>
+<h3>Scoring / reranking</h3>
+<ul>
+<li><strong>Reranking is ON by default.</strong> Disable per query with <code>scoring_config: { "reranker": "none" }</code>.</li>
+<li>Disabling reranking cuts latency <strong>~100–300 ms</strong> but can reduce relevance — evaluate before disabling.</li>
+<li>Tune with <code>weights</code> (texts/vectors/reranker — relative), <code>numeric_boosts</code>, <code>time_decays</code> (with <code>limit_hours</code>), <code>text_boosts</code>/<code>vector_boosts</code>, <code>diversity</code>, and <strong>named scoring profiles</strong> (<code>ALTER … ADD SCORING PROFILE</code>).</li>
+</ul>
+<h3>Filter operators</h3>
+<p><code>@eq</code>, <code>@contains</code> (array), <code>@gte</code>, <code>@lte</code>, <code>@primarykey</code>; compose with <code>@and</code> / <code>@or</code> / <code>@not</code>.</p>
+<h3>Security model — <strong>owner's rights</strong> (very high-yield)</h3>
+<p>Cortex Search runs with <strong>owner's rights</strong>. <strong>Any role with USAGE on the service can retrieve every row the service indexed</strong>, regardless of that role's privileges on the underlying tables/views — even rows behind row-access/masking policies the querying role couldn't otherwise read. <strong>Grant USAGE on a search service carefully.</strong></p>
+<h3>Access to build/query</h3>
+<ul>
+<li><strong>Build:</strong> <code>CREATE CORTEX SEARCH SERVICE</code> + SELECT on source + USAGE on warehouse, and <strong>CORTEX_USER or CORTEX_EMBED_USER</strong> (embedding privilege).</li>
+<li><strong>Query:</strong> USAGE on the service + its DB + schema.</li>
+<li>Response size limits: REST/Python <strong>10 MB</strong>; SQL <code>SEARCH_PREVIEW</code> <strong>300 KB</strong> (preview/testing only, string literals, higher latency).</li>
+</ul>
+<hr />
+<h2>5. Cortex Analyst / Semantic Views — advanced</h2>
+<ul>
+<li><strong>Semantic views</strong> (schema-level objects) are <strong>recommended</strong> over legacy stage-based YAML models. Benefits: native RBAC, sharing, catalog, <strong>derived metrics</strong>, <strong>access modifiers</strong>.</li>
+<li><strong>Verified queries (VQR)</strong> must reference the <strong>logical</strong> table/column names, with the logical table prefixed by <strong>two underscores</strong> (e.g. <code>FROM __sales_data</code>) — not the physical column names. <code>use_as_onboarding_question: true</code> surfaces it as a suggestion.</li>
+<li><strong>Custom instructions:</strong> the single <code>custom_instructions</code> string is <strong>legacy</strong> — migrate to <strong><code>module_custom_instructions</code></strong> with two components:</li>
+<li><code>sql_generation</code> — how SQL is written (formatting, default filters).</li>
+<li><code>question_categorization</code> — classify/block questions or ask for missing details (e.g., mark UNCLEAR). Via an <strong>Agent</strong>, write these in plain language (no <code>UNCLEAR</code> keyword needed).</li>
+<li><strong>Dimension → Cortex Search</strong> (<code>cortex_search_service</code> with <code>literal_column</code>) helps Analyst <strong>resolve dimension literal values</strong> (entity resolution). Replaces the deprecated <code>cortex_search_service_name</code>.</li>
+<li><strong>Access modifiers:</strong> facts/metrics can be <code>public_access</code> (default) or <strong><code>private_access</code></strong> (hidden from queries; intermediate calcs only).</li>
+<li><strong>Semantic views don't need <code>join_type</code>/<code>relationship_type</code></strong> — relationship type is inferred. Support ASOF/range relationships, role-playing tables, bridge (many-to-many), variables, <code>max_staleness</code> for materializations (min 120s).</li>
+<li>Enable with <code>ENABLE_CORTEX_ANALYST = TRUE</code> + CORTEX_USER; USAGE on the view + warehouse.</li>
+</ul>
+<hr />
+<h2>6. Governance / Access — precise mechanics</h2>
+<h3>Two things needed to call AI functions</h3>
+<ol>
+<li>Account privilege <strong><code>USE AI FUNCTIONS</code></strong> (on PUBLIC by default), <strong>AND</strong></li>
+<li>a database role: <strong><code>SNOWFLAKE.CORTEX_USER</code></strong> <em>or</em> <strong><code>SNOWFLAKE.AI_FUNCTIONS_USER</code></strong>.</li>
+</ol>
+<h3>Cortex database roles</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Grants</th>
+<th>Default on PUBLIC?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CORTEX_USER</code></td>
+<td>All covered Cortex AI features</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><code>AI_FUNCTIONS_USER</code></td>
+<td>Scalar AI functions only (no Cortex services)</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>CORTEX_AGENT_USER</code></td>
+<td>Agents only</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>CORTEX_EMBED_USER</code></td>
+<td>Embeddings + build Search w/ managed embeddings</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Database roles can't be granted directly to users</strong> — grant to a custom account role, then to the user.</li>
+</ul>
+<h3>Model access control (two mechanisms, OR relationship)</h3>
+<ul>
+<li><strong>RBAC (recommended):</strong> base models are objects in <strong><code>SNOWFLAKE.MODELS</code></strong> (refresh daily; <code>CALL SNOWFLAKE.MODELS.CORTEX_BASE_MODELS_REFRESH()</code>). Snowflake creates <strong>application roles</strong> per model, e.g. <code>SNOWFLAKE."CORTEX-MODEL-ROLE-LLAMA3.1-70B"</code> and <code>CORTEX-MODEL-ROLE-ALL</code>. Grant with <code>GRANT APPLICATION ROLE</code>.</li>
+<li><strong>Allowlist (legacy):</strong> <code>ALTER ACCOUNT SET CORTEX_MODELS_ALLOWLIST = 'All'|'None'|'model-a,model-b'</code>. Account-level, ACCOUNTADMIN-only, <strong>names case-sensitive lowercase</strong>.</li>
+<li><strong>Interaction: OR</strong> — access if RBAC USAGE <strong>or</strong> allowlist permits. To use RBAC exclusively, set allowlist to <strong>'None'</strong>. <strong>ACCOUNTADMIN bypasses both</strong> — test with a non-admin role + <code>USE SECONDARY ROLES NONE</code>.</li>
+</ul>
+<h3>Cortex Agents — the default-role trap</h3>
+<p>Agents evaluate the querying user's <strong>default role</strong> (not the current session role) and require a <strong>default warehouse</strong>. Grants must be on the <strong>default</strong> role, over the agent, its DB/schema, the warehouse, and <strong>every tool object</strong> (search service, semantic view tables, custom functions).</p>
+<h3>Cost / metering views (all in <code>SNOWFLAKE.ACCOUNT_USAGE</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Tracks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>METERING_HISTORY</code></td>
+<td>Hourly credits by service type</td>
+</tr>
+<tr>
+<td><strong><code>METERING_DAILY_HISTORY</code></strong></td>
+<td><strong>Daily</strong> credits by service (<code>SERVICE_TYPE='AI_SERVICES'</code>) — the "daily AI cost" answer</td>
+</tr>
+<tr>
+<td><code>CORTEX_ANALYST_USAGE_HISTORY</code></td>
+<td>Analyst messages/credits by user</td>
+</tr>
+<tr>
+<td><code>CORTEX_AISQL_USAGE_HISTORY</code></td>
+<td><strong>Per-query</strong> LLM function token usage</td>
+</tr>
+<tr>
+<td><code>CORTEX_SEARCH_DAILY_USAGE_HISTORY</code></td>
+<td>Search serving/token usage (daily)</td>
+</tr>
+<tr>
+<td><code>CORTEX_PROVISIONED_THROUGHPUT_USAGE_HISTORY</code></td>
+<td>PTU hours</td>
+</tr>
+</tbody>
+</table>
+<h3>Data safety, guardrails, redaction</h3>
+<ul>
+<li><strong>AI_REDACT</strong> = strip/mask <strong>PII</strong> before inference or storage.</li>
+<li><strong>Cortex AI Guardrails</strong> (Horizon; <code>AI_SETTINGS</code>) = <strong>prompt-injection / jailbreak</strong> defense for agents/CoCo/CoWork. Monitor with <code>CORTEX_AI_GUARDRAILS_USAGE_HISTORY</code>.</li>
+<li><strong>Cortex Guard</strong> (AI_COMPLETE <code>guardrails=TRUE</code>) = filter harmful <strong>model output</strong> (Llama Guard 3).</li>
+<li><strong>Cross-region:</strong> payload transient (not persisted in processing region), encrypted in transit; <strong>credits billed in the requesting region, no egress</strong>; <code>CORTEX_ENABLED_CROSS_REGION</code> is ACCOUNT-level, ACCOUNTADMIN-only.</li>
+<li><strong>AI Observability:</strong> <strong>TruLens SDK</strong> instruments the app; evaluates the <strong>RAG Triad</strong> (context relevance, groundedness, answer relevance) via LLM-as-judge; traces + metrics land in an <strong>event table</strong>.</li>
+</ul>
+<hr />
+<h2>7. Document processing — advanced</h2>
+<ul>
+<li><strong>AI_PARSE_DOCUMENT modes:</strong> <strong>OCR</strong> = plain text (fast, cheaper); <strong>LAYOUT</strong> = Markdown with <strong>tables/headers preserved</strong> and <strong>required for image extraction</strong> (<code>extract_images</code>).</li>
+<li><strong>AI_EXTRACT</strong> = pull <strong>specific fields</strong> via a response schema (question→value). Choose Extract for fields, Parse LAYOUT for the whole document.</li>
+<li><strong>Limits:</strong> ~<strong>2,000 pages/doc</strong>, ~100 MB; use <strong><code>page_split</code> / <code>page_filter</code></strong> to stay in bounds. <code>page_filter {start:0, end:2}</code> → indexes 0 and 1 = <strong>first two pages</strong> (end exclusive).</li>
+<li><strong>Warehouse no larger than MEDIUM</strong> — bigger doesn't speed it up (billing is per page).</li>
+<li><strong>Pipelines:</strong> <strong>Stream</strong> (CDC on the stage's directory table) captures new files; <strong>Task</strong> runs the parse/extract. Use <code>TRY_COMPLETE</code>-style resilience for batch.</li>
+<li><strong>Staged files:</strong> <code>TO_FILE(...)</code> builds the FILE object; <strong><code>GET_PRESIGNED_URL</code></strong> creates a temporary access URL.</li>
+<li><strong>Fine-tuning:</strong> improve domain-specific extraction by fine-tuning <strong><code>arctic-extract</code></strong> on labeled examples.</li>
+<li><strong>Encryption gotcha:</strong> AI functions on FILE objects <strong>don't work</strong> on client-side-encrypted stages (<code>AWS_CSE</code>/<code>AZURE_CSE</code>), <code>SNOWFLAKE_FULL</code> internal encryption, user/table stages, or double-quoted stage names.</li>
+</ul>
+<hr />
+<h2>8. Vector functions — quick recap</h2>
+<ul>
+<li><strong>Similarity (higher = closer):</strong> <code>VECTOR_COSINE_SIMILARITY</code>, <code>VECTOR_INNER_PRODUCT</code>.</li>
+<li><strong>Distance (lower = closer):</strong> <code>VECTOR_L2_DISTANCE</code>, <code>VECTOR_L1_DISTANCE</code>.</li>
+<li>Type is <strong><code>VECTOR(type, dim)</code></strong> — dimensions <strong>must match</strong> to compare (e.g. can't compare 768-dim to 1024-dim). Use <code>VECTOR_TRUNCATE</code> to shorten deliberately, <code>VECTOR_NORMALIZE</code> for unit length.</li>
+<li>Cosine assumes normalized vectors; scores in <code>[-1, 1]</code>.</li>
+</ul>
+<hr />
+<h2>9. Subtopic quick-reference (1.1–4.4) — foundational facts the drill also tests</h2>
+<p>The sections above go deep on edge cases; this table backfills the <strong>foundational</strong> facts (mostly Domains 1–2) so this page alone answers every targeted-drill question.</p>
+<h3>Domain 1</h3>
+<ul>
+<li><strong>1.1 Cortex Fine-tuning</strong> — customizes a base model on labeled data for a narrow task (cheaper/faster inference, better accuracy). Created with the <strong><code>FINETUNE</code></strong> function; requires the <strong><code>CREATE MODEL</code></strong> privilege. Distinct from RAG (which adds retrieved context at query time and does <strong>not</strong> change the model).</li>
+<li><strong>1.1 Principle</strong> — data stays inside Snowflake's governance boundary and is <strong>not used to train</strong> the foundation models.</li>
+<li><strong>1.2 Context window</strong> — max tokens (prompt + response) a model can consider; long docs must be <strong>chunked</strong> to fit. Exceeding it truncates/errors and raises latency/cost.</li>
+<li><strong>1.2 MCP (Model Context Protocol)</strong> — open protocol to expose/consume tools and data; Cortex Agents can act as MCP <strong>server/client</strong> so internal + external tools interoperate.</li>
+<li><strong>1.2 REST auth</strong> — Cortex REST APIs (Analyst, Agents, inference) authenticate via <strong>PAT</strong>, <strong>key-pair JWT</strong>, or <strong>OAuth</strong>.</li>
+</ul>
+<h3>Domain 2</h3>
+<ul>
+<li><strong>2.1 AI_FILTER</strong> — returns TRUE/FALSE for a natural-language condition; use directly in a <strong><code>WHERE</code></strong> clause to filter rows by meaning.</li>
+<li><strong>2.1 Aggregates</strong> — <strong><code>AI_AGG</code></strong> and <strong><code>AI_SUMMARIZE_AGG</code></strong> reduce many rows into one result (use with <code>GROUP BY</code>); usable with <code>AI_FUNCTIONS_USER</code> even without <code>CORTEX_USER</code>. <strong><code>SUMMARIZE</code></strong> is scalar (one value at a time).</li>
+<li><strong>2.1 Other task functions</strong> — <code>AI_SIMILARITY</code> (compare two inputs), <code>AI_TRANSCRIBE</code> (audio→text), <code>AI_TRANSLATE</code>, <code>AI_SENTIMENT</code>. Prefer task-specific over hand-prompted <code>AI_COMPLETE</code> when they fit (cheaper, more accurate).</li>
+<li><strong>2.2 Chunking helpers</strong> — <strong><code>SPLIT_TEXT_RECURSIVE_CHARACTER</code></strong> (generic, by characters with overlap) and <strong><code>SPLIT_TEXT_MARKDOWN_HEADER</code></strong> (splits along Markdown headers to preserve structure; pairs with AI_PARSE LAYOUT).</li>
+<li><strong>2.2 RAG order</strong> — Parse → Chunk → Embed → Index/Serve (Cortex Search) → Retrieve top-k → Generate (AI_COMPLETE). Reranking (default on) reorders candidates for relevance.</li>
+<li><strong>2.3 Multi-turn chat</strong> — the <strong>messages array</strong> carries conversation history; the LLM is <strong>stateless</strong>, so the app must resend prior turns each request.</li>
+<li><strong>2.3 Snowflake Intelligence</strong> — the <strong>no-code</strong> business-user chat UI built on top of Cortex Agents + semantic models.</li>
+<li><strong>2.5 SPCS object order</strong> — Docker <strong>image</strong> → <strong>image repository</strong> → <strong>compute pool</strong> (GPU for LLMs) → <strong>service spec</strong> (YAML) → <strong><code>CREATE SERVICE</code></strong> → call endpoint. Use for custom serving/GPUs.</li>
+<li><strong>2.5 Model Registry</strong> — <code>registry.log_model(...)</code> creates a <strong>versioned MODEL object</strong>; call it for inference. Easiest governed deploy for standard models (no containers). Pick <strong>SPCS</strong> only when you need containers/GPUs/custom runtime.</li>
+</ul>
+<h3>Domain 3</h3>
+<ul>
+<li><strong>3.3 AI_COUNT_TOKENS</strong> — estimate tokens for a prompt/model to forecast cost <strong>before</strong> running.</li>
+<li><strong>3.3 Provisioned Throughput (PTU)</strong> — reserve dedicated inference capacity for <strong>predictable cost/throughput</strong> at high volume (vs pay-per-token). Track with <code>CORTEX_PROVISIONED_THROUGHPUT_USAGE_HISTORY</code>.</li>
+<li><strong>3.3 Cost attribution / control</strong> — use <strong>object tagging</strong> + <strong>usage quotas/budgets</strong> to attribute and cap AI spend by team; minimize tokens (shorter prompts/outputs, smaller models); suspend idle <strong>SPCS compute pools</strong>.</li>
+</ul>
+<h3>Domain 4</h3>
+<ul>
+<li><strong>4.2 FILE objects</strong> — <strong><code>TO_FILE(stage, path)</code></strong> builds the FILE input; the stage needs a <strong>directory table</strong> (enumerate via <code>DIRECTORY(@stage)</code>). <strong><code>GET_PRESIGNED_URL</code></strong> makes a temporary access URL.</li>
+<li><strong>4.2 Extraction workflow</strong> — <code>AI_EXTRACT</code> (schema → specific fields) vs <code>AI_PARSE_DOCUMENT</code> LAYOUT (whole doc as Markdown w/ tables). Automate with <strong>Stream (CDC on directory table) + Task</strong>.</li>
+<li><strong>4.4 Optimize/troubleshoot</strong> — ~2,000-page limit → <strong>page_split/page_filter</strong>; warehouse <strong>≤ MEDIUM</strong> (per-page billing); encrypted-stage blockers (CSE / SNOWFLAKE_FULL / user &amp; table stages / quoted names); fine-tune <strong>arctic-extract</strong> for niche fields.</li>
+</ul>
+<hr />
+<h2>10. Reducing hallucinations — the Snowflake toolkit</h2>
+<p>"Which feature reduces hallucination?" is a recurring exam scenario. The answer is almost always <strong>grounding</strong>, not safety filtering.</p>
+<h3>Grounding (primary defense — give the model facts)</h3>
+<ul>
+<li><strong>RAG with Cortex Search</strong> — retrieve relevant chunks and pass them to <code>AI_COMPLETE</code> so the answer is grounded in your data, not the model's memory. <strong>This is the default "reduce hallucination" answer.</strong></li>
+<li><strong>Cortex Analyst on a semantic view</strong> — grounds text-to-SQL in a governed business model (not the raw schema), so results reflect real definitions.</li>
+<li><strong>Verified Query Repository (VQR)</strong> — admin-approved NL→SQL pairs Analyst reuses for trusted, consistent answers.</li>
+<li><strong>Custom / <code>module_custom_instructions</code></strong> — encode business definitions and rules so generation follows them.</li>
+<li><strong>Cortex Knowledge Extensions (CKE)</strong> — ground agents on curated, provider-maintained knowledge.</li>
+<li><strong>Agent citations</strong> — Cortex Agents return citations to source, making grounding auditable.</li>
+</ul>
+<h3>Constrain the output</h3>
+<ul>
+<li><strong>Structured Outputs</strong> (<code>response_format</code> + <code>required</code> fields) — force schema-valid JSON, reducing free-form drift and fabricated fields.</li>
+<li><strong><code>temperature = 0</code></strong> — deterministic, less "creative"/invented output.</li>
+<li><strong>Capable model choice</strong> — stronger models hallucinate less on hard tasks.</li>
+</ul>
+<h3>Improve retrieval quality</h3>
+<ul>
+<li><strong>Semantic reranking</strong> (Cortex Search, on by default) surfaces the most relevant chunks first, so the grounding context is better.</li>
+</ul>
+<h3>Measure it</h3>
+<ul>
+<li><strong>AI Observability + TruLens</strong> — the <strong>RAG Triad</strong>; its <strong>groundedness</strong> metric specifically scores whether the answer is supported by retrieved context (LLM-as-judge), alongside context relevance and answer relevance. Use tracing to see which chunks were used.</li>
+</ul>
+<h3>Trap (know the distinction)</h3>
+<ul>
+<li><strong>Cortex Guard</strong> (<code>guardrails=TRUE</code>, Llama Guard 3) filters <strong>harmful output</strong>; <strong>Cortex AI Guardrails</strong> (<code>AI_SETTINGS</code>) defend against <strong>prompt injection/jailbreaks</strong>. Both are <strong>safety</strong>, <strong>not</strong> factuality — do <strong>not</strong> pick them as the "reduce hallucination" answer. The correct lever is <strong>RAG grounding</strong> (and <strong>VQR</strong> for Analyst).</li>
+</ul>
+<hr />
+<h2>Rapid-fire "exact answer" drill</h2>
+<ul>
+<li>AI_COMPLETE max_tokens default? → <strong>4096</strong> (truncation cause).</li>
+<li>Can a prompt-object AI_COMPLETE take a JSON schema? → <strong>No</strong> (single-string only).</li>
+<li>Cortex Guard filters input or output? → <strong>Output</strong> (Llama Guard 3).</li>
+<li>Default Cortex Search embedding model? → <strong>snowflake-arctic-embed-m-v1.5</strong>.</li>
+<li>Default REFRESH_MODE? → <strong>INCREMENTAL</strong> (needs change tracking).</li>
+<li>AUTO_SUSPEND minimum for Search? → <strong>1800 s</strong>.</li>
+<li>Who can query all indexed Search rows? → any role with <strong>USAGE</strong> (owner's rights).</li>
+<li>RBAC vs allowlist? → <strong>OR</strong>; allowlist names <strong>lowercase, case-sensitive</strong>; ACCOUNTADMIN bypasses.</li>
+<li>Agent uses which role? → the user's <strong>default</strong> role (+ default warehouse).</li>
+<li>Daily AI credits view? → <strong>METERING_DAILY_HISTORY</strong> in ACCOUNT_USAGE.</li>
+<li>Per-query token usage view? → <strong>CORTEX_AISQL_USAGE_HISTORY</strong>.</li>
+<li>AI_CLASSIFY on a document: output_mode? → <strong>single</strong>, no examples.</li>
+<li>AI_PARSE mode for tables + images? → <strong>LAYOUT</strong>.</li>
+<li>Fine-tune model for extraction? → <strong>arctic-extract</strong>.</li>
+<li>VQR references which names? → <strong>logical</strong> (<code>__table</code>), not physical.</li>
+<li>Reduce hallucination — best lever? → <strong>RAG grounding</strong> (Cortex Search); <strong>VQR</strong> for Analyst. <strong>Not</strong> Cortex Guard/Guardrails (those are safety).</li>
+<li>Which metric scores hallucination? → <strong>groundedness</strong> (RAG Triad, TruLens/AI Observability).</li>
+</ul>
+</section>
+<section id="links" data-nav="Link Index">
+<h1>Link Index — grouped by domain</h1>
+<p>Doc/blog links referenced by the official study guide, organized by domain with canonical Snowflake URLs. URLs marked ✓ were verified against live docs during prep; others use canonical <code>docs.snowflake.com</code> paths (if any 404 due to a docs reorg, search the title at https://docs.snowflake.com).</p>
+<blockquote>
+<p>Tip: you don't need to read every link. Prioritize titles on topics your quiz results showed as weak.</p>
+</blockquote>
+<hr />
+<h2>Domain 1 — Snowflake for Gen AI Overview</h2>
+<p><strong>Documentation</strong>
+- Snowflake Cortex LLM Functions — https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions
+- Cortex Search Overview — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search/cortex-search-overview
+- Cortex Analyst — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst
+- Cortex Analyst — Custom Instructions — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/custom-instructions
+- Cortex Agents — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents
+- Model Context Protocol (MCP) for Cortex Agents — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents-mcp
+- Snowflake Intelligence — https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence
+- Cortex Fine-tuning — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-finetuning
+- Snowflake Copilot Inline — https://docs.snowflake.com/en/user-guide/snowflake-copilot
+- Semantic Views (Autopilot) — https://docs.snowflake.com/en/user-guide/views-semantic/overview
+- YAML Specification for Semantic Views — https://docs.snowflake.com/en/user-guide/views-semantic/spec
+- Cross-Region Inference ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cross-region-inference
+- Cortex Knowledge Extensions Overview — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-knowledge-extensions
+- Vector Embeddings — https://docs.snowflake.com/en/user-guide/snowflake-cortex/vector-embeddings
+- Snowflake ML Overview — https://docs.snowflake.com/en/developer-guide/snowflake-ml/overview
+- Model Registry Overview — https://docs.snowflake.com/en/developer-guide/snowflake-ml/model-registry/overview
+- Model Registry — Bring Your Own Model Types — https://docs.snowflake.com/en/developer-guide/snowflake-ml/model-registry/bring-your-own-model-types
+- Model Registry — Snowsight UI — https://docs.snowflake.com/en/developer-guide/snowflake-ml/model-registry/model-registry-snowsight
+- Cortex AISQL — Model Access &amp; Supported Features ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql-privileges-and-access
+- Cortex Analyst REST API — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/rest-api
+- Cortex Code (CLI / Snowsight / key features / session mgmt / commands) — https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code-desktop</p>
+<p><strong>Reading Assets (blogs)</strong>
+- Cortex Search: AI Hybrid Search — https://www.snowflake.com/en/blog/ (search "Cortex Search hybrid search")
+- Agentic Semantic Model Text-to-SQL — https://www.snowflake.com/en/blog/ (search "agentic semantic model text-to-SQL")</p>
+<hr />
+<h2>Domain 2 — Snowflake Gen AI Functions</h2>
+<p><strong>Documentation</strong>
+- Snowflake Cortex AI Functions (AISQL) — https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql
+- Snowflake Cortex LLM Functions — https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions
+- Getting Started with Generative AI in Snowflake — https://docs.snowflake.com/en/user-guide/snowflake-cortex/overview
+- Choosing a Model — https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions#choosing-a-model
+- Provisioned Throughput — https://docs.snowflake.com/en/user-guide/snowflake-cortex/provisioned-throughput
+- Cortex Guard — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-guard
+- COMPLETE (SNOWFLAKE.CORTEX) — https://docs.snowflake.com/en/sql-reference/functions/complete-snowflake-cortex
+- AI_COMPLETE — Multimodal — https://docs.snowflake.com/en/sql-reference/functions/ai_complete-multimodal
+- Complete Structured Outputs — https://docs.snowflake.com/en/user-guide/snowflake-cortex/complete-structured-outputs
+- AI_CLASSIFY — https://docs.snowflake.com/en/sql-reference/functions/ai_classify
+- AI_EXTRACT — https://docs.snowflake.com/en/sql-reference/functions/ai_extract
+- AI_SUMMARIZE_AGG — https://docs.snowflake.com/en/sql-reference/functions/ai_summarize_agg
+- AI_EMBED — https://docs.snowflake.com/en/sql-reference/functions/ai_embed
+- AI_REDACT — https://docs.snowflake.com/en/sql-reference/functions/ai_redact
+- AI_COUNT_TOKENS — https://docs.snowflake.com/en/sql-reference/functions/ai_count_tokens
+- EXTRACT_ANSWER (SNOWFLAKE.CORTEX) — https://docs.snowflake.com/en/sql-reference/functions/extract_answer-snowflake-cortex
+- SENTIMENT (SNOWFLAKE.CORTEX) — https://docs.snowflake.com/en/sql-reference/functions/sentiment-snowflake-cortex
+- Vector Embeddings / Vector Data Types — https://docs.snowflake.com/en/sql-reference/data-types-vector
+- VECTOR_INNER_PRODUCT — https://docs.snowflake.com/en/sql-reference/functions/vector_inner_product
+- VECTOR_L1_DISTANCE — https://docs.snowflake.com/en/sql-reference/functions/vector_l1_distance
+- VECTOR_L2_DISTANCE — https://docs.snowflake.com/en/sql-reference/functions/vector_l2_distance
+- VECTOR_COSINE_SIMILARITY — https://docs.snowflake.com/en/sql-reference/functions/vector_cosine_similarity
+- Cortex Analyst Verified Query Repository — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/verified-query-repository
+- Cortex Analyst — Semantic Search Integration — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/semantic-model-search
+- Cortex Analyst — Custom Instructions (+ Advanced) — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst/custom-instructions
+- snowflake.cortex.complete / CompleteOptions (Python API) — https://docs.snowflake.com/en/developer-guide/snowpark-ml/reference/latest/cortex
+- Cortex REST API — Embed — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api
+- About Streamlit in Snowflake — https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit
+- Snowpark Container Services Overview — https://docs.snowflake.com/en/developer-guide/snowpark-container-services/overview
+- SPCS Tutorial 1 — Create a Service — https://docs.snowflake.com/en/developer-guide/snowpark-container-services/tutorials/tutorial-1
+- Native Apps with Containers — https://docs.snowflake.com/en/developer-guide/native-apps/container-preparing
+- AI_PARSE_DOCUMENT ✓ — https://docs.snowflake.com/en/sql-reference/functions/ai_parse_document
+- Snowflake Intelligence — https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence</p>
+<p><strong>Quickstarts / Tutorials</strong>
+- Fine-Tuning an LLM in SPCS with AutoTrain — https://quickstarts.snowflake.com/
+- Getting Started with Cortex Analyst — https://quickstarts.snowflake.com/
+- Deploy &amp; Fine-Tune Llama 2 in SPCS — https://quickstarts.snowflake.com/</p>
+<p><strong>Additional</strong>
+- Northstar Developer Resources — https://developers.snowflake.com/
+- Building Multimodal Data Pipelines (short course) — https://www.deeplearning.ai/ (search "Snowflake multimodal data pipelines")</p>
+<hr />
+<h2>Domain 3 — Snowflake Gen AI Governance</h2>
+<p><strong>Documentation</strong>
+- Overview of Access Control — https://docs.snowflake.com/en/user-guide/security-access-control-overview
+- Governance Overview — https://docs.snowflake.com/en/guides-overview-govern
+- Control Model Access ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql-privileges-and-access
+- LLM Functions — Required Privileges ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql-privileges-and-access
+- Opt out of Snowflake AI features (ACCOUNTADMIN) ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/opting-out
+- Snowflake Database Roles ✓ — https://docs.snowflake.com/en/sql-reference/snowflake-db-roles
+- Cortex Agents — Access control &amp; authentication ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents-setup
+- Cortex AI Guardrails ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-ai-guardrails
+- LLM Functions — Cortex Guard — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-guard
+- AI cost management and governance ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/governance-and-availability/ai-cost-management-and-governance
+- CORTEX_ANALYST_USAGE_HISTORY ✓ — https://docs.snowflake.com/en/sql-reference/account-usage/cortex_analyst_usage_history
+- CORTEX_SEARCH_DAILY_USAGE_HISTORY — https://docs.snowflake.com/en/sql-reference/account-usage/cortex_search_daily_usage_history
+- CORTEX_FUNCTIONS_USAGE_HISTORY — https://docs.snowflake.com/en/sql-reference/account-usage/cortex_functions_usage_history
+- METERING_DAILY_HISTORY — https://docs.snowflake.com/en/sql-reference/account-usage/metering_daily_history
+- Cortex Search — Cost Categories / Costs — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search/cortex-search-overview#cost-considerations
+- Cortex Analyst — Cost Considerations — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-analyst#cost
+- Model Registry — Cost Considerations — https://docs.snowflake.com/en/developer-guide/snowflake-ml/model-registry/overview
+- Complete Structured Outputs — Cost Considerations — https://docs.snowflake.com/en/user-guide/snowflake-cortex/complete-structured-outputs
+- AI Observability — Key Concepts / Reference / Evaluation Metrics — https://docs.snowflake.com/en/user-guide/snowflake-cortex/ai-observability
+- Evaluate AI Applications — https://docs.snowflake.com/en/user-guide/snowflake-cortex/ai-observability/evaluate-ai-applications
+- Arctic-Extract Fine-tuning — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-finetuning
+- ALTER CORTEX SEARCH — https://docs.snowflake.com/en/sql-reference/sql/alter-cortex-search-service
+- REVOKE PRIVILEGE on APPLICATION ROLE — https://docs.snowflake.com/en/sql-reference/sql/revoke-privilege
+- GRANT DATABASE ROLE — https://docs.snowflake.com/en/sql-reference/sql/grant-database-role
+- AI_REDACT / Redact PII — https://docs.snowflake.com/en/sql-reference/functions/ai_redact</p>
+<p><strong>Reading Assets (blogs)</strong>
+- Benchmarking LLM-as-a-Judge RAG Triad Metrics — https://www.snowflake.com/en/blog/
+- AI Observability: Evaluate Gen AI Apps with TruLens — https://www.snowflake.com/en/blog/
+- Cortex Search — Overview, Pricing &amp; Cost Monitoring — https://www.snowflake.com/en/blog/
+- Unlocking Privacy-First Intelligence with AI_REDACT — https://www.snowflake.com/en/blog/</p>
+<hr />
+<h2>Domain 4 — Snowflake Document Processing</h2>
+<p><strong>Documentation</strong>
+- AI_PARSE_DOCUMENT ✓ — https://docs.snowflake.com/en/sql-reference/functions/ai_parse_document
+- Parsing Documents with AI_PARSE_DOCUMENT ✓ — https://docs.snowflake.com/en/user-guide/snowflake-cortex/parse-document
+- AI_EXTRACT — https://docs.snowflake.com/en/sql-reference/functions/ai_extract
+- Working with Documents in Snowflake Cortex / Document AI — https://docs.snowflake.com/en/user-guide/snowflake-cortex/document-ai/overview
+- AI_EMBED — https://docs.snowflake.com/en/sql-reference/functions/ai_embed
+- Fine-tuning Arctic-Extract Models — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-finetuning
+- Cortex Fine-tuning — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-finetuning
+- Introduction to Streams — https://docs.snowflake.com/en/user-guide/streams-intro
+- Introduction to Data Pipelines — https://docs.snowflake.com/en/user-guide/data-pipelines-intro
+- GET_PRESIGNED_URL — https://docs.snowflake.com/en/sql-reference/functions/get_presigned_url
+- BUILD_SCOPED_FILE_URL — https://docs.snowflake.com/en/sql-reference/functions/build_scoped_file_url
+- TO_FILE — https://docs.snowflake.com/en/sql-reference/functions/to_file</p>
+<p><strong>Reading Assets</strong>
+- Ask Questions to Your Own Documents with Cortex Search (Developer Guide) — https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search/cortex-search-overview</p>
+<hr />
+<h2>Cross-cutting essentials (open these first if short on time)</h2>
+<p><strong>Deep-dive these — questions you missed on the practice exam:</strong></p>
+<ol>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql" target="_blank" rel="noopener noreferrer">Cortex AI / LLM Functions</a> (Domain 2) — the function catalog. <strong>Deep-dive</strong> (token-cost basics live here).</li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql-privileges-and-access" target="_blank" rel="noopener noreferrer">AISQL Privileges &amp; Access</a> (Domain 3) — who can grant <code>SNOWFLAKE.CORTEX_USER</code>; a database role can't be granted directly to a user. <strong>Deep-dive — missed.</strong></li>
+<li>AI cost management &amp; usage views (Domain 3) — <strong>Deep-dive — missed (both cost questions):</strong><ul>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql-cost" target="_blank" rel="noopener noreferrer">Cost considerations for Cortex AI Functions</a> — token credits: <code>AI_EMBED</code> = input-only, <code>AI_COMPLETE</code> = input + output.</li>
+<li><a href="https://docs.snowflake.com/en/sql-reference/account-usage/cortex_search_daily_usage_history" target="_blank" rel="noopener noreferrer">CORTEX_SEARCH_DAILY_USAGE_HISTORY view</a> — <code>CONSUMPTION_TYPE</code> = SERVING / EMBED_TEXT_TOKENS / BATCH.</li>
+</ul>
+</li>
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/parse-document" target="_blank" rel="noopener noreferrer">Parsing Documents with AI_PARSE_DOCUMENT</a> (Domain 4) — returns a JSON string → <code>PARSE_JSON</code> → <code>:content</code>; OCR vs LAYOUT. <strong>Deep-dive — missed (invoice + pipeline).</strong></li>
+</ol>
+<p><strong>Also missed (not originally in this list — add to your deep-dive):</strong></p>
+<ol start="5">
+<li><a href="https://docs.snowflake.com/en/sql-reference/functions/split_text_recursive_character-snowflake-cortex" target="_blank" rel="noopener noreferrer">SPLIT_TEXT_RECURSIVE_CHARACTER</a> (Domain 4) — default separators split on paragraph breaks first; overlap &lt; chunk_size; the <code>(15, 10)</code> doc example.</li>
+<li><a href="https://docs.streamlit.io/develop/api-reference/chat/st.chat_message" target="_blank" rel="noopener noreferrer">st.chat_message (Streamlit docs)</a> (Domain 2.3) — role-based chat container; hosts charts/tables/text; <code>avatar</code> param.</li>
+<li><a href="https://docs.snowflake.com/en/developer-guide/snowpark-container-services/working-with-compute-pool" target="_blank" rel="noopener noreferrer">Working with compute pools</a> (Domain 2.5) — <code>INITIALLY_SUSPENDED</code>/<code>AUTO_RESUME</code> defaults; 750 account cap + per-family limits; system GPU/CPU pools.</li>
+</ol>
+<p><strong>Already solid — skip:</strong></p>
+<ol start="8">
+<li><a href="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cross-region-inference" target="_blank" rel="noopener noreferrer">Cross-Region Inference</a> (Domains 1 &amp; 3) — <code>CORTEX_ENABLED_CROSS_REGION</code>, set by ACCOUNTADMIN. You got this right.</li>
+</ol>
+</section>
+    </main>
+  </div>
+
+  <script>
+    const contentEl = document.getElementById('content');
+    const tocEl = document.getElementById('toc');
+
+    function slug(s) {
+      return s.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').slice(0, 60);
+    }
+
+    const tocLinks = [];
+    const usedIds = {};
+
+    contentEl.querySelectorAll('section').forEach(secEl => {
+      const l1 = document.createElement('a');
+      l1.className = 'lvl1';
+      l1.href = '#' + secEl.id;
+      l1.textContent = secEl.dataset.nav || secEl.id;
+      tocEl.appendChild(l1);
+      tocLinks.push({ a: l1, targetId: secEl.id });
+
+      secEl.querySelectorAll('h2').forEach(h => {
+        let id = slug(h.textContent) || secEl.id;
+        if (usedIds[id]) { usedIds[id]++; id = id + '-' + usedIds[id]; } else { usedIds[id] = 1; }
+        h.id = id;
+        h.style.scrollMarginTop = '16px';
+        const l2 = document.createElement('a');
+        l2.className = 'lvl2';
+        l2.href = '#' + id;
+        l2.textContent = h.textContent;
+        tocEl.appendChild(l2);
+        tocLinks.push({ a: l2, targetId: id });
+      });
+    });
+
+    const byId = {};
+    tocLinks.forEach(t => byId[t.targetId] = t.a);
+    const targets = tocLinks.map(t => document.getElementById(t.targetId)).filter(Boolean);
+    let activeId = null;
+    function setActive(id) {
+      if (id === activeId) return;
+      if (activeId && byId[activeId]) byId[activeId].classList.remove('active');
+      activeId = id;
+      if (byId[id]) {
+        byId[id].classList.add('active');
+        byId[id].scrollIntoView({ block: 'nearest' });
+      }
+    }
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActive(visible[0].target.id);
+    }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+    targets.forEach(t => observer.observe(t));
+  </script>
+</body>
+</html>
