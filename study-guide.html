@@ -1092,6 +1092,53 @@ GRANT ROLE cortex_agent_user_role TO USER example_user;</code></p>
 <li>Disable Analyst: <code>ALTER ACCOUNT SET ENABLE_CORTEX_ANALYST = FALSE;</code></li>
 <li><code>REVOKE PRIVILEGE ON APPLICATION ROLE</code> / <code>GRANT DATABASE ROLE</code> appear in the guide's links — know the DDL shapes.</li>
 </ul>
+<h3>System-defined role hierarchy (the classic RBAC question)</h3>
+<p>A recurring exam pattern: "a Gen AI app fails for <strong>business users</strong> but works under <strong>ACCOUNTADMIN</strong>" → the business role is <strong>missing the Cortex access role</strong> (grant <code>SNOWFLAKE.CORTEX_USER</code>). Know the built-in roles and what each <em>does</em>, because distractors mix them up:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Job (trigger words)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACCOUNTADMIN</strong></td>
+<td>Top of a single account; <strong>includes SYSADMIN + SECURITYADMIN</strong>. Account settings, billing/credits.</td>
+</tr>
+<tr>
+<td><strong>SECURITYADMIN</strong></td>
+<td>Manages <strong>grants/permissions</strong> — holds <strong>MANAGE GRANTS</strong>; <strong>inherits USERADMIN</strong>. (GRANT/REVOKE.)</td>
+</tr>
+<tr>
+<td><strong>USERADMIN</strong></td>
+<td>Creates/manages <strong>users and roles</strong> (<code>CREATE USER</code>, <code>CREATE ROLE</code>).</td>
+</tr>
+<tr>
+<td><strong>SYSADMIN</strong></td>
+<td><strong>Builds objects</strong> — warehouses, databases, schemas, tables.</td>
+</tr>
+<tr>
+<td><strong>PUBLIC</strong></td>
+<td>Pseudo-role <strong>auto-granted to everyone</strong>; anything granted here is available to all.</td>
+</tr>
+<tr>
+<td><strong>GLOBALORGADMIN</strong></td>
+<td><strong>Organization-level</strong> ops across <strong>multiple accounts</strong> (newer/preferred over the older <strong>ORGADMIN</strong>).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Memory hook: <strong>ACCOUNTADMIN</strong>=big boss · <strong>SECURITYADMIN</strong>=grants/keys · <strong>USERADMIN</strong>=people · <strong>SYSADMIN</strong>=builds · <strong>PUBLIC</strong>=everyone · <strong>GLOBALORGADMIN/ORGADMIN</strong>=organization. Either <strong>SECURITYADMIN</strong> (via MANAGE GRANTS) or <strong>ACCOUNTADMIN</strong> can make the Cortex role grants.</p>
+</blockquote>
+<h3>Cortex Agent privilege verbs (know which verb does what)</h3>
+<ul>
+<li><strong>Create</strong> an Agent → USAGE on the <strong>database</strong> + USAGE on the <strong>schema</strong> + <strong>CREATE AGENT</strong> on the schema. (Snowflake Intelligence agent creation uses this same trio.)</li>
+<li><strong>Invoke / query</strong> an existing Agent → <strong>USAGE on the Agent</strong> (+ a usable/<strong>default warehouse</strong>).</li>
+<li><strong>Update</strong> an Agent's definition → <strong>MODIFY</strong> on the Agent.</li>
+<li><strong>View</strong> an Agent's threads/logs/traces → <strong>MONITOR</strong> on the Agent.</li>
+<li>A tool the Agent calls still needs its <strong>own</strong> privilege (e.g. <strong>USAGE on the Cortex Search service</strong>). Agent USAGE does <strong>not</strong> bypass underlying object permissions — the calling role must independently have access to the source data/tools.</li>
+</ul>
 <hr />
 <h2>3.3 Manage, monitor &amp; optimize Cortex costs</h2>
 <h3>How Cortex is billed</h3>

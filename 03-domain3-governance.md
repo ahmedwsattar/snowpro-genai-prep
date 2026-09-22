@@ -64,6 +64,27 @@ To call Cortex AI functions a user needs **BOTH**:
 - Disable Analyst: `ALTER ACCOUNT SET ENABLE_CORTEX_ANALYST = FALSE;`
 - `REVOKE PRIVILEGE ON APPLICATION ROLE` / `GRANT DATABASE ROLE` appear in the guide's links — know the DDL shapes.
 
+### System-defined role hierarchy (the classic RBAC question)
+A recurring exam pattern: "a Gen AI app fails for **business users** but works under **ACCOUNTADMIN**" → the business role is **missing the Cortex access role** (grant `SNOWFLAKE.CORTEX_USER`). Know the built-in roles and what each *does*, because distractors mix them up:
+
+| Role | Job (trigger words) |
+| --- | --- |
+| **ACCOUNTADMIN** | Top of a single account; **includes SYSADMIN + SECURITYADMIN**. Account settings, billing/credits. |
+| **SECURITYADMIN** | Manages **grants/permissions** — holds **MANAGE GRANTS**; **inherits USERADMIN**. (GRANT/REVOKE.) |
+| **USERADMIN** | Creates/manages **users and roles** (`CREATE USER`, `CREATE ROLE`). |
+| **SYSADMIN** | **Builds objects** — warehouses, databases, schemas, tables. |
+| **PUBLIC** | Pseudo-role **auto-granted to everyone**; anything granted here is available to all. |
+| **GLOBALORGADMIN** | **Organization-level** ops across **multiple accounts** (newer/preferred over the older **ORGADMIN**). |
+
+> Memory hook: **ACCOUNTADMIN**=big boss · **SECURITYADMIN**=grants/keys · **USERADMIN**=people · **SYSADMIN**=builds · **PUBLIC**=everyone · **GLOBALORGADMIN/ORGADMIN**=organization. Either **SECURITYADMIN** (via MANAGE GRANTS) or **ACCOUNTADMIN** can make the Cortex role grants.
+
+### Cortex Agent privilege verbs (know which verb does what)
+- **Create** an Agent → USAGE on the **database** + USAGE on the **schema** + **CREATE AGENT** on the schema. (Snowflake Intelligence agent creation uses this same trio.)
+- **Invoke / query** an existing Agent → **USAGE on the Agent** (+ a usable/**default warehouse**).
+- **Update** an Agent's definition → **MODIFY** on the Agent.
+- **View** an Agent's threads/logs/traces → **MONITOR** on the Agent.
+- A tool the Agent calls still needs its **own** privilege (e.g. **USAGE on the Cortex Search service**). Agent USAGE does **not** bypass underlying object permissions — the calling role must independently have access to the source data/tools.
+
 ---
 
 ## 3.3 Manage, monitor & optimize Cortex costs
