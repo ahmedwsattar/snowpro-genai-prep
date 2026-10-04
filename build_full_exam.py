@@ -261,6 +261,52 @@ html = re.sub(
     flags=re.DOTALL,
 )
 
+# --- Auto save/resume (localStorage), scoped to this page only ---
+# 1) Add LS_KEY + save/restore helpers right after the state/pending declarations.
+state_old = "    const state = {};\n    const pending = {};"
+state_new = state_old + "\n" + r"""    const LS_KEY = "snowpro-genai-full-exam-v1";
+    function saveProgress() {
+      try {
+        if (!Object.keys(state).length) { localStorage.removeItem(LS_KEY); return; }
+        localStorage.setItem(LS_KEY, JSON.stringify({ state: state, pending: pending, ts: Date.now() }));
+      } catch (e) {}
+    }
+    function restoreProgress() {
+      try {
+        const s = localStorage.getItem(LS_KEY);
+        if (!s) return 0;
+        const d = JSON.parse(s);
+        if (d && d.state) Object.assign(state, d.state);
+        if (d && d.pending) Object.assign(pending, d.pending);
+        return Object.keys(state).length;
+      } catch (e) { return 0; }
+    }"""
+assert state_old in html, "state/pending declaration not found"
+html = html.replace(state_old, state_new, 1)
+
+# 2) Persist after every score update (fires on each answer / check / reset).
+score_old = ('      document.getElementById("s-pct").textContent = pct === null ? "\\u2014" : pct + "%";\n'
+             "    }")
+score_new = ('      document.getElementById("s-pct").textContent = pct === null ? "\\u2014" : pct + "%";\n'
+             "      saveProgress();\n"
+             "    }")
+assert score_old in html, "updateScore tail not found"
+html = html.replace(score_old, score_new, 1)
+
+# 3) Restore on load (before the initial render) and show a resume banner.
+init_old = "    render(); updateScore();\n  </script>"
+init_new = (r"""    const _resumed = restoreProgress();
+    render(); updateScore();
+    if (_resumed) {
+      const _n = document.createElement("div");
+      _n.textContent = "\u21ba Resumed your saved progress \u2014 " + _resumed + " answered. Click Reset to start over.";
+      _n.style.cssText = "margin:14px 0;padding:10px 14px;border:1px solid #3b82f6;border-radius:8px;background:rgba(59,130,246,0.12);font-size:0.9rem;";
+      quizEl.parentNode.insertBefore(_n, quizEl);
+    }
+  </script>""")
+assert init_old in html, "init render call not found"
+html = html.replace(init_old, init_new, 1)
+
 with open(OUT, "w", encoding="utf-8") as f:
     f.write(html)
 

@@ -322,6 +322,23 @@
     const LETTERS = ["A","B","C","D","E"];
     const state = {};
     const pending = {};
+    const LS_KEY = "snowpro-genai-full-exam-v1";
+    function saveProgress() {
+      try {
+        if (!Object.keys(state).length) { localStorage.removeItem(LS_KEY); return; }
+        localStorage.setItem(LS_KEY, JSON.stringify({ state: state, pending: pending, ts: Date.now() }));
+      } catch (e) {}
+    }
+    function restoreProgress() {
+      try {
+        const s = localStorage.getItem(LS_KEY);
+        if (!s) return 0;
+        const d = JSON.parse(s);
+        if (d && d.state) Object.assign(state, d.state);
+        if (d && d.pending) Object.assign(pending, d.pending);
+        return Object.keys(state).length;
+      } catch (e) { return 0; }
+    }
     let activeFilter = "all";
     const quizEl = document.getElementById("quiz");
     const filtersEl = document.getElementById("filters");
@@ -466,6 +483,7 @@
       document.getElementById("s-wrong").textContent = answered - correct;
       const pct = answered ? Math.round(correct / answered * 100) : null;
       document.getElementById("s-pct").textContent = pct === null ? "\u2014" : pct + "%";
+      saveProgress();
     }
 
     document.getElementById("reset").addEventListener("click", () => {
@@ -474,7 +492,14 @@
       render(); updateScore();
     });
 
+    const _resumed = restoreProgress();
     render(); updateScore();
+    if (_resumed) {
+      const _n = document.createElement("div");
+      _n.textContent = "\u21ba Resumed your saved progress \u2014 " + _resumed + " answered. Click Reset to start over.";
+      _n.style.cssText = "margin:14px 0;padding:10px 14px;border:1px solid #3b82f6;border-radius:8px;background:rgba(59,130,246,0.12);font-size:0.9rem;";
+      quizEl.parentNode.insertBefore(_n, quizEl);
+    }
   </script>
 </body>
 </html>
