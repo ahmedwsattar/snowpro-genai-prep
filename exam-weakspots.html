@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="snowflake-source" content="cortex-agent-authored" />
+  <title>SnowPro Gen AI (GES-C02) — Weak-Spot Drill</title>
+  <script type="application/json" id="snowflake-report-metadata">
+  {
+    "generated": "2026-08-12",
+    "intent": "Targeted practice drill for the specific GES-C02 subtopics Ahmed missed on the study exam (1.1, 1.2, 2.1, 2.2, 2.3, 2.5, 3.1, 3.2, 3.3, 4.2, 4.4). Filterable by subtopic; doc-grounded explanations.",
+    "sections": [
+      { "id": "drill", "title": "Targeted drill",
+        "dataSources": [{ "type": "docs", "path": "docs.snowflake.com: AI functions, cortex-search, cortex-analyst semantic views, cortex LLM privileges, model access, cost views, ai_parse_document, ai_extract, SPCS, model registry" }],
+        "producerNotes": "One question bank tagged by exam subtopic. To refresh, re-verify facts against docs and update the QUESTIONS array (each item has a topic like '3.1')." }
+    ]
+  }
+  </script>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
+      max-width: 900px; margin: 0 auto; padding: 24px 20px 90px;
+      color: light-dark(#1f2937, #e5e7eb);
+      background: light-dark(#ffffff, #0b1120);
+      line-height: 1.5;
+    }
+    h1 { color: light-dark(#0f172a, #f1f5f9); margin-bottom: 4px; font-size: 1.5rem; }
+    .sub { color: light-dark(#64748b, #94a3b8); margin-top: 0; font-size: 0.95rem; }
+    a { color: light-dark(#2563eb, #60a5fa); }
+
+    .controls {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 12px 0; margin: 10px 0 8px;
+      background: light-dark(#ffffff, #0b1120);
+      border-bottom: 1px solid light-dark(#e2e8f0, #1e293b);
+    }
+    .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-btn, .action-btn {
+      font: inherit; font-size: 0.82rem; cursor: pointer;
+      padding: 5px 11px; border-radius: 999px;
+      border: 1px solid light-dark(#cbd5e1, #334155);
+      background: light-dark(#f8fafc, #1e293b);
+      color: light-dark(#334155, #cbd5e1);
+    }
+    .filter-btn.active {
+      background: light-dark(#0d9488, #14b8a6);
+      border-color: light-dark(#0d9488, #14b8a6);
+      color: #fff; font-weight: 600;
+    }
+    .action-btn:hover, .filter-btn:hover { border-color: light-dark(#0d9488, #2dd4bf); }
+    .spacer { flex: 1 1 auto; }
+
+    .scorebar {
+      display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap;
+      font-size: 0.9rem; color: light-dark(#475569, #cbd5e1);
+      padding: 10px 14px; margin: 4px 0 20px; border-radius: 10px;
+      background: light-dark(#f1f5f9, #111c30);
+    }
+    .scorebar strong { color: light-dark(#0f172a, #f8fafc); font-size: 1.05rem; }
+    .score-correct { color: light-dark(#15803d, #4ade80); }
+    .score-wrong { color: light-dark(#b91c1c, #f87171); }
+
+    .q {
+      border: 1px solid light-dark(#e2e8f0, #1e293b);
+      border-radius: 12px; padding: 18px 18px 6px; margin: 0 0 18px;
+      background: light-dark(#ffffff, #0f172a);
+    }
+    .q-head { display: flex; gap: 10px; align-items: baseline; margin-bottom: 10px; }
+    .q-tag {
+      font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+      padding: 3px 8px; border-radius: 6px;
+      background: light-dark(#ccfbf1, #042f2e);
+      color: light-dark(#0f766e, #5eead4);
+    }
+    .q-text { font-weight: 600; color: light-dark(#0f172a, #f1f5f9); }
+    .q-text code, .opt code {
+      background: light-dark(#f1f5f9, #1e293b);
+      padding: 1px 5px; border-radius: 4px; font-size: 0.88em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .opts { list-style: none; padding: 0; margin: 0; }
+    .opt {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 12px; margin: 6px 0; cursor: pointer;
+      border: 1px solid light-dark(#e2e8f0, #253247);
+      border-radius: 9px; transition: background 0.12s, border-color 0.12s;
+    }
+    .opt:hover { border-color: light-dark(#2dd4bf, #14b8a6); }
+    .opt input { margin-top: 3px; accent-color: light-dark(#0d9488, #14b8a6); }
+    .opt .letter { font-weight: 700; color: light-dark(#64748b, #94a3b8); }
+    .opt.correct { background: light-dark(#dcfce7, #052e1a); border-color: light-dark(#22c55e, #16a34a); }
+    .opt.wrong { background: light-dark(#fee2e2, #3b0d0d); border-color: light-dark(#ef4444, #dc2626); }
+    .opt.locked { cursor: default; }
+    .opt.missed { background: light-dark(#fef9c3, #422006); border-color: light-dark(#eab308, #ca8a04); }
+
+    .multi-hint { font-size: 0.8rem; font-weight: 600; color: light-dark(#0d9488, #2dd4bf); margin: 2px 0 6px; }
+    .multi-submit {
+      margin: 4px 0 2px; padding: 7px 16px; cursor: pointer;
+      border: 1px solid light-dark(#0d9488, #14b8a6); border-radius: 8px;
+      background: light-dark(#0d9488, #14b8a6); color: #fff; font-weight: 600; font-size: 0.85rem;
+    }
+    .multi-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .explain {
+      margin: 4px 0 14px; padding: 12px 14px;
+      border-left: 3px solid light-dark(#0d9488, #14b8a6);
+      background: light-dark(#f8fafc, #111c30);
+      border-radius: 0 8px 8px 0; font-size: 0.92rem; display: none;
+    }
+    .explain.show { display: block; }
+    .explain .verdict { font-weight: 700; }
+    .explain .verdict.right { color: light-dark(#15803d, #4ade80); }
+    .explain .verdict.no { color: light-dark(#b91c1c, #f87171); }
+
+    footer { margin-top: 30px; font-size: 0.85rem; color: light-dark(#64748b, #94a3b8); }
+  </style>
+</head>
+<body>
+
+  <h1>SnowPro Gen AI (GES-C02) — Weak-Spot Drill</h1>
+  <p class="sub">A hard, scenario-based set concentrated on the topics you’ve missed before — cost &amp; credits, who-can-grant RBAC, document FILE-object extraction, chunking params, compute-pool defaults, doc-pipeline PARSE_JSON/TARGET_LAG traps, and Streamlit chat. Shuffled answers, auto save/resume. Single-answer locks on click; multi-answer uses checkboxes + Check answer.</p>
+
+  <div class="controls">
+    <div class="filters" id="filters"></div>
+    <span class="spacer"></span>
+    <button class="action-btn" id="reset">Reset all</button>
+  </div>
+
+  <div class="scorebar">
+    <span>Answered <strong id="s-answered">0</strong> / <strong id="s-total">0</strong></span>
+    <span class="score-correct">Correct <strong id="s-correct">0</strong></span>
+    <span class="score-wrong">Incorrect <strong id="s-wrong">0</strong></span>
+    <span>Score <strong id="s-pct">&mdash;</strong></span>
+  </div>
+
+  <div id="quiz"></div>
+
+  <footer>
+    Grounded against Snowflake product docs (2026-08-12). Back to <a href="index.html">prep hub</a> &middot; <a href="study-guide.html">study guide</a> &middot; <a href="study-guide.html#advanced">advanced notes</a>.
+  </footer>
+
+  <script>
+    const TOPIC_NAMES = {
+      "1.1": "1.1 Principles & features",
+      "1.2": "1.2 Gen AI capabilities",
+      "2.1": "2.1 Apply AI functions",
+      "2.2": "2.2 Data analysis use case",
+      "2.3": "2.3 Chat interfaces",
+      "2.5": "2.5 Run third-party models",
+      "3.1": "3.1 Model access controls",
+      "3.2": "3.2 RBAC grant/revoke",
+      "3.3": "3.3 Cost mgmt & optimize",
+      "3.4": "3.4 Observability & hallucination",
+      "4.2": "4.2 Doc prep & extraction",
+      "4.4": "4.4 Doc troubleshoot/optimize"
+    };
+
+    const QUESTIONS = [
+      // ===== Cost & credits (D3.3) =====
+      { topic: "3.3", q: "Query A calls AI_EMBED and processes 50,000 input tokens; Query B calls AI_COMPLETE on llama3.1-70b with only 3,000 tokens. Query B bills MORE token-credits. Which explanation is correct?",
+        opts: ["Query B ran on a larger virtual warehouse, doubling the credits", "AI_EMBED is always free, so any completion will cost more", "AI_COMPLETE silently calls Cortex Analyst, which adds the extra credits", "Embedding bills INPUT tokens only (low rate); generative completion bills INPUT + OUTPUT tokens, and each model has its own per-token credit rate \u2014 so fewer tokens on a pricier generative model can cost more"], answer: 3,
+        why: "Credits = tokens \u00d7 per-model rate. AI_EMBED is priced on INPUT tokens only at a low rate; generative AI_COMPLETE is priced on INPUT + OUTPUT tokens at a higher, model-specific rate. No hidden Analyst call, no 'embedding is free', and warehouse size isn't the token-credit driver." },
+      { topic: "3.3", q: "You need per-call token AND credit detail for Cortex AI Function usage today. Which is the CURRENT view, and why are the others wrong?",
+        opts: ["METERING_DAILY_HISTORY, filtered to the AI_SERVICES service type", "QUERY_HISTORY using its CREDITS_USED_CORTEX column", "CORTEX_FUNCTIONS_QUERY_USAGE_HISTORY \u2014 the current per-query view", "CORTEX_AI_FUNCTIONS_USAGE_HISTORY \u2014 current per-call view (tokens + CREDITS); CORTEX_FUNCTIONS_QUERY_USAGE_HISTORY is no longer updated, METERING_DAILY_HISTORY is daily-by-service only, QUERY_HISTORY has no per-AI credit column"], answer: 3,
+        why: "CORTEX_AI_FUNCTIONS_USAGE_HISTORY is the current Account Usage view (per call: tokens, CREDITS, model, warehouse, role). CORTEX_FUNCTIONS_QUERY_USAGE_HISTORY is deprecated/not updated; METERING_DAILY_HISTORY is coarse daily-by-service; QUERY_HISTORY has no per-AI credit column." },
+      { topic: "3.3", q: "CORTEX_SEARCH_DAILY_USAGE_HISTORY breaks Cortex Search spend into which categories? (Select THREE.)",
+        opts: ["Virtual-warehouse auto-suspend", "Fail-safe storage", "Batch / indexing", "Embedding text (EMBED_TEXT_TOKENS)", "Serving", "Network-policy evaluation"], answers: [2, 3, 4],
+        why: "Search cost is NOT just a warehouse charge \u2014 the daily view splits it into serving, embedding-text, and batch/indexing. Fail-safe storage, warehouse suspend, and network-policy checks are not Search cost categories." },
+      { topic: "3.3", q: "A FinOps lead wants ONE object for daily credits consumed by ALL AI services (not per-function detail). Which is the documented go-to?",
+        opts: ["METERING_DAILY_HISTORY filtered to SERVICE_TYPE = 'AI_SERVICES'", "CORTEX_ANALYST_USAGE_HISTORY", "CORTEX_AI_FUNCTIONS_USAGE_HISTORY summed by day", "WAREHOUSE_METERING_HISTORY"], answer: 0,
+        why: "For daily credits by AI service, use METERING_DAILY_HISTORY with SERVICE_TYPE='AI_SERVICES'. The AI-functions view is per-call detail (overkill/overlap here); Analyst view is Analyst-only; warehouse metering excludes serverless AI service credits." },
+
+      // ===== Grants, RBAC & who-can-grant (D3.1 / D3.2) =====
+      { topic: "3.2", q: "Which statements let user SOME_USER call Cortex LLM functions via SNOWFLAKE.CORTEX_USER? (Select TWO.)",
+        opts: ["USE ROLE USERADMIN; GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE PUBLIC;", "USE ROLE SYSADMIN; CREATE ROLE cu_role; GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE cu_role; GRANT ROLE cu_role TO USER some_user;", "GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO USER some_user;", "USE ROLE SECURITYADMIN; CREATE ROLE cu_role; GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE cu_role; GRANT ROLE cu_role TO USER some_user;", "USE ROLE ACCOUNTADMIN; CREATE ROLE cu_role; GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE cu_role; GRANT ROLE cu_role TO USER some_user;"], answers: [3, 4],
+        why: "A SNOWFLAKE database role must be granted to an ACCOUNT role (then that role to the user) \u2014 so direct-to-user (D) is invalid. Making the grant needs MANAGE GRANTS: SECURITYADMIN (A) or ACCOUNTADMIN (B) qualify. SYSADMIN (C) lacks MANAGE GRANTS; USERADMIN (E) can create users/roles but not MANAGE GRANTS, and granting to PUBLIC would over-expose anyway." },
+      { topic: "3.1", q: "A role can SELECT from tables but gets an authorization error on AI_COMPLETE. Which pair of conditions must BOTH be true to fix it? (Select TWO.)",
+        opts: ["The role is granted ACCOUNTADMIN", "The role has a CORTEX_USER or AI_FUNCTIONS_USER database role", "The warehouse is resized to at least Medium", "The role owns the SNOWFLAKE database", "The role holds the account-level USE AI FUNCTIONS privilege (or per-function USE AI FUNCTION AI_COMPLETE)"], answers: [1, 4],
+        why: "Current access needs BOTH the account privilege USE AI FUNCTIONS AND a CORTEX_USER/AI_FUNCTIONS_USER database role \u2014 missing either blocks the call. ACCOUNTADMIN 'works' only because it bypasses these; ownership of SNOWFLAKE and warehouse size are irrelevant to the auth error." },
+      { topic: "3.2", q: "In the system role hierarchy, which role can make the grant of a SNOWFLAKE database role to an account role WITHOUT being ACCOUNTADMIN, and why can't SYSADMIN?",
+        opts: ["USERADMIN \u2014 it owns all grants; SYSADMIN lacks CREATE ROLE", "SECURITYADMIN \u2014 it holds MANAGE GRANTS (and inherits USERADMIN); SYSADMIN builds objects but has no MANAGE GRANTS", "PUBLIC \u2014 everyone can grant database roles", "Only ACCOUNTADMIN can ever grant a database role"], answer: 1,
+        why: "SECURITYADMIN has MANAGE GRANTS (and inherits USERADMIN) so it can make the grant; SYSADMIN is the object builder (warehouses/DBs/schemas) and has no MANAGE GRANTS. USERADMIN manages users/roles but not arbitrary grants; PUBLIC can't grant; ACCOUNTADMIN isn't the ONLY option." },
+      { topic: "3.1", q: "A user has USAGE on a Cortex Agent whose custom tool reads a table their role can't SELECT. What happens?",
+        opts: ["Snowflake clones the restricted table into a scratch schema the user owns", "The Agent runs the tool as ACCOUNTADMIN and returns the rows", "USAGE on the Agent implicitly grants SELECT on referenced tables", "The tool call is denied \u2014 Agent USAGE does NOT bypass underlying object permissions; the querying role still needs its own access (and Agents evaluate the user's DEFAULT role + default warehouse)"], answer: 3,
+        why: "Agent permission \u2260 data permission: the calling role must independently hold privileges on each underlying source/tool. Agents evaluate the user's DEFAULT role (not session role) and need a default warehouse. No ACCOUNTADMIN escalation, implicit SELECT, or auto-clone occurs." },
+      { topic: "3.1", q: "As of the 2026 rollout, how should you restrict which Cortex models a role may use, and what's the exact transitional state of the old control?",
+        opts: ["Set CORTEX_MODELS_ALLOWLIST = 'ANY_REGION' to pin models", "Model access can no longer be restricted at all", "Keep using CORTEX_MODELS_ALLOWLIST \u2014 it's the long-term control", "Use model RBAC (CORTEX-MODEL-ROLE-* application roles on SNOWFLAKE.MODELS); CORTEX_MODELS_ALLOWLIST is deprecated \u2014 it can now only be set to 'None' \u2014 and RBAC is enforced even for embedding models (AI_EMBED, AI_SIMILARITY, Cortex Search)"], answer: 3,
+        why: "Model RBAC (application roles in SNOWFLAKE.MODELS) is the go-forward, fine-grained mechanism. The allowlist is deprecating \u2014 only 'None' is a permitted change during transition \u2014 and RBAC now covers embedding models too. 'ANY_REGION' is a cross-region value, unrelated to the allowlist." },
+
+      // ===== Document extraction & FILE objects (D4.2) =====
+      { topic: "4.2", q: "Invoice PDFs sit on a stage. You must pull invoice_number/date/total into structured output. Which is a CORRECT approach, and what's the specific error in the tempting wrong one?",
+        opts: ["Call AI_COMPLETE on the raw PDF bytes and regex the fields", "Either parse first with AI_PARSE_DOCUMENT then AI_EXTRACT on the text, OR call AI_EXTRACT on a FILE object (TO_FILE) with a responseFormat schema \u2014 the trap is passing a bare path string: AI_EXTRACT needs a FILE object, not a raw string path", "Pass the bare stage path STRING directly to AI_EXTRACT with an object schema", "Run AI_SENTIMENT on the file to score the invoice"], answer: 1,
+        why: "Two valid paths: AI_PARSE_DOCUMENT\u2192AI_EXTRACT(text), or AI_EXTRACT directly on a FILE reference built with TO_FILE + a responseFormat schema. The classic wrong answer passes a bare stage-path STRING to AI_EXTRACT \u2014 it requires a FILE object. AI_COMPLETE-on-bytes and AI_SENTIMENT don't do structured field extraction." },
+      { topic: "4.2", q: "A pipeline parses a PDF with AI_PARSE_DOCUMENT and then wants the text in a column for chunking. What must you remember about the function's OUTPUT?",
+        opts: ["It returns plain TEXT already stripped of JSON", "It returns a JSON STRING; convert it with PARSE_JSON and read the :content field before using the text", "It returns a VECTOR you pass straight to Cortex Search", "It returns a VARIANT you can use as-is without parsing"], answer: 1,
+        why: "AI_PARSE_DOCUMENT returns a JSON STRING; you typically PARSE_JSON it and read the :content field to get the extracted text. It is not a ready VARIANT, not plain text, and not a vector." },
+      { topic: "4.2", q: "A PDF has multi-column text, nested tables, and headings that MUST survive for RAG; separately you also need the embedded images. Which configuration is right?",
+        opts: ["mode='LAYOUT' only works if you also set mode='OCR'", "mode='LAYOUT' (preserves tables/headings/reading order) with extract_images=true \u2014 image extraction REQUIRES LAYOUT", "mode='OCR' (fastest) with extract_images=true", "mode='TEXT' with images=true"], answer: 1,
+        why: "LAYOUT preserves structure for RAG; extracting embedded images requires LAYOUT with extract_images=true. OCR is fast text-only and does not support extract_images; there is no 'TEXT' mode / 'images' flag, and LAYOUT doesn't require OCR." },
+      { topic: "4.4", q: "Match the hard limits: which pairing is correct for the document functions?",
+        opts: ["AI_PARSE_DOCUMENT: 100 MB & 2,000 pages per file; AI_EXTRACT: ~125 pages per doc", "AI_PARSE_DOCUMENT: 1 GB & 10,000 pages; AI_EXTRACT: 2,000 pages", "AI_PARSE_DOCUMENT: 50 MB & 250 pages; AI_EXTRACT: unlimited", "Both functions share a single 100-page limit"], answer: 0,
+        why: "AI_PARSE_DOCUMENT allows up to 100 MB and 2,000 pages per file; AI_EXTRACT handles roughly 125 pages per document. The other pairings invent limits." },
+
+      // ===== Chunking parameters (D2.2 / D4) =====
+      { topic: "2.2", q: "SPLIT_TEXT_RECURSIVE_CHARACTER('markdown', chunk_size, overlap) produced chunks like ['A few showers,','showers early','early becoming','becoming a','a steady rain']. Which (chunk_size, overlap) is most consistent, and why not the others?",
+        opts: ["(10, 2) \u2014 tiny window", "(25, 15) \u2014 medium window", "(15, 10) \u2014 chunk_size must be \u2265 the longest chunk (~14 chars) but still small, and the heavy whole-phrase overlap implies ~10; (10,2) is too small for a 14-char chunk, (25,15) and (100,25) are too large to yield ~14-char chunks", "(100, 25) \u2014 big window"], answer: 2,
+        why: "chunk_size has to be at least the longest emitted chunk (~14 chars) yet small enough to force these short pieces \u2192 ~15; the large repeated overlap between adjacent chunks implies ~10. (10,2) can't hold a 14-char chunk; (25,15)/(100,25) would produce much longer chunks." },
+      { topic: "2.2", q: "Which statements about SPLIT_TEXT_RECURSIVE_CHARACTER are TRUE? (Select TWO.)",
+        opts: ["Its default separators (e.g. [\"\\n\\n\",\"\\n\",\" \",\"\"]) split on paragraph breaks first, preserving natural-language boundaries", "It returns a single concatenated string, not an array", "It only works on Markdown input", "It requires a unique hash key per chunk to deduplicate", "overlap repeats context from the end of one chunk at the start of the next so facts near a boundary aren't severed"], answers: [0, 4],
+        why: "Recursive splitting tries natural separators (paragraph, then line, then space) first, preserving boundaries; overlap carries boundary context forward. There is no hash-key dedup requirement, it supports formats beyond Markdown (there's a separate markdown-header splitter), and it returns an array of chunks." },
+
+      // ===== Compute pools / SPCS (D2.5) =====
+      { topic: "2.5", q: "Which consideration about a USER-created compute pool (to serve third-party models) is correct?",
+        opts: ["By default INITIALLY_SUSPENDED is FALSE for a user-created pool and AUTO_RESUME is TRUE, so a workload can start it automatically; node caps vary by instance family (account cap 750), not a flat 50", "A hard maximum of 50 nodes applies regardless of INSTANCE_FAMILY", "It can only be created through the Snowflake CLI", "You must run ALTER COMPUTE POOL ... RESUME before first use because pools start suspended"], answer: 0,
+        why: "User-created pools default INITIALLY_SUSPENDED=FALSE and AUTO_RESUME=TRUE (so no manual RESUME is needed). You can create via SQL/Snowsight/Python (not CLI-only). The 50 figure is a GPU SYSTEM-pool MAX_NODES, not a universal cap \u2014 per-family limits vary under an account limit of 750. (System GPU/CPU pools default INITIALLY_SUSPENDED=TRUE \u2014 a common confuser.)" },
+      { topic: "2.5", q: "A data scientist wants to MANAGE and version a bring-your-own model and call it for inference, with no container work; a second team must RUN a custom GPU container. Which pairing is correct?",
+        opts: ["Snowpark Container Services for both", "Model Registry for both", "Model Registry (snowflake.ml.registry) manages/serves the logged model; Snowpark Container Services on a compute pool runs the custom GPU container", "Cortex Fine-tuning registers the first model; a virtual warehouse (GPU mode) runs the container"], answer: 2,
+        why: "'Manage/version/call a model' \u2192 Model Registry (snowflake.ml.registry); 'run a custom container/GPU' \u2192 SPCS on a compute pool. Registry can even serve via an SPCS service, but the division of labor is Registry=manage, SPCS=run. Warehouses have no GPU/custom-container support." },
+
+      // ===== Doc ingestion pipeline traps (D4) =====
+      { topic: "4.4", q: "A document-ingestion pipeline uses AI_PARSE_DOCUMENT + SPLIT_TEXT_RECURSIVE_CHARACTER + a Cortex Search service. Which statements are TRUE? (Select TWO.)",
+        opts: ["AI_PARSE_DOCUMENT returns a JSON string; convert with PARSE_JSON to read the :content field before splitting", "The recursive splitter's default separators split on paragraph breaks first, preserving natural-language boundaries", "Each chunk needs a unique hash key for the Search service to dedupe", "A Cortex Search service refreshes on row INSERT immediately, independent of TARGET_LAG", "A Dynamic Table defined on the stage auto-triggers re-parse the instant a file lands"], answers: [0, 1],
+        why: "True: recursive splitter preserves NL boundaries; AI_PARSE_DOCUMENT output is a JSON string needing PARSE_JSON (:content). False traps: dynamic tables refresh on TARGET_LAG (not an instant stage-file trigger), Cortex Search refreshes per its TARGET_LAG (not instantly on insert), and there's no hash-key dedup requirement." },
+      { topic: "4.4", q: "A Cortex Search service is built on a table behind a row-access policy. A role with only USAGE on the service (no access to base rows) queries it. What's returned?",
+        opts: ["An error, because the row-access policy blocks the service", "Only the rows that role could read directly", "The policy is re-evaluated per querying role at query time", "Results from ALL rows the service OWNER indexed \u2014 Cortex Search runs with OWNER'S RIGHTS, so USAGE on the service can expose rows the caller couldn't read directly"], answer: 3,
+        why: "Cortex Search queries run with OWNER'S RIGHTS: any role with USAGE on the service can retrieve anything the service indexed, regardless of its own base-table privileges. That's a key governance caution \u2014 the policy is NOT re-applied per caller." },
+
+      // ===== Streamlit chat UI (D2.3) =====
+      { topic: "2.3", q: "A Streamlit-in-Snowflake LLM chat app must show role-based message bubbles with custom avatars and embed charts/tables/text inside each turn. Which API, and why not the near-miss?",
+        opts: ["st.write for everything", "st.markdown \u2014 it renders the whole conversation", "st.chat_message(role, avatar=...) \u2014 a role-based container (supports an avatar and can host other st elements like st.dataframe/st.line_chart); st.markdown only renders text, no bubble/avatar/embeds", "st.text_area as the chat container"], answer: 2,
+        why: "st.chat_message creates a role-tagged bubble, takes an avatar param, and can host other Streamlit elements (charts, tables, text). st.markdown/st.write/st.text_area render content but don't give you the role bubble + avatar + embedded-element container. (Pair it with st.chat_input for the prompt box.)" },
+
+      // ===== A couple of trap-sibling rounders (D1/D2) =====
+      { topic: "2.1", q: "You must compare the MEANING of two already-generated strings and get a single similarity score, without hand-managing vectors. Which function \u2014 and what 2026 governance nuance applies?",
+        opts: ["AI_EMBED, which returns the similarity score", "AI_CLASSIFY with categories ['similar','different']", "VECTOR_COSINE_SIMILARITY on the two strings", "AI_SIMILARITY \u2014 compares two inputs' meaning directly; being embedding-based, it is subject to model RBAC after the allowlist deprecation"], answer: 3,
+        why: "AI_SIMILARITY compares meaning of two inputs directly (it embeds internally). VECTOR_COSINE_SIMILARITY needs vectors, not raw strings; AI_EMBED returns a vector (not a score); AI_CLASSIFY labels. Nuance: embedding functions (AI_SIMILARITY/AI_EMBED/EMBED_TEXT) fall under model RBAC enforcement in the allowlist deprecation." },
+      { topic: "2.1", q: "A 500K-row free-text table needs a CUSTOM analytical answer (\"top recurring complaint themes\") synthesized across rows beyond one context window. Which function, and how does it differ from the plain-summary sibling?",
+        opts: ["AI_SUMMARIZE_AGG, which answers arbitrary analytical questions", "SUMMARIZE per row, then concatenate", "AI_AGG \u2014 instruction-driven aggregation across many rows (not bound to one context window); AI_SUMMARIZE_AGG only makes a generic summary with no custom instruction", "AI_COMPLETE with all 500K rows in one prompt"], answer: 2,
+        why: "AI_AGG takes a natural-language INSTRUCTION and reduces many rows to an answer to it, beyond a single context window. AI_SUMMARIZE_AGG is a plain many-row summary (no custom instruction). SUMMARIZE is scalar; stuffing 500K rows into one prompt overflows the window. (Both AI_AGG/AI_SUMMARIZE_AGG work with only USE AI FUNCTIONS, no CORTEX_USER.)" }
+    ];
+
+    const LETTERS = ["A","B","C","D","E"];
+    const state = {};
+    const pending = {};
+    const LS_KEY = "snowpro-genai-weakspots-v1";
+    function saveProgress() {
+      try {
+        if (!Object.keys(state).length) { localStorage.removeItem(LS_KEY); return; }
+        localStorage.setItem(LS_KEY, JSON.stringify({ state: state, pending: pending, ts: Date.now() }));
+      } catch (e) {}
+    }
+    function restoreProgress() {
+      try {
+        const s = localStorage.getItem(LS_KEY);
+        if (!s) return 0;
+        const d = JSON.parse(s);
+        if (d && d.state) Object.assign(state, d.state);
+        if (d && d.pending) Object.assign(pending, d.pending);
+        return Object.keys(state).length;
+      } catch (e) { return 0; }
+    }
+    let activeFilter = "all";
+    const quizEl = document.getElementById("quiz");
+    const filtersEl = document.getElementById("filters");
+
+    const topicKeys = Object.keys(TOPIC_NAMES);
+    const filterDefs = [{ key: "all", label: "All (" + QUESTIONS.length + ")" }]
+      .concat(topicKeys.map(k => ({ key: k, label: k })));
+    filterDefs.forEach(f => {
+      const b = document.createElement("button");
+      b.className = "filter-btn" + (f.key === activeFilter ? " active" : "");
+      b.textContent = f.label;
+      b.title = f.key === "all" ? "All subtopics" : TOPIC_NAMES[f.key];
+      b.dataset.filter = f.key;
+      b.addEventListener("click", () => {
+        activeFilter = f.key;
+        document.querySelectorAll(".filter-btn").forEach(x => x.classList.toggle("active", x.dataset.filter === f.key));
+        render();
+      });
+      filtersEl.appendChild(b);
+    });
+
+    function render() {
+      const _scrollY = window.scrollY;
+      quizEl.innerHTML = "";
+      let n = 0;
+      QUESTIONS.forEach((item, idx) => {
+        if (activeFilter !== "all" && item.topic !== activeFilter) return;
+        n++;
+        const isMulti = Array.isArray(item.answers);
+        const correctSet = isMulti ? item.answers.slice().sort((a,b)=>a-b) : [item.answer];
+        const chosen = state[idx];
+        const answered = isMulti ? Array.isArray(chosen) : chosen !== undefined;
+        if (isMulti && !pending[idx]) pending[idx] = [];
+        const sel = isMulti ? (answered ? chosen : pending[idx]) : chosen;
+
+        const card = document.createElement("div");
+        card.className = "q";
+        const head = document.createElement("div");
+        head.className = "q-head";
+        const tag = document.createElement("span");
+        tag.className = "q-tag";
+        tag.textContent = TOPIC_NAMES[item.topic];
+        const qtext = document.createElement("span");
+        qtext.className = "q-text";
+        qtext.innerHTML = n + ". " + item.q;
+        head.appendChild(tag); head.appendChild(qtext);
+        card.appendChild(head);
+
+        if (isMulti) {
+          const hint = document.createElement("div");
+          hint.className = "multi-hint";
+          hint.textContent = "Select " + correctSet.length + " \u2014 multiple answers";
+          card.appendChild(hint);
+        }
+
+        const ul = document.createElement("ul");
+        ul.className = "opts";
+        item.opts.forEach((opt, oi) => {
+          const li = document.createElement("li");
+          li.className = "opt";
+          const isSel = isMulti ? sel.includes(oi) : sel === oi;
+          if (answered) {
+            li.classList.add("locked");
+            const isCorrect = correctSet.includes(oi);
+            if (isCorrect && isSel) li.classList.add("correct");
+            else if (!isCorrect && isSel) li.classList.add("wrong");
+            else if (isCorrect && !isSel) li.classList.add("missed");
+          }
+          const input = document.createElement("input");
+          input.type = isMulti ? "checkbox" : "radio";
+          input.name = "q" + idx; input.value = oi;
+          input.checked = isSel; input.disabled = answered;
+          const letter = document.createElement("span");
+          letter.className = "letter"; letter.textContent = LETTERS[oi] + ".";
+          const txt = document.createElement("span"); txt.innerHTML = opt;
+          li.appendChild(input); li.appendChild(letter); li.appendChild(txt);
+          if (!answered) {
+            li.addEventListener("click", () => {
+              if (isMulti) {
+                const arr = pending[idx];
+                const at = arr.indexOf(oi);
+                if (at === -1) arr.push(oi); else arr.splice(at, 1);
+                render(); updateScore();
+              } else {
+                if (state[idx] !== undefined) return;
+                state[idx] = oi; render(); updateScore();
+              }
+            });
+          }
+          ul.appendChild(li);
+        });
+        card.appendChild(ul);
+
+        if (isMulti && !answered) {
+          const btn = document.createElement("button");
+          btn.className = "multi-submit";
+          btn.textContent = "Check answer";
+          btn.disabled = pending[idx].length === 0;
+          btn.addEventListener("click", () => {
+            state[idx] = pending[idx].slice().sort((a,b)=>a-b);
+            render(); updateScore();
+          });
+          card.appendChild(btn);
+        }
+
+        const ex = document.createElement("div");
+        ex.className = "explain" + (answered ? " show" : "");
+        if (answered) {
+          const correct = isMulti
+            ? (chosen.length === correctSet.length && chosen.every((v,i) => v === correctSet[i]))
+            : chosen === item.answer;
+          const letters = correctSet.map(i => LETTERS[i]).join(", ");
+          const verdict = correct
+            ? '<span class="verdict right">Correct.</span> '
+            : '<span class="verdict no">Not quite &mdash; correct answer' + (correctSet.length > 1 ? "s are " : " is ") + letters + '.</span> ';
+          ex.innerHTML = verdict + item.why;
+        }
+        card.appendChild(ex);
+        quizEl.appendChild(card);
+      });
+      document.getElementById("s-total").textContent = QUESTIONS.length;
+      window.scrollTo(0, _scrollY);
+    }
+
+    function updateScore() {
+      let answered = 0, correct = 0;
+      QUESTIONS.forEach((item, idx) => {
+        const isMulti = Array.isArray(item.answers);
+        const val = state[idx];
+        const isAnswered = isMulti ? Array.isArray(val) : val !== undefined;
+        if (!isAnswered) return;
+        answered++;
+        if (isMulti) {
+          const cs = item.answers.slice().sort((a,b)=>a-b);
+          if (val.length === cs.length && val.every((v,i) => v === cs[i])) correct++;
+        } else if (val === item.answer) {
+          correct++;
+        }
+      });
+      document.getElementById("s-answered").textContent = answered;
+      document.getElementById("s-correct").textContent = correct;
+      document.getElementById("s-wrong").textContent = answered - correct;
+      const pct = answered ? Math.round(correct / answered * 100) : null;
+      document.getElementById("s-pct").textContent = pct === null ? "\u2014" : pct + "%";
+      saveProgress();
+    }
+
+    document.getElementById("reset").addEventListener("click", () => {
+      for (const k in state) delete state[k];
+      for (const k in pending) delete pending[k];
+      render(); updateScore();
+    });
+
+    const _resumed = restoreProgress();
+    render(); updateScore();
+    if (_resumed) {
+      const _n = document.createElement("div");
+      _n.textContent = "\u21ba Resumed your saved progress \u2014 " + _resumed + " answered. Click Reset to start over.";
+      _n.style.cssText = "margin:14px 0;padding:10px 14px;border:1px solid #3b82f6;border-radius:8px;background:rgba(59,130,246,0.12);font-size:0.9rem;";
+      quizEl.parentNode.insertBefore(_n, quizEl);
+    }
+  </script>
+</body>
+</html>
