@@ -114,7 +114,7 @@ button { cursor: pointer; border: none; border-radius: var(--radius); font-famil
 <div class="timer-bar">
   <div><span id="q-progress">1 / 55</span> &bull; <span id="answered-count">0 answered</span></div>
   <div class="time" id="timer">85:00</div>
-  <div><button class="btn-sm" id="btn-finish">Finish Exam</button></div>
+  <div><button class="btn-sm" id="btn-pause" style="margin-right:8px;">Pause &amp; Exit</button><button class="btn-sm" id="btn-finish">Finish Exam</button></div>
 </div>
 <div class="container">
   <div class="nav-dots" id="nav-dots"></div>
@@ -311,6 +311,7 @@ function renderQuestion() {
 
   area.querySelectorAll('.opts label').forEach(label => {
     label.addEventListener('click', (e) => {
+      if (e.target.closest('input')) return;
       const idx = parseInt(label.dataset.idx);
       if (isMulti) {
         let arr = Array.isArray(state.answers[i]) ? [...state.answers[i]] : [];
@@ -444,12 +445,7 @@ function renderReview(filter) {
 }
 
 // Init
-document.getElementById('btn-start').addEventListener('click', () => {
-  state = { current: 0, answers: {}, flags: {}, startTime: Date.now(), elapsed: 0, finished: false };
-  save();
-  showScreen('exam');
-  renderNav(); renderQuestion(); startTimer();
-});
+
 
 document.getElementById('btn-prev').addEventListener('click', () => {
   if (state.current > 0) { state.current--; save(); renderQuestion(); renderNav(); }
@@ -457,6 +453,13 @@ document.getElementById('btn-prev').addEventListener('click', () => {
 document.getElementById('btn-next').addEventListener('click', () => {
   if (state.current < QUESTIONS.length - 1) { state.current++; save(); renderQuestion(); renderNav(); }
 });
+document.getElementById('btn-pause').addEventListener('click', () => {
+  save();
+  clearInterval(timerInterval);
+  showScreen('start');
+  document.getElementById('btn-start').textContent = 'Resume Exam';
+});
+
 document.getElementById('btn-finish').addEventListener('click', () => {
   const unanswered = QUESTIONS.length - Object.keys(state.answers).length;
   if (unanswered > 0) {
@@ -483,16 +486,27 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // Resume if saved
 if (load() && !state.finished && Object.keys(state.answers).length > 0) {
-  if (confirm('Resume your previous exam session?')) {
-    showScreen('exam');
-    renderNav(); renderQuestion(); startTimer();
-    document.getElementById('timer').textContent = formatTime(Math.max(0, TIME_LIMIT - state.elapsed));
-  }
+  document.getElementById('btn-start').textContent = 'Resume Exam';
 } else if (load() && state.finished) {
-  if (confirm('View your previous results?')) {
-    showScreen('results'); renderResults();
-  }
+  document.getElementById('btn-start').textContent = 'View Results';
 }
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  if (load() && !state.finished && Object.keys(state.answers).length > 0) {
+    showScreen('exam');
+    renderNav(); renderQuestion(); startTimer(); updateProgress();
+    document.getElementById('timer').textContent = formatTime(Math.max(0, TIME_LIMIT - state.elapsed));
+    return;
+  }
+  if (load() && state.finished) {
+    showScreen('results'); renderResults();
+    return;
+  }
+  state = { current: 0, answers: {}, flags: {}, startTime: Date.now(), elapsed: 0, finished: false };
+  save();
+  showScreen('exam');
+  renderNav(); renderQuestion(); startTimer();
+}, { once: false });
 </script>
 </body>
 </html>
